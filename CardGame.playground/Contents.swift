@@ -178,7 +178,7 @@ struct Deck {
     }
     
     func drawCard() -> Card {
-        let cardNumber = Int.random(in: 0...cards.count)
+        let cardNumber = Int.random(in: 0...cards.count - 1)
         let drawnCard = cards[cardNumber]
         //cards.remove(at: cardNumber)
         return drawnCard
@@ -223,8 +223,12 @@ class HighLow: CardGame {
     var delegate: CardGameDelegate?
     
     func play() {
+        delegate?.gameDidStart(self)
+        
         let player1Card = deck.drawCard()
         let player2Card = deck.drawCard()
+        
+        delegate?.game(player1DidDraw: player1Card, player2DidDraw: player2Card)
         
         if player1Card == player2Card {
             print("Player tie with \(player1Card)")
