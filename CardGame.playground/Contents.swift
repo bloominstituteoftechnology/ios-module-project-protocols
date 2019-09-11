@@ -11,14 +11,64 @@ import Foundation
 //: ## Step 17
 //: Make the `Rank` type conform to the `Comparable` protocol. Implement the `<` and `==` functions such that they compare the `rawValue` of the `lhs` and `rhs` arguments passed in. This will allow us to compare two rank values with each other and determine whether they are equal, or if not, which one is larger.
 
-
+enum CardRank: Int, CustomStringConvertible {
+    var description: String {
+        switch self {
+        case .jack:
+            return "Jack"
+        case .queen:
+            return "Queen"
+        case .king:
+            return "King"
+        case .ace:
+            return "Ace"
+        case .two:
+            return "2"
+        case .three:
+            return "3"
+        case .four:
+            return "4"
+        case .five:
+            return "5"
+        case .six:
+            return "6"
+        case .seven:
+            return "7"
+        case .eight:
+            return "8"
+        case .nine:
+            return "9"
+        case .ten:
+            return "10"
+        }
+    }
+    
+    case ace = 1
+    case two
+    case three
+    case four
+    case five
+    case six
+    case seven
+    case eight
+    case nine
+    case ten
+    case jack
+    case queen
+    case king
+}
 
 //: ## Step 3
 //: Create an enum for the suit of a playing card. The values are `hearts`, `diamonds`, `spades`, and `clubs`. Use a raw type of `String` for this enum (this will allow us to get a string version of the enum cases for free, no use of `CustomStringConvertible` required).
 //: ## Step 8
 //: In the suit enum, add a static computed property that returns all the suits in an array. Name this property `allSuits`.
 
-
+enum CardSuit: String {
+    case hearts
+    case diamonds
+    case spades
+    case clubs
+}
 
 //: ## Step 4
 //: Using the two enums above, create a `struct` called `Card` to model a single playing card. It should have constant properties for each constituent piece (one for suit and one for rank).
@@ -27,7 +77,14 @@ import Foundation
 //: Step 18
 //: Make the `Card` type conform to the `Comparable` protocol. Implement the `<` and `==` methods such that they compare the ranks of the `lhs` and `rhs` arguments passed in. For the `==` method, compare **both** the rank and the suit.
 
-
+struct Card: CustomStringConvertible {
+    let rank: CardRank
+    let suit: CardSuit
+    
+    var description: String {
+        return "\(rank.description) of \(suit.rawValue)"
+    }
+}
 
 //: ## Step 6
 //: Create a `struct` to model a deck of cards. It should be called `Deck` and have an array of `Card` objects as a constant property. A custom `init` function should be created that initializes the array with a card of each rank and suit. You'll want to iterate over all ranks, and then over all suits (this is an example of _nested `for` loops_). See the next 2 steps before you continue with the nested loops.
