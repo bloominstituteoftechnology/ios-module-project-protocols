@@ -107,7 +107,7 @@ struct Card: CustomStringConvertible, Comparable{
 //: Add a method to the deck called `drawCard()`. It takes no arguments and it returns a `Card` object. Have it draw a random card from the deck of cards and return it.
 //: - Callout(Hint): There should be `52` cards in the deck. So what if you created a random number within those bounds and then retrieved that card from the deck? Remember that arrays are indexed from `0` and take that into account with your random number picking.
 struct Deck {
-    var cards: [Card]
+    var cards = [Card]()
     
     init(ranks: [Rank], suits: [Suit]) {
         self.cards = []
@@ -164,8 +164,13 @@ class HighLow: CardGame {
     
     
     func play() {
+        
+        dele?.gameDidStart(cardgame: self)
+        
         let card1 = adeck.drawCard()
         let card2 = adeck.drawCard()
+        
+        dele?.game(player1DidDraw: card1, player2DidDraw: card2)
         
         if card1 == card2 {
             print("Round ends in a tie with \(card1.cardRank) of \(card1.cardSuit)")
