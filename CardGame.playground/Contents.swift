@@ -12,6 +12,20 @@ import Foundation
 //: Make the `Rank` type conform to the `Comparable` protocol. Implement the `<` and `==` functions such that they compare the `rawValue` of the `lhs` and `rhs` arguments passed in. This will allow us to compare two rank values with each other and determine whether they are equal, or if not, which one is larger.
 
 enum CardRank: Int, CustomStringConvertible {
+    case ace = 1
+    case two
+    case three
+    case four
+    case five
+    case six
+    case seven
+    case eight
+    case nine
+    case ten
+    case jack
+    case queen
+    case king
+    
     var description: String {
         switch self {
         case .jack:
@@ -43,19 +57,25 @@ enum CardRank: Int, CustomStringConvertible {
         }
     }
     
-    case ace = 1
-    case two
-    case three
-    case four
-    case five
-    case six
-    case seven
-    case eight
-    case nine
-    case ten
-    case jack
-    case queen
-    case king
+    static var allRanks: [CardRank] {
+        var ranks = [CardRank]()
+        
+        ranks.append(.ace)
+        ranks.append(.two)
+        ranks.append(.three)
+        ranks.append(.four)
+        ranks.append(.five)
+        ranks.append(.six)
+        ranks.append(.seven)
+        ranks.append(.eight)
+        ranks.append(.nine)
+        ranks.append(.ten)
+        ranks.append(.jack)
+        ranks.append(.queen)
+        ranks.append(.king)
+        
+        return ranks
+    }
 }
 
 //: ## Step 3
@@ -68,6 +88,10 @@ enum CardSuit: String {
     case diamonds
     case spades
     case clubs
+    
+    static var allSuits: [CardSuit] {
+        return [.hearts, .diamonds, .spades, .clubs]
+    }
 }
 
 //: ## Step 4
@@ -101,7 +125,20 @@ struct Card: CustomStringConvertible {
 //: Add a method to the deck called `drawCard()`. It takes no arguments and it returns a `Card` object. Have it draw a random card from the deck of cards and return it.
 //: - Callout(Hint): There should be `52` cards in the deck. So what if you created a random number within those bounds and then retrieved that card from the deck? Remember that arrays are indexed from `0` and take that into account with your random number picking.
 
+struct Deck {
+    var cards = [Card]()
+    
+    init() {
+        for rank in CardRank.allRanks {
+            for suit in CardSuit.allSuits {
+                cards.append(Card(rank: rank, suit: suit))
+            }
+        }
+    }
+}
 
+//let deck = Deck()
+//print(deck)
 
 //: ## Step 12
 //: Create a protocol for a `CardGame`. It should have two requirements:
