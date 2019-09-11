@@ -15,6 +15,9 @@ import Foundation
 //: ## Step 17
 //: Make the `Rank` type conform to the `Comparable` protocol. Implement the `<` and `==` functions such that they compare the `rawValue` of the `lhs` and `rhs` arguments passed in. This will allow us to compare two rank values with each other and determine whether they are equal, or if not, which one is larger.
 enum Rank: Int, CustomStringConvertible {       // empowered the rank enum to describe itself using customstringconv protocol
+    static var allRanks: [Rank] {
+        return [.ace, .two, .three, .four, .five, .six, .seven, .eight, .nine, .ten, .jack, .queen, .king]
+    }
     var description: String {
         switch self {
         case .ace:
@@ -53,7 +56,9 @@ rank
 //: ## Step 8
 //: In the suit enum, add a static computed property that returns all the suits in an array. Name this property `allSuits`.
 enum Suit: String {
-
+    static var allSuits: [Suit] {
+        return [.clubs, .diamond, .heart, .spade]
+    }
     case heart
     case spade
     case diamond
@@ -93,24 +98,38 @@ struct Card: CustomStringConvertible {
 //: - Callout(Hint): There should be `52` cards in the deck. So what if you created a random number within those bounds and then retrieved that card from the deck? Remember that arrays are indexed from `0` and take that into account with your random number picking.
 struct Deck {
     var deck = [Card]()
-    init(deck: Card) {
-        self.deck = [deck]
+    init() {
+        for rank in Rank.allRanks {
+            for suit in Suit.allSuits {
+                let aCard = Card(suit: suit , rank: rank )
+                deck.append(aCard)
+            }
+        }
     }
+    func drawCard() -> Card {
+        let randomNumber = Int.random(in: 1...deck.count) - 1
+        return deck[randomNumber]
+    }
+    
 }
-
-
 //: ## Step 12
 //: Create a protocol for a `CardGame`. It should have two requirements:
 //: * a gettable `deck` property
 //: * a `play()` method
-
+protocol CardGame {
+    var deck: Card { get }
+    func play()
+}
 
 
 //: ## Step 13
 //: Create a protocol for tracking a card game as a delegate called `CardGameDelegate`. It should have two functional requirements:
 //: * a function called `gameDidStart` that takes a `CardGame` as an argument
 //: * a function with the following signature: `game(player1DidDraw card1: Card, player2DidDraw card2: Card)`
-
+protocol CardGameDelegate {
+    func gameDidStart(_game: CardGame)
+    func game(player1DidDraw card1: Card, player2DidDraw card2: Card)
+}
 
 
 //: ## Step 14
