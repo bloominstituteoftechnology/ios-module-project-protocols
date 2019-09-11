@@ -177,10 +177,10 @@ struct Deck {
         }
     }
     
-    func drawCard() -> Card {
+    mutating func drawCard() -> Card {
         let cardNumber = Int.random(in: 0...cards.count - 1)
         let drawnCard = cards[cardNumber]
-        //cards.remove(at: cardNumber)
+        cards.remove(at: cardNumber)
         return drawnCard
     }
 }
