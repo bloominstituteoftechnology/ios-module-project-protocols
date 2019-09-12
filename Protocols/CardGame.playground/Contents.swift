@@ -14,7 +14,13 @@ import Foundation
 //: Take a look at the Swift docs for the [Comparable](https://developer.apple.com/documentation/swift/comparable) protocol. In particular, look at the two functions called `<` and `==`.
 //: ## Step 17
 //: Make the `Rank` type conform to the `Comparable` protocol. Implement the `<` and `==` functions such that they compare the `rawValue` of the `lhs` and `rhs` arguments passed in. This will allow us to compare two rank values with each other and determine whether they are equal, or if not, which one is larger.
-enum Rank: Int, CustomStringConvertible {       // empowered the rank enum to describe itself using customstringconv protocol
+enum Rank: Int, CustomStringConvertible, Comparable {
+    static func < (lhs: Rank, rhs: Rank) -> Bool {
+        return lhs.rawValue < rhs.rawValue
+    }
+    
+    
+    // empowered the rank enum to describe itself using customstringconv protocol
     static var allRanks: [Rank] {
         return [.ace, .two, .three, .four, .five, .six, .seven, .eight, .nine, .ten, .jack, .queen, .king]
     }
@@ -57,11 +63,11 @@ rank
 //: In the suit enum, add a static computed property that returns all the suits in an array. Name this property `allSuits`.
 enum Suit: String {
     static var allSuits: [Suit] {
-        return [.clubs, .diamond, .heart, .spade]
+        return [.clubs, .diamonds, .hearts, .spades]
     }
-    case heart
-    case spade
-    case diamond
+    case hearts
+    case spades
+    case diamonds
     case clubs
 }
 
@@ -72,7 +78,13 @@ enum Suit: String {
 //: Make the card also conform to `CustomStringConvertible`. When turned into a string, a card's value should look something like this, "ace of spades", or "3 of diamonds".
 //: Step 18
 //: Make the `Card` type conform to the `Comparable` protocol. Implement the `<` and `==` methods such that they compare the ranks of the `lhs` and `rhs` arguments passed in. For the `==` method, compare **both** the rank and the suit.
-struct Card: CustomStringConvertible {
+
+
+struct Card: CustomStringConvertible, Comparable {
+    static func < (lhs: Card, rhs: Card) -> Bool {
+        return lhs.suit == rhs.suit && lhs.rank == rhs.rank
+    }
+    
     var description: String {
         return "\(rank) of \(suit)"
     }
@@ -117,7 +129,7 @@ struct Deck {
 //: * a gettable `deck` property
 //: * a `play()` method
 protocol CardGame {
-    var deck: Card { get }
+    var deck: Deck { get }
     func play()
 }
 
@@ -127,7 +139,7 @@ protocol CardGame {
 //: * a function called `gameDidStart` that takes a `CardGame` as an argument
 //: * a function with the following signature: `game(player1DidDraw card1: Card, player2DidDraw card2: Card)`
 protocol CardGameDelegate {
-    func gameDidStart(_game: CardGame)
+    func gameDidStart(_ game: CardGame)
     func game(player1DidDraw card1: Card, player2DidDraw card2: Card)
 }
 
@@ -144,10 +156,52 @@ protocol CardGameDelegate {
 
 
 
+class HighLow: CardGame {
+    var deck = Deck()
+    var delegate: CardGameDelegate?
+  
+    func play() {
+        var firstPlayer = deck.drawCard()
+        var secondPlayer = deck.drawCard()
+       
+        delegate?.gameDidStart(self)
+        
+        if firstPlayer == secondPlayer {
+            print("Round ends in a tie with \(firstPlayer).")
+        }
+        else if firstPlayer < secondPlayer {
+            print("Player 2 wins with a/an \(secondPlayer).")
+        }
+        else {
+            print("Player 1 wins with a/an \(firstPlayer).")
+            
+            
+    }
+        delegate?.gameDidStart(self)
+
+    }
+    
+}
+
+
 //: ## Step 20
 //: Create a class called `CardGameTracker` that conforms to the `CardGameDelegate` protocol. Implement the two required functions: `gameDidStart` and `game(player1DidDraw:player2DidDraw)`. Model `gameDidStart` after the same method in the guided project from today. As for the other method, have it print a message like the following:
 //: * "Player 1 drew a 6 of hearts, player 2 drew a jack of spades."
-
+class CardGameTracker: CardGameDelegate {
+    func game(player1DidDraw card1: Card, player2DidDraw card2: Card) {
+        numberOfTurns += 1
+        print("Player 1 drew a \(card1) and Player 2 drew a \(card2)")
+    }
+    
+    var numberOfTurns = 5
+    
+    func gameDidStart(_ game: CardGame) {
+        if game is HighLow {
+            print("Started a new game of High/Low!")
+    }
+   
+    }
+}
 
 
 //: Step 21
@@ -158,5 +212,11 @@ protocol CardGameDelegate {
 //: Player 1 drew a 2 of diamonds, player 2 drew a ace of diamonds.
 //: Player 1 wins with 2 of diamonds.
 //: ```
+let tracker = CardGameTracker()
+let game = HighLow()
+game.delegate = tracker
+game.play()
+
+
 
 
