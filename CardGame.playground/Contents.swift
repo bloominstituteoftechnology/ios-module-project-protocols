@@ -10,7 +10,207 @@ import Foundation
 //: Take a look at the Swift docs for the [Comparable](https://developer.apple.com/documentation/swift/comparable) protocol. In particular, look at the two functions called `<` and `==`.
 //: ## Step 17
 //: Make the `Rank` type conform to the `Comparable` protocol. Implement the `<` and `==` functions such that they compare the `rawValue` of the `lhs` and `rhs` arguments passed in. This will allow us to compare two rank values with each other and determine whether they are equal, or if not, which one is larger.
+// Rank Enum
+enum RankOfCard: Int, CustomStringConvertible, Comparable {
+    static func < (lhs: RankOfCard, rhs: RankOfCard) -> Bool {
+        if lhs.rawValue < rhs.rawValue { return true }
+        else { return false }
+    }
+    
+    static func == (lhs: RankOfCard, rhs: RankOfCard) -> Bool {
+        if lhs.rawValue == rhs.rawValue { return true }
+        else { return false }
+    }
+    
+    
+    var description: String {
+        
+        switch self {
+        case .ace:
+            return "Ace"
+        case .two:
+            return "2"
+        case .three:
+            return "3"
+        case .four:
+            return "4"
+        case .five:
+            return "5"
+        case .six:
+            return "6"
+        case .seven:
+            return "7"
+        case .eight:
+            return "8"
+        case .nine:
+            return "9"
+        case .ten:
+            return "10"
+        case .jack:
+            return "Jack"
+        case .queen:
+            return "Queen"
+        case .king:
+            return "King"
+        }
+    }
 
+    
+    case ace = 1
+    case two = 2
+    case three = 3
+    case four = 4
+    case five = 5
+    case six = 6
+    case seven = 7
+    case eight = 8
+    case nine = 9
+    case ten = 10
+    case jack = 11
+    case queen = 12
+    case king = 13
+    
+    static var allRanks: [RankOfCard] {
+        return [.ace, .two, .three, .four, .five, .six, .seven, .eight, .nine, .ten, .jack, .queen, .king]
+    }
+
+}
+
+
+// Suite Enum
+enum SuiteOfCard: String {
+    case hearts
+    case diamonds
+    case spades
+    case clubs
+    
+    static var allSuits: [SuiteOfCard] {
+        return [.hearts, .diamonds, .spades, .clubs]
+    }
+}
+
+
+// Card Struct
+struct Card: CustomStringConvertible, Comparable {
+    static func < (lhs: Card, rhs: Card) -> Bool {
+        if lhs.rank < rhs.rank { return true }
+        else { return false }
+    }
+    
+    static func == (lhs: Card, rhs: Card) -> Bool {
+        if lhs.rank == rhs.rank { return true }
+        else { return false }
+        if lhs.suite == rhs.suite { return true }
+        else { return false }
+    }
+    
+    var description: String {
+        return "\(rank) of \(suite)"
+    }
+    
+    let rank: RankOfCard
+    let suite: SuiteOfCard
+}
+
+
+
+// Deck Struct
+struct Deck {
+    let cards: [Card]
+    
+    init() {
+        var deckOfcards: [Card] = []
+        
+        for rank in RankOfCard.allRanks {
+            for suit in SuiteOfCard.allSuits {
+                let card = Card(rank: rank, suite: suit)
+                deckOfcards.append(card)
+            }
+        }
+        
+        self.cards = deckOfcards
+    }
+    
+    
+    func drawCard() -> Card {
+        
+        let randomNumber = Int.random(in: 1...53) - 1
+        return cards[randomNumber]
+    }
+    
+    
+}
+
+
+// CardGame Protocol
+protocol CardGame {
+    var deck: Deck { get }
+    func play()
+}
+
+
+// CardGameDelegate protocol
+protocol CardGameDelegate {
+    func gameDidStart(CardGame: HighLow)
+    func game(player1DidDraw card1: Card, player2DidDraw card2: Card)
+}
+
+
+
+// HighLow class
+class HighLow: CardGame {
+    var delegate: CardGameDelegate?
+    
+    var deck = Deck()
+  
+    func play() {
+        var firstPlayer = deck.drawCard()
+        var secondPlayer = deck.drawCard()
+        
+        if firstPlayer == secondPlayer {
+            print("Round ends in a tie with \(firstPlayer).")
+        }
+        else if firstPlayer < secondPlayer {
+            print("Player 2 wins with a \(secondPlayer).")
+        }
+        else {
+            print("Player 1 wins with a \(firstPlayer).")
+        }
+    }
+    
+    
+}
+
+
+
+// CardGameTracker class
+class CardGameTracker: CardGameDelegate {
+    
+
+    func gameDidStart(CardGame: HighLow) {
+    
+            if game is HighLow {
+                print("Started a new game of HighLow!")
+            }
+    }
+    
+    func game(player1DidDraw card1: Card, player2DidDraw card2: Card) {
+
+        print("Player 1 drew a \(card1), Player 2 drew a \(card2).")
+    }
+    
+    
+}
+
+
+
+
+
+// Testing
+let newGame = HighLow()
+let tracker = CardGameTracker()
+newGame.delegate = tracker
+newGame.play()
 
 
 //: ## Step 3
