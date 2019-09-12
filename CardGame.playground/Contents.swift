@@ -10,12 +10,20 @@ import Foundation
 //: Take a look at the Swift docs for the [Comparable](https://developer.apple.com/documentation/swift/comparable) protocol. In particular, look at the two functions called `<` and `==`.
 //: ## Step 17
 //: Make the `Rank` type conform to the `Comparable` protocol. Implement the `<` and `==` functions such that they compare the `rawValue` of the `lhs` and `rhs` arguments passed in. This will allow us to compare two rank values with each other and determine whether they are equal, or if not, which one is larger.
-
-enum RankOfCard: Int, CustomStringConvertible {
+// Rank Enum
+enum RankOfCard: Int, CustomStringConvertible, Comparable {
+    static func < (lhs: RankOfCard, rhs: RankOfCard) -> Bool {
+        if lhs.rawValue < rhs.rawValue { return true }
+        else { return false }
+    }
+    
+    static func == (lhs: RankOfCard, rhs: RankOfCard) -> Bool {
+        if lhs.rawValue == rhs.rawValue { return true }
+        else { return false }
+    }
+    
     
     var description: String {
-        
-        //typealias RawValue = Int
         
         switch self {
         case .ace:
@@ -45,19 +53,8 @@ enum RankOfCard: Int, CustomStringConvertible {
         case .king:
             return "King"
         }
-        
-    //return "\(self)"
     }
-    
-    
-    
-//    var allRanks: [self] {
-//        for i in self {
-//            switch .
-//        }
-//    }
-    
-    
+
     
     case ace = 1
     case two = 2
@@ -79,6 +76,8 @@ enum RankOfCard: Int, CustomStringConvertible {
 
 }
 
+
+// Suite Enum
 enum SuiteOfCard: String {
     case hearts
     case diamonds
@@ -90,7 +89,21 @@ enum SuiteOfCard: String {
     }
 }
 
-struct Card: CustomStringConvertible {
+
+// Card Struct
+struct Card: CustomStringConvertible, Comparable {
+    static func < (lhs: Card, rhs: Card) -> Bool {
+        if lhs.rank < rhs.rank { return true }
+        else { return false }
+    }
+    
+    static func == (lhs: Card, rhs: Card) -> Bool {
+        if lhs.rank == rhs.rank { return true }
+        else { return false }
+        if lhs.suite == rhs.suite { return true }
+        else { return false }
+    }
+    
     var description: String {
         return "\(rank) of \(suite)"
     }
@@ -101,6 +114,7 @@ struct Card: CustomStringConvertible {
 
 
 
+// Deck Struct
 struct Deck {
     let cards: [Card]
     
@@ -127,22 +141,62 @@ struct Deck {
     
 }
 
+
+// CardGame Protocol
 protocol CardGame {
     var deck: Deck { get }
     func play()
 }
 
+
+// CardGameDelegate protocol
 protocol CardGameDelegate {
-    func gameDidStart(CardGame: CardGame)
+    func gameDidStart(CardGame: HighLow)
     func game(player1DidDraw card1: Card, player2DidDraw card2: Card)
 }
 
 
-class HighLow: CardGame, CardGameDelegate? {
-    var deck: Deck
+
+// HighLow class
+class HighLow: CardGame {
+    var delegate: CardGameDelegate?
     
+    var deck = Deck()
+  
     func play() {
-        <#code#>
+        var firstPlayer = deck.drawCard()
+        var secondPlayer = deck.drawCard()
+        
+        if firstPlayer == secondPlayer {
+            print("Round ends in a tie with \(firstPlayer).")
+        }
+        else if firstPlayer < secondPlayer {
+            print("Player 2 wins with a \(secondPlayer).")
+        }
+        else {
+            print("Player 1 wins with a \(firstPlayer).")
+        }
+    }
+    
+    
+}
+
+
+
+// CardGameTracker class
+class CardGameTracker: CardGameDelegate {
+    
+
+    func gameDidStart(CardGame: HighLow) {
+    
+            if game is HighLow {
+                print("Started a new game of HighLow!")
+            }
+    }
+    
+    func game(player1DidDraw card1: Card, player2DidDraw card2: Card) {
+
+        print("Player 1 drew a \(card1), Player 2 drew a \(card2).")
     }
     
     
@@ -152,6 +206,11 @@ class HighLow: CardGame, CardGameDelegate? {
 
 
 
+// Testing
+let newGame = HighLow()
+let tracker = CardGameTracker()
+newGame.delegate = tracker
+newGame.play()
 
 
 //: ## Step 3
