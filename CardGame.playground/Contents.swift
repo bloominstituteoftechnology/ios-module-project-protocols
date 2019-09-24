@@ -1,5 +1,5 @@
 import Foundation
-
+import UIKit
 //: ## Step 1
 //: Create an enumeration for the value of a playing card. The values are: `ace`, `two`, `three`, `four`, `five`, `six`, `seven`, `eight`, `nine`, `ten`, `jack`, `queen`, and `king`. Set the raw type of the enum to `Int` and assign the ace a value of `1`.
 //: ## Step 2
@@ -188,14 +188,31 @@ class HighLow: CardGame {
     var deck: Deck = Deck()
     var delegate: CardGameDelegate?
 }
-//test
-//let game = HighLow()
-//game.play()
+
+
 //: ## Step 20
 //: Create a class called `CardGameTracker` that conforms to the `CardGameDelegate` protocol. Implement the two required functions: `gameDidStart` and `game(player1DidDraw:player2DidDraw)`. Model `gameDidStart` after the same method in the guided project from today. As for the other method, have it print a message like the following:
 //: * "Player 1 drew a 6 of hearts, player 2 drew a jack of spades."
 
-
+class CardGameTracker: CardGameDelegate {
+    
+    var numberOfTurns: Int = 0
+    
+    func gameDidStart(_ game: CardGame) {
+        numberOfTurns = 0
+        if game is HighLow {
+            print("Started a game of High Low")
+        }
+    }
+    
+    func game(player1DidDraw card1: Card, player2DidDraw card2: Card) {
+        numberOfTurns += 1
+        print("Player 1 drew \(card1), player 2 drew \(card2)")
+    }
+    
+    
+    
+}
 
 //: Step 21
 //: Time to test all the types you've created. Create an instance of the `HighLow` class. Set the `delegate` property of that object to an instance of `CardGameTracker`. Lastly, call the `play()` method on the game object. It should print out to the console something that looks similar to the following:
@@ -205,5 +222,10 @@ class HighLow: CardGame {
 //: Player 1 drew a 2 of diamonds, player 2 drew a ace of diamonds.
 //: Player 1 wins with 2 of diamonds.
 //: ```
+let tracker = CardGameTracker()
+let game = HighLow()
+game.delegate = tracker
+game.play()
+
 
 
