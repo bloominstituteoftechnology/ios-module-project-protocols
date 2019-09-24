@@ -12,13 +12,51 @@ import Foundation
 //: Make the `Rank` type conform to the `Comparable` protocol. Implement the `<` and `==` functions such that they compare the `rawValue` of the `lhs` and `rhs` arguments passed in. This will allow us to compare two rank values with each other and determine whether they are equal, or if not, which one is larger.
 
 
+enum Rank: Int, CustomStringConvertible {
+    var description: String {
+        switch self.rawValue {
+        case 1...10:
+            return String(self.rawValue)
+        case 11:
+            return "jack"
+        case 12:
+            return "queen"
+        case 13:
+            return "king"
+        default:
+            return ""
+        }
+    }
+    
+    case ace = 1
+    case two
+    case three
+    case four
+    case five
+    case six
+    case seven
+    case eight
+    case nine
+    case ten
+    case jack
+    case queen
+    case king
+    
+    
+}
+
 
 //: ## Step 3
 //: Create an enum for the suit of a playing card. The values are `hearts`, `diamonds`, `spades`, and `clubs`. Use a raw type of `String` for this enum (this will allow us to get a string version of the enum cases for free, no use of `CustomStringConvertible` required).
 //: ## Step 8
 //: In the suit enum, add a static computed property that returns all the suits in an array. Name this property `allSuits`.
 
-
+enum Suit: String {
+    case hearts = "hearts"
+    case diamonds = "diamonds"
+    case spades = "spades"
+    case clubs = "clubs"
+}
 
 //: ## Step 4
 //: Using the two enums above, create a `struct` called `Card` to model a single playing card. It should have constant properties for each constituent piece (one for suit and one for rank).
@@ -27,7 +65,13 @@ import Foundation
 //: Step 18
 //: Make the `Card` type conform to the `Comparable` protocol. Implement the `<` and `==` methods such that they compare the ranks of the `lhs` and `rhs` arguments passed in. For the `==` method, compare **both** the rank and the suit.
 
-
+struct Card: CustomStringConvertible {
+    var description: String {
+        return "\(rank) of \(suit)"
+    }
+    let rank: Rank
+    let suit: Suit
+}
 
 //: ## Step 6
 //: Create a `struct` to model a deck of cards. It should be called `Deck` and have an array of `Card` objects as a constant property. A custom `init` function should be created that initializes the array with a card of each rank and suit. You'll want to iterate over all ranks, and then over all suits (this is an example of _nested `for` loops_). See the next 2 steps before you continue with the nested loops.
@@ -44,7 +88,9 @@ import Foundation
 //: Add a method to the deck called `drawCard()`. It takes no arguments and it returns a `Card` object. Have it draw a random card from the deck of cards and return it.
 //: - Callout(Hint): There should be `52` cards in the deck. So what if you created a random number within those bounds and then retrieved that card from the deck? Remember that arrays are indexed from `0` and take that into account with your random number picking.
 
-
+struct Deck {
+    let cards: [Card]
+}
 
 //: ## Step 12
 //: Create a protocol for a `CardGame`. It should have two requirements:
