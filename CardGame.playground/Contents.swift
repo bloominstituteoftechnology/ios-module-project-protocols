@@ -2,8 +2,89 @@ import Foundation
 
 //: ## Step 1
 //: Create an enumeration for the value of a playing card. The values are: `ace`, `two`, `three`, `four`, `five`, `six`, `seven`, `eight`, `nine`, `ten`, `jack`, `queen`, and `king`. Set the raw type of the enum to `Int` and assign the ace a value of `1`.
+enum Rank: Int {
+    case ace = 1
+    case two = 2
+    case three = 3
+    case four = 4
+    case five = 5
+    case six = 6
+    case seven = 7
+    case eight = 8
+    case nine = 9
+    case ten = 10
+    case jack = 11
+    case queen = 12
+    case king = 13
+    
+    static let allRanks: [Rank] = [.ace, .two, .three, .four, .five, .six, .seven, .eight, .nine, .ten, .jack, .queen, .king]
+}
+
+// Test line to make sure the static let works
+Rank.allRanks
+
+extension Rank: CustomStringConvertible {
+    var description: String {
+        switch self.rawValue {
+        case 1...10:
+            return String(self.rawValue)
+        case 11:
+            return "jack"
+        case 12:
+            return "queen"
+        case 13:
+            return "king"
+        default:
+            return ""
+        }
+    }
+}
+
+enum Suit: String {
+    case hearts = "Hearts"
+    case diamonds = "Diamonds"
+    case spades = "Spades"
+    case clubs = "Clubs"
+    
+    static let allSuits: [Suit] = [.hearts, .diamonds, .spades, .clubs]
+}
+// Test line to make sure static let works as intended
+Suit.allSuits
+
+struct Card: CustomStringConvertible {
+    var description: String {
+        return "\(rank) of \(suit)"
+    }
+    
+    let suit: Suit
+    let rank: Rank
+}
+
+struct Deck {
+let cards: [Card]
+
+init() {
+    var deck: [Card] = []
+    var currentCard: Card
+    for rank in Rank.allRanks {
+        for suit in Suit.allSuits {
+            currentCard = Card.init(suit: suit, rank: rank)
+           deck.append(currentCard)
+        }
+    }
+    self.cards = deck
+    
+    func drawCard() -> Card {
+        let randomCard = Int.random(in: 1...52)
+        return cards[randomCard + 1]
+}
+
+
+
 //: ## Step 2
 //: Once you've defined the enum as described above, take a look at this built-in protocol, [CustomStringConvertible](https://developer.apple.com/documentation/swift/customstringconvertible) and make the enum conform to that protocol. Make the face cards return a string of their name, and for the numbered cards, simply have it return that number as a string.
+
+
 //: ## Step 7
 //: In the rank enum, add a static computed property that returns all the ranks in an array. Name this property `allRanks`. This is needed because you can't iterate over all cases from an enum automatically.
 //: ## Step 16
