@@ -12,7 +12,7 @@ import Foundation
 //: Make the `Rank` type conform to the `Comparable` protocol. Implement the `<` and `==` functions such that they compare the `rawValue` of the `lhs` and `rhs` arguments passed in. This will allow us to compare two rank values with each other and determine whether they are equal, or if not, which one is larger.
 
 
-enum Rank: Int, CustomStringConvertible {
+enum Rank: Int, CustomStringConvertible{
     var description: String {
         switch self.rawValue {
         case 1...10:
@@ -27,7 +27,6 @@ enum Rank: Int, CustomStringConvertible {
             return ""
         }
     }
-    
     case ace = 1
     case two
     case three
@@ -41,7 +40,13 @@ enum Rank: Int, CustomStringConvertible {
     case jack
     case queen
     case king
+    //this is how we would do it if nothing ever changes in the enum, which it doesn't.
+//    static var allRanks: [Rank] = [ace, two, three, four, five, six, seven, eight, nine, ten, jack, queen, king]
     
+    //this is how class wants it! =)
+    static var allRanks: [Rank] {
+        return [ace, two, three, four, five, six, seven, eight, nine, ten, jack, queen, king]
+    }
     
 }
 
@@ -56,6 +61,10 @@ enum Suit: String {
     case diamonds = "diamonds"
     case spades = "spades"
     case clubs = "clubs"
+    
+    static var allSuits: [Suit] {
+        return [hearts, diamonds, spades, clubs]
+    }
 }
 
 //: ## Step 4
@@ -64,11 +73,13 @@ enum Suit: String {
 //: Make the card also conform to `CustomStringConvertible`. When turned into a string, a card's value should look something like this, "ace of spades", or "3 of diamonds".
 //: Step 18
 //: Make the `Card` type conform to the `Comparable` protocol. Implement the `<` and `==` methods such that they compare the ranks of the `lhs` and `rhs` arguments passed in. For the `==` method, compare **both** the rank and the suit.
-
+//this is creating what a CARD ACTUALLY IS
 struct Card: CustomStringConvertible {
+   //this is forcing the print value or describing value to always return the description of Card in string format as such.
     var description: String {
         return "\(rank) of \(suit)"
     }
+    
     let rank: Rank
     let suit: Suit
 }
@@ -89,22 +100,44 @@ struct Card: CustomStringConvertible {
 //: - Callout(Hint): There should be `52` cards in the deck. So what if you created a random number within those bounds and then retrieved that card from the deck? Remember that arrays are indexed from `0` and take that into account with your random number picking.
 
 struct Deck {
-    let cards: [Card]
+    let cardsForDeck: [Card]
+    
+    init() {
+        var deck: [Card] = []
+        for rank in Rank.allRanks {
+            for suit in Suit.allSuits {
+                deck.append(Card(rank: rank, suit: suit))
+            }
+        }
+        self.cardsForDeck = deck
+    }
+    
+    func drawCard() -> Card {
+        return cardsForDeck.randomElement()!
+    }
 }
+let deck = Deck()
+deck.drawCard()
 
 //: ## Step 12
 //: Create a protocol for a `CardGame`. It should have two requirements:
 //: * a gettable `deck` property
 //: * a `play()` method
 
-
+protocol CardGame {
+    var deck: Deck {get}
+    func play()
+}
 
 //: ## Step 13
 //: Create a protocol for tracking a card game as a delegate called `CardGameDelegate`. It should have two functional requirements:
 //: * a function called `gameDidStart` that takes a `CardGame` as an argument
 //: * a function with the following signature: `game(player1DidDraw card1: Card, player2DidDraw card2: Card)`
 
-
+protocol CardGameDelegate {
+    func gameDidStart(_ game: CardGame)
+    func game(player1DidDraw card1: Card, player2DidDraw card2: Card)
+}
 
 //: ## Step 14
 //: Create a class called `HighLow` that conforms to the `CardGame` protocol. It should have an initialized `Deck` as a property, as well as an optional delegate property of type `CardGameDelegate`.
@@ -116,7 +149,15 @@ struct Deck {
 //: * Player 1 wins with a higher card, e.g. "Player 1 wins with 8 of hearts."
 //: * Player 2 wins with a higher card, e.g. "Player 2 wins with king of diamonds."
 
-
+class HighLow: CardGame {
+   //CardGame Conformance Protocol Stub
+    func play() {
+    }
+    
+    
+    var deck: Deck = Deck()
+    var delegate: CardGameDelegate?
+}
 
 //: ## Step 20
 //: Create a class called `CardGameTracker` that conforms to the `CardGameDelegate` protocol. Implement the two required functions: `gameDidStart` and `game(player1DidDraw:player2DidDraw)`. Model `gameDidStart` after the same method in the guided project from today. As for the other method, have it print a message like the following:
