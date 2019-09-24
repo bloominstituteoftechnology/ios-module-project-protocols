@@ -163,7 +163,7 @@ protocol CardGameDelegate {
 
 class HighLow: CardGame {
     var deck: Deck = Deck()
-    var delegate = CardGameDelegate?
+    var delegate: CardGameDelegate?
     func play() {
         <#code#>
     }
