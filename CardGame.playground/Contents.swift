@@ -114,7 +114,8 @@ struct Deck {
     }
     
     func drawCard() -> Card {
-        return cards[8]  // as an example
+        let rand = Int.random(in: 1...52)
+        return cards[rand + 1]  // as an example
     }
 }
 
@@ -135,14 +136,20 @@ for rank in Rank.allRanks {
 //: * a gettable `deck` property
 //: * a `play()` method
 
-
+protocol CardGame {
+    var deck: Deck { get }
+    func play()
+}
 
 //: ## Step 13
 //: Create a protocol for tracking a card game as a delegate called `CardGameDelegate`. It should have two functional requirements:
 //: * a function called `gameDidStart` that takes a `CardGame` as an argument
 //: * a function with the following signature: `game(player1DidDraw card1: Card, player2DidDraw card2: Card)`
 
-
+protocol CardGameDelegate {
+    func gameDidStart(_ game: CardGame)
+    func game(player1DidDraw card1: Card, player2DidDraw card2: Card)
+}
 
 //: ## Step 14
 //: Create a class called `HighLow` that conforms to the `CardGame` protocol. It should have an initialized `Deck` as a property, as well as an optional delegate property of type `CardGameDelegate`.
@@ -154,7 +161,15 @@ for rank in Rank.allRanks {
 //: * Player 1 wins with a higher card, e.g. "Player 1 wins with 8 of hearts."
 //: * Player 2 wins with a higher card, e.g. "Player 2 wins with king of diamonds."
 
-
+class HighLow: CardGame {
+    var deck: Deck = Deck()
+    var delegate = CardGameDelegate?
+    func play() {
+        <#code#>
+    }
+    
+    
+}
 
 //: ## Step 20
 //: Create a class called `CardGameTracker` that conforms to the `CardGameDelegate` protocol. Implement the two required functions: `gameDidStart` and `game(player1DidDraw:player2DidDraw)`. Model `gameDidStart` after the same method in the guided project from today. As for the other method, have it print a message like the following:
