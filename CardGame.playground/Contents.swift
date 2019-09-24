@@ -113,6 +113,8 @@ class HighLow: CardGame {
         let player1Card = deck.drawCard()
         let player2Card = deck.drawCard()
         
+        delegate?.gameDidStart(self)
+        
         print("Player 1 drew \(player1Card)\nPlayer 2 drew \(player2Card)")
         
         if player1Card == player2Card {
