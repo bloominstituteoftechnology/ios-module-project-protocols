@@ -49,6 +49,15 @@ enum Rank: Int, CustomStringConvertible{
     }
     
 }
+extension Rank: Comparable {
+    static func < (lhs: Rank, rhs: Rank) -> Bool {
+        return lhs.rawValue < rhs.rawValue
+    }
+    static func == (lhs: Rank, rhs: Rank) -> Bool{
+        return lhs.rawValue == rhs.rawValue
+    }
+    
+}
 
 
 //: ## Step 3
@@ -82,6 +91,15 @@ struct Card: CustomStringConvertible {
     
     let rank: Rank
     let suit: Suit
+}
+extension Card: Comparable {
+    static func < (lhs: Card, rhs: Card) -> Bool {
+        return lhs.rank < rhs.rank
+    }
+  static func == (lhs: Card, rhs: Card) -> Bool {
+    return lhs.rank == rhs.rank && lhs.suit == rhs.suit
+    }
+    
 }
 
 //: ## Step 6
@@ -152,13 +170,27 @@ protocol CardGameDelegate {
 class HighLow: CardGame {
    //CardGame Conformance Protocol Stub
     func play() {
+        let player1Card = deck.drawCard()
+        let player2Card = deck.drawCard()
+        
+        print("Player 1 drew \(player1Card)\nPlayer 2 drew \(player2Card)")
+        
+        if player1Card == player2Card {
+            print("Round ends in a tie with \(player1Card)")
+        }else if player2Card < player1Card {
+            print("Player 1 wins with \(player1Card)")
+        }else {
+            print("Player 2 wins with \(player2Card)")
+        }
+        
     }
-    
-    
+
     var deck: Deck = Deck()
     var delegate: CardGameDelegate?
 }
-
+//test
+//let game = HighLow()
+//game.play()
 //: ## Step 20
 //: Create a class called `CardGameTracker` that conforms to the `CardGameDelegate` protocol. Implement the two required functions: `gameDidStart` and `game(player1DidDraw:player2DidDraw)`. Model `gameDidStart` after the same method in the guided project from today. As for the other method, have it print a message like the following:
 //: * "Player 1 drew a 6 of hearts, player 2 drew a jack of spades."
