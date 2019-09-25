@@ -2,12 +2,18 @@ import Foundation
 
 //: ## Step 1
 //: Create an enumeration for the value of a playing card. The values are: `ace`, `two`, `three`, `four`, `five`, `six`, `seven`, `eight`, `nine`, `ten`, `jack`, `queen`, and `king`. Set the raw type of the enum to `Int` and assign the ace a value of `1`.
-enum Rank: Int, CustomStringConvertible {
-    case ace = 1, two = 2 , three = 3, four = 4 , five = 5, six = 6, seven = 7, eight = 8, nine = 9, ten = 10, jack, queen, king
+enum Rank: Int, CustomStringConvertible, Comparable {
+//: Make the Rank type conform to the Comparable protocol. Implement the < and == methods such that they compare the rawValue of the lhs and rhs arguments passed in. This will allow us to compare two rank values with each other and determine whether they are equal, or if not, which one is larger.
+    static func < (lhs: Rank, rhs: Rank) -> Bool {
+        if lhs.rawValue < rhs.rawValue { return true }
+            else { return false }
+    }
+    static func == (lhs: Rank, rhs: Rank) -> Bool{
+        if lhs.rawValue == rhs.rawValue { return true }
+            else { return false }
+        }
     
-//    var description: String {
-//        return "\(Rank.ace), \(Rank.two) , \(Rank.three), \(Rank.four), \(Rank.five), \(Rank.six), \(Rank.seven), \(Rank.eight), \(Rank.nine), \(Rank.ten), \(Rank.jack), \(Rank.queen), \(Rank.king)"
-//    }
+    case ace = 1, two = 2 , three = 3, four = 4 , five = 5, six = 6, seven = 7, eight = 8, nine = 9, ten = 10, jack = 11, queen = 12, king = 13
     
     var description: String {
        switch self{
@@ -57,45 +63,119 @@ enum Rank: Int, CustomStringConvertible {
 }
 
 
-    struct Card: CustomStringConvertible {
+struct Card: CustomStringConvertible, Comparable {
+    
+    static func < (lhs: Card, rhs: Card) -> Bool {
+        if lhs.rank < rhs.rank { return true }
+        else { return false }
+    }
+    
+    static func == (lhs: Card, rhs: Card) -> Bool {
+        if lhs.rank == rhs.rank && lhs.suit == rhs.suit { return true }
+           else { return false }
+       }
+    
         let rank: Rank
         let suit: Suits
-        
-        
+//:Make the Card type conform to the Comparable protocol. Implement the < and == methods such that they compare the ranks of the lhs and rhs arguments passed in. For the == method, compare both the rank and the suit.
+       
+
         var description: String {
             return "\(rank) of \(suit)"
         }
 }
 
     struct Deck {
-
-        var cardDeck: [Card] = []
-        
+        var deck: [Card] = []
         init() {
-            var deck: [Card] = []
             for rank in Rank.allRank {
                 for suit in Suits.allSuits {
-                    deck.append(Card(rank: rank, suit: suit))
+                    self.deck.append(Card(rank: rank, suit: suit))
                 }
             }
-            cardDeck = deck
         }
         
         func drawCard() -> Card {
-            let randomCard = cardDeck.randomElement()!
-            print(randomCard)
+            let randomCard = deck.randomElement()!
             return randomCard
         }
 }
 
+//let deck = Deck()
+//deck.drawCard()
+
+protocol CardGame {
+    var deck: Deck { get }
+    func play()
+}
+//:Create a protocol for tracking a card game as a delegate called CardGameDelegate. It should have two functional requirements:
+//:a function called gameDidStart that takes a CardGame as an argument
+//:a function with the following signature: game(player1DidDraw card1: Card, player2DidDraw card2: Card)
+protocol CardGameDelegate {
+    func gameDidStart(_ game: CardGame)
+    func game(player1DidDraw card1: Card, player2DidDraw card2: Card)
+}
+
+//: Create a class called HighLow that conforms to the CardGame protocol. It should have an initialized Deck as a property, as well as an optional delegate property of type CardGameDelegate.
+class HighLow: CardGame{
+    var deck: Deck
+    var delegate: CardGameDelegate?
+    
+//: Back to the play() method. With the above types now conforming to Comparable, you can write logic to compare the drawn cards and print out 1 of 3 possible message types:
+//: Ends in a tie, something like, "Round ends in a tie with 3 of clubs."
+//: Player 1 wins with a higher card, e.g. "Player 1 wins with 8 of hearts."
+//: Player 2 wins with a higher card, e.g. "Player 2 wins with king of diamonds."
+    func play() {
+        delegate?.gameDidStart(self)
+//:The method should draw 2 cards from the deck, one for player 1 and one for player 2. These cards will then be compared to see which one is higher. The winning player will be printed along with a description of the winning card. Work will need to be done to the Suit and Rank types above, so see the next couple steps before continuing with this step.
+        let card1 = deck.drawCard()
+        let card2 = deck.drawCard()
+        delegate?.game(player1DidDraw: card1, player2DidDraw: card2)
+        if card1 == card2 {
+            print("Round ends in a tie with \(card2).")
+        } else if card2 < card1 {
+            print("Player 1 wins with \(card1).")
+        } else if card1 < card2 {
+            print("Player 2 wins with \(card2)")
+        }
+    }
+    init(deck: Deck) {
+        self.deck = deck
+    }
+}
+
+//: Create a class called CardGameTracker that conforms to the CardGameDelegate protocol. Implement the two required functions: gameDidStart and game(player1DidDraw:player2DidDraw). Model gameDidStart after the same method in the guided project from today. As for the other method, have it print a message like the following:
+//: "Player 1 drew a 6 of hearts, player 2 drew a jack of spades."
+class CardGameTracker: CardGameDelegate{
+    
+    func gameDidStart(_ game: CardGame) {
+        if game is HighLow{
+            print("started a new game of High Low!")
+        }
+    }
+    
+    func game(player1DidDraw card1: Card, player2DidDraw card2: Card) {
+        print("Player 1 drew a \(card1), player 2 drew a \(card2)")
+//        "Player 1 drew a 6 of hearts, player 2 drew a jack of spades."
+    }
+    
+    
+}
 let deck = Deck()
-deck.drawCard()
+let tracker = CardGameTracker()
+let cardGameHighLow =  HighLow(deck: deck)
+cardGameHighLow.delegate = tracker
+cardGameHighLow.play()
 
 
-//: ## Step 2
-//: Once you've defined the enum as described above, take a look at this built-in protocol, [CustomStringConvertible](https://developer.apple.com/documentation/swift/customstringconvertible) and make the enum conform to that protocol. Make the face cards return a string of their name, and for the numbered cards, simply have it return that number as a string.
-//: ## Step 7
-//: In the rank enum, add a static computed property that returns all the ranks in an array. Name this property `allRanks`. This is needed because you can't iterate over all cases from an enum automatically.
+// Time to test all the types you've created. Create an instance of the HighLow class. Set the delegate property of that object to an instance of CardGameTracker. Lastly, call the play() method on the game object. It should print out to the console something that looks similar to the following:
+
+// Started a new game of High Low
+// Player 1 drew a 2 of diamonds, player 2 drew a ace of diamonds.
+// Player 1 wins with 2 of diamonds.
+//
+//
+
 //: ## Step 16
 //: Take a look at the Swift docs for the [Comparable](https://developer.apple.com/documentation/swift/comparable) protocol. In particular, look at the two functions called `<` and `==`.
 //: ## Step 17
