@@ -153,8 +153,9 @@ struct Deck {
     }
 }
 
-let deck = Deck()
-deck.drawCard()
+// Test Case
+//let deck = Deck()
+//deck.drawCard()
 
 //: ## Step 12
 //: Create a protocol for a `CardGame`. It should have two requirements:
@@ -190,11 +191,23 @@ class HighLow: CardGame {
     var deck: Deck = Deck()
     var delegate: CardGameDelegate?
     func play() {
-        <#code#>
+        let player1Card = deck.drawCard()
+        let player2Card = deck.drawCard()
+        
+        if player1Card == player2Card {
+            print("The players tied with a \(player1Card.description)")
+        } else if player1Card < player2Card {
+            print("Player 2 won with a \(player2Card.description)")
+        } else {
+            print("Player 1 won with a \(player1Card.description)")
+        }
     }
-    
-    
 }
+
+// Test case
+//let game1 = HighLow()
+//game1.play()
+
 
 //: ## Step 20
 //: Create a class called `CardGameTracker` that conforms to the `CardGameDelegate` protocol. Implement the two required functions: `gameDidStart` and `game(player1DidDraw:player2DidDraw)`. Model `gameDidStart` after the same method in the guided project from today. As for the other method, have it print a message like the following:
