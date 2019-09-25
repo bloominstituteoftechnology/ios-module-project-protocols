@@ -205,8 +205,8 @@ class HighLow: CardGame {
 }
 
 // Test case
-//let game1 = HighLow()
-//game1.play()
+    let game = HighLow()
+    game.play()
 
 
 //: ## Step 20
