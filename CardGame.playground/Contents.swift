@@ -203,6 +203,8 @@ class HighLow: CardGame {
             print("Invalid entry for number of turns. Must be integer greater than zero.")
             return
         }
+        var player1Score = 0                // added to keep score of overall match
+        var player2Score = 0                // added to keep score of overall match
         
         for x in 1...numberOfTurns {         // added for number of turns property
             let player1Card = deck.drawCard()
@@ -215,10 +217,19 @@ class HighLow: CardGame {
             if player1Card == player2Card {
                 print("The players tied with a \(player1Card.description)\n\n")
             } else if player1Card < player2Card {
+                player2Score += 1           // added to keep score of overall match
                 print("Player 2 won with a \(player2Card.description)\n\n")
             } else {
+                player1Score += 1           // added to keep score of overall match
                 print("Player 1 won with a \(player1Card.description)\n\n")
             }
+        }
+        if player1Score == player2Score {      // added this entire if statement to display the score of the overall match when the number of rounds has ended.
+            print("The players tied with a score of \(player1Score).")
+        } else if player1Score > player2Score {
+            print("Player 1 won the match with a score of \(player1Score) to \(player2Score).")
+        } else {
+            print("Player 2 won the match with a score of \(player2Score) to \(player1Score).")
         }
     }
 }
@@ -255,7 +266,7 @@ class CardGameTracker: CardGameDelegate {
 //: Player 1 wins with 2 of diamonds.
 //: ```
 
-let thisGame = HighLow(numberOfTurns: 0)
+let thisGame = HighLow(numberOfTurns: 8)
 let gameTracker = CardGameTracker()
 thisGame.delegate = gameTracker
 thisGame.play()
