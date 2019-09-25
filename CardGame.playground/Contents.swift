@@ -3,7 +3,22 @@ import Foundation
 //: ## Step 1
 //: Create an enumeration for the value of a playing card. The values are: `ace`, `two`, `three`, `four`, `five`, `six`, `seven`, `eight`, `nine`, `ten`, `jack`, `queen`, and `king`. Set the raw type of the enum to `Int` and assign the ace a value of `1`.
 
-enum PlayingCard: Int {
+enum Rank: Int, CustomStringConvertible {
+    var description: String {
+        switch self {
+        case .ace:
+            return "ace"
+        case .jack:
+            return "jack"
+        case .queen:
+            return "queen"
+        case .king:
+            return "king"
+        default:
+            return "\(self.rawValue)"
+        }
+    }
+    
     case ace = 1
     case two
     case three
@@ -17,10 +32,48 @@ enum PlayingCard: Int {
     case jack
     case queen
     case king
+    
+    static var allRanks: [Rank] {
+        return [ace, two, three, four, five, six, seven, eight, nine, ten, jack, queen, king]
+    }
 }
 
 //: ## Step 2
 //: Once you've defined the enum as described above, take a look at this built-in protocol, [CustomStringConvertible](https://developer.apple.com/documentation/swift/customstringconvertible) and make the enum conform to that protocol. Make the face cards return a string of their name, and for the numbered cards, simply have it return that number as a string.
+
+//: ##  Step 3
+
+enum Suit: String {
+    case hearts
+    case diamonds
+    case spades
+    case clubs
+    
+    static var allSuit: [Suit] {
+        return [hearts, diamonds, spades, clubs]
+    }
+
+}
+
+//: ## Step 4
+struct Card: CustomStringConvertible {
+    let suit: Suit
+    let rank: Rank
+    
+    var description: String {
+        return "\(rank.description) of \(suit.rawValue)"
+    }
+}
+
+//: ## Step 6
+
+struct Deck {
+    let cards: [Card]
+    
+    
+
+}
+
 //: ## Step 7
 //: In the rank enum, add a static computed property that returns all the ranks in an array. Name this property `allRanks`. This is needed because you can't iterate over all cases from an enum automatically.
 //: ## Step 16
