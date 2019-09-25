@@ -11,7 +11,7 @@ import Foundation
 //: ## Step 17
 //: Make the `Rank` type conform to the `Comparable` protocol. Implement the `<` and `==` functions such that they compare the `rawValue` of the `lhs` and `rhs` arguments passed in. This will allow us to compare two rank values with each other and determine whether they are equal, or if not, which one is larger.
 
-enum Rank: Int {
+enum Rank: Int, CustomStringConvertible {
     case ace = 1
     case two
     case three
@@ -27,12 +27,7 @@ enum Rank: Int {
     case king
     
     static let allRanks: [Rank] = [.ace, .two, .three, .four, .five, .six, .seven, .eight, .nine, .ten, .jack, .queen, .king]
-}
-
-// Test line to make sure the static let works
-Rank.allRanks
-
-extension Rank: CustomStringConvertible {
+    
     var description: String {
         switch self.rawValue {
         case 1...10:
@@ -48,6 +43,26 @@ extension Rank: CustomStringConvertible {
         }
     }
 }
+
+// Test line to make sure the static let works
+Rank.allRanks
+
+//extension Rank: CustomStringConvertible {
+//    var description: String {
+//        switch self.rawValue {
+//        case 1...10:
+//            return String(self.rawValue)
+//        case 11:
+//            return "jack"
+//        case 12:
+//            return "queen"
+//        case 13:
+//            return "king"
+//        default:
+//            return ""
+//        }
+//    }
+//}
 
 extension Rank: Comparable {
     static func < (lhs: Rank, rhs: Rank) -> Bool {
@@ -149,7 +164,7 @@ struct Deck {
     
     func drawCard() -> Card {
         let rand = Int.random(in: 1...52)
-        return cards[rand + 1]  // as an example
+        return cards[rand - 1]  // as an example
     }
 }
 
@@ -205,15 +220,30 @@ class HighLow: CardGame {
 }
 
 // Test case
-    let game = HighLow()
-    game.play()
-
+//for x in 1...50 {
+//    let game = HighLow()
+//    print("Game #\(x) result:")
+//    game.play()
+//}
 
 //: ## Step 20
 //: Create a class called `CardGameTracker` that conforms to the `CardGameDelegate` protocol. Implement the two required functions: `gameDidStart` and `game(player1DidDraw:player2DidDraw)`. Model `gameDidStart` after the same method in the guided project from today. As for the other method, have it print a message like the following:
 //: * "Player 1 drew a 6 of hearts, player 2 drew a jack of spades."
 
-
+class CardGameTracker: CardGameDelegate {
+    var gameRound = 0
+    func gameDidStart(_ game: CardGame) {
+         var gameRound = 0
+               if game is HighLow {
+                   print("Started a new game of HighLow")
+               }
+    }
+    
+    func game(player1DidDraw card1: Card, player2DidDraw card2: Card) {
+        gameRound += 1
+        print("Player 1 drew a \(card1.description) and Player 2 drew a \(card2.description).")
+    }
+}
 
 //: Step 21
 //: Time to test all the types you've created. Create an instance of the `HighLow` class. Set the `delegate` property of that object to an instance of `CardGameTracker`. Lastly, call the `play()` method on the game object. It should print out to the console something that looks similar to the following:
