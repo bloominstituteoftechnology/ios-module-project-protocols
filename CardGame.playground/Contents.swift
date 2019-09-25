@@ -254,4 +254,9 @@ class CardGameTracker: CardGameDelegate {
 //: Player 1 wins with 2 of diamonds.
 //: ```
 
+let thisGame = HighLow()
+let gameTracker = CardGameTracker()
+thisGame.delegate = gameTracker
+thisGame.play()
+
 
