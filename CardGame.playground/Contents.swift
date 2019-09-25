@@ -30,7 +30,9 @@ enum Rank: Int, CustomStringConvertible {
     
     var description: String {
         switch self.rawValue {
-        case 1...10:
+        case 1:
+            return "ace"
+        case 2...10:
             return String(self.rawValue)
         case 11:
             return "jack"
@@ -189,7 +191,7 @@ protocol CardGame {
 
 protocol CardGameDelegate {
     func gameDidStart(_ game: CardGame)
-    func game(player1DidDraw card1: Card, player2DidDraw card2: Card)
+    func game(_ game: CardGame, player1DidDraw card1: Card, player2DidDraw card2: Card) // ammended to add "_ game: CardGame,"
 }
 
 //: ## Step 14
@@ -203,19 +205,32 @@ protocol CardGameDelegate {
 //: * Player 2 wins with a higher card, e.g. "Player 2 wins with king of diamonds."
 
 class HighLow: CardGame {
+    var numberOfTurns: Int                      // added for number of turns
     var deck: Deck = Deck()
     var delegate: CardGameDelegate?
+    
+    init(numberOfTurns: Int) {                  // added for number of turns
+        self.numberOfTurns = numberOfTurns      // added for number of turns
+    }                                           // added for number of turns
+    
     func play() {
+        
+        delegate?.gameDidStart(self)
+        
+        for x in 1...numberOfTurns {         // added for number of turns
         let player1Card = deck.drawCard()
         let player2Card = deck.drawCard()
         
-        if player1Card == player2Card {
-            print("The players tied with a \(player1Card.description)")
-        } else if player1Card < player2Card {
-            print("Player 2 won with a \(player2Card.description)")
-        } else {
-            print("Player 1 won with a \(player1Card.description)")
-        }
+            print("Turn #\(x): ")              // added
+            delegate?.game(self, player1DidDraw: player1Card, player2DidDraw: player2Card) // added
+            if player1Card == player2Card {
+                print("The players tied with a \(player1Card.description)\n\n")
+            } else if player1Card < player2Card {
+                print("Player 2 won with a \(player2Card.description)\n\n")
+            } else {
+                print("Player 1 won with a \(player1Card.description)\n\n")
+            }
+        }                                       // added for number of turns
     }
 }
 
@@ -231,16 +246,13 @@ class HighLow: CardGame {
 //: * "Player 1 drew a 6 of hearts, player 2 drew a jack of spades."
 
 class CardGameTracker: CardGameDelegate {
-    var gameRound = 0
-    func gameDidStart(_ game: CardGame) {
-         var gameRound = 0
+        func gameDidStart(_ game: CardGame) {
                if game is HighLow {
                    print("Started a new game of HighLow")
                }
     }
     
-    func game(player1DidDraw card1: Card, player2DidDraw card2: Card) {
-        gameRound += 1
+    func game(_ game: CardGame, player1DidDraw card1: Card, player2DidDraw card2: Card) {  // ammended to add "_ game: CardGame,"
         print("Player 1 drew a \(card1.description) and Player 2 drew a \(card2.description).")
     }
 }
@@ -254,7 +266,7 @@ class CardGameTracker: CardGameDelegate {
 //: Player 1 wins with 2 of diamonds.
 //: ```
 
-let thisGame = HighLow()
+let thisGame = HighLow(numberOfTurns: 20)
 let gameTracker = CardGameTracker()
 thisGame.delegate = gameTracker
 thisGame.play()
