@@ -1,7 +1,6 @@
-import UIKit
 import Foundation
 
-enum Rank: Int, CustomStringConvertible{
+enum Rank: Int, CustomStringConvertible {
     var description: String {
         switch self.rawValue {
         case 1...10:
@@ -36,6 +35,7 @@ enum Rank: Int, CustomStringConvertible{
     }
     
 }
+
 extension Rank: Comparable {
     static func < (lhs: Rank, rhs: Rank) -> Bool {
         return lhs.rawValue < rhs.rawValue
@@ -45,7 +45,6 @@ extension Rank: Comparable {
     }
     
 }
-
 
 enum Suit: String {
     case hearts = "hearts"
@@ -74,7 +73,6 @@ extension Card: Comparable {
     static func == (lhs: Card, rhs: Card) -> Bool {
         return lhs.rank == rhs.rank && lhs.suit == rhs.suit
     }
-    
 }
 
 struct Deck {
@@ -94,8 +92,6 @@ struct Deck {
         return cardsForDeck.randomElement()!
     }
 }
-let deck = Deck()
-deck.drawCard()
 
 protocol CardGame {
     var deck: Deck {get}
@@ -108,27 +104,51 @@ protocol CardGameDelegate {
 }
 
 class HighLow: CardGame {
-    //CardGame Conformance Protocol Stub
-    func play() {
-        let player1Card = deck.drawCard()
-        let player2Card = deck.drawCard()
-        
-        delegate?.gameDidStart(self)
-        
-        print("Player 1 drew \(player1Card)\nPlayer 2 drew \(player2Card)")
-        
-        if player1Card == player2Card {
-            print("Round ends in a tie with \(player1Card)")
-        }else if player2Card < player1Card {
-            print("Player 1 wins with \(player1Card)")
-        }else {
-            print("Player 2 wins with \(player2Card)")
+   var numberOfTurns: Int                     
+   var deck: Deck = Deck()
+   var delegate: CardGameDelegate?
+   
+   init(numberOfTurns: Int) {
+       self.numberOfTurns = numberOfTurns
+   }
+   
+   func play() {
+       
+       delegate?.gameDidStart(self)
+       
+       if numberOfTurns < 1 {
+            print("Invalid entry for number of turns. Must be integer greater than zero.")
+            return
         }
+        var player1Score = 0
+        var player2Score = 0
         
+        for x in 1...numberOfTurns {
+            let player1Card = deck.drawCard()
+           let player2Card = deck.drawCard()
+           
+           print("Turn #\(x): ")
+           
+           delegate?.game(player1DidDraw: player1Card, player2DidDraw: player2Card)
+           
+            if player1Card == player2Card {
+                print("The players tied with a \(player1Card.description)\n\n")
+            } else if player1Card < player2Card {
+                player2Score += 1
+                print("Player 2 won with a \(player2Card.description)\n\n")
+            } else {
+                player1Score += 1
+                print("Player 1 won with a \(player1Card.description)\n\n")
+            }
+        }
+        if player1Score == player2Score {
+            print("The players tied with a score of \(player1Score).")
+        } else if player1Score > player2Score {
+            print("Player 1 won the match with a score of \(player1Score) to \(player2Score).")
+        } else {
+            print("Player 2 won the match with a score of \(player2Score) to \(player1Score).")
+        }
     }
-    
-    var deck: Deck = Deck()
-    var delegate: CardGameDelegate?
 }
 
 class CardGameTracker: CardGameDelegate {
@@ -149,6 +169,6 @@ class CardGameTracker: CardGameDelegate {
 }
 
 let tracker = CardGameTracker()
-let game = HighLow()
+let game = HighLow(numberOfTurns: 5)
 game.delegate = tracker
 game.play()
