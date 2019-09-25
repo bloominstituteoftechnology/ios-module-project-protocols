@@ -102,7 +102,8 @@ extension Card: Comparable {
         return lhs.rank.rawValue < rhs.rank.rawValue
     }
     static func == (lhs: Card, rhs: Card) -> Bool {
-        return lhs.rank.rawValue == rhs.rank.rawValue && lhs.suit == rhs.suit
+        return lhs.rank.rawValue == rhs.rank.rawValue
+//         I commented this out from the above line: <&& lhs.suit == rhs.suit> because we don't have any information for which suit is a higher rank than the next.  As it was, it counted a tie when the card was exactly the same, but gave player2 preference when the rank was the same and the suit was different.
     }
 }
 
@@ -114,7 +115,7 @@ extension Card: Comparable {
 //
 //card1 == card2
 //card1 == card4
-//card2 > card3
+//card2 < card3
 //card2 >= card3
 //: ## Step 6
 //: Create a `struct` to model a deck of cards. It should be called `Deck` and have an array of `Card` objects as a constant property. A custom `init` function should be created that initializes the array with a card of each rank and suit. You'll want to iterate over all ranks, and then over all suits (this is an example of _nested `for` loops_). See the next 2 steps before you continue with the nested loops.
@@ -215,7 +216,7 @@ class HighLow: CardGame {
             delegate?.game(player1DidDraw: player1Card, player2DidDraw: player2Card)
             
             if player1Card == player2Card {
-                print("The players tied with a \(player1Card.description)\n\n")
+                print("The players tied with a \(player1Card.rank)\n\n")
             } else if player1Card < player2Card {
                 player2Score += 1           // added to keep score of overall match
                 print("Player 2 won with a \(player2Card.description)\n\n")
@@ -266,7 +267,7 @@ class CardGameTracker: CardGameDelegate {
 //: Player 1 wins with 2 of diamonds.
 //: ```
 
-let thisGame = HighLow(numberOfTurns: 8)
+let thisGame = HighLow(numberOfTurns: 20)
 let gameTracker = CardGameTracker()
 thisGame.delegate = gameTracker
 thisGame.play()
