@@ -49,8 +49,22 @@ extension Rank: CustomStringConvertible {
     }
 }
 
-let sample: Rank = .queen
-print(sample.description)
+extension Rank: Comparable {
+    static func < (lhs: Rank, rhs: Rank) -> Bool {
+            return lhs.rawValue < rhs.rawValue
+    }
+    static func == (lhs: Rank, rhs: Rank) -> Bool {
+        return lhs.rawValue == rhs.rawValue
+    }
+}
+
+// Test cases
+//Rank.four == Rank.four
+//Rank.four <= Rank.queen
+//Rank.four >= Rank.four
+//Rank.ace >= Rank.king
+//let sample: Rank = .queen
+//print(sample.description)
 //: ## Step 3
 //: Create an enum for the suit of a playing card. The values are `hearts`, `diamonds`, `spades`, and `clubs`. Use a raw type of `String` for this enum (this will allow us to get a string version of the enum cases for free, no use of `CustomStringConvertible` required).
 //: ## Step 8
@@ -66,7 +80,7 @@ enum Suit: String {
 }
 
 // Test line to make sure static let works as intended
-Suit.allSuits
+// Suit.allSuits
 
 //: ## Step 4
 //: Using the two enums above, create a `struct` called `Card` to model a single playing card. It should have constant properties for each constituent piece (one for suit and one for rank).
@@ -83,6 +97,26 @@ struct Card: CustomStringConvertible {
     let suit: Suit
 }
 
+extension Card: Comparable {
+    static func < (lhs: Card, rhs: Card) -> Bool {
+        return lhs.rank.rawValue < rhs.rank.rawValue
+    }
+    static func == (lhs: Card, rhs: Card) -> Bool {
+        return lhs.rank.rawValue == rhs.rank.rawValue && lhs.suit == rhs.suit
+    }
+}
+
+let card1 = Card(rank: .ace, suit: .diamonds)
+let card2 = Card(rank: .eight, suit: .spades)
+let card3 = Card(rank: .eight, suit: .diamonds)
+let card4 = Card(rank: .ace, suit: .diamonds)
+
+
+// Test cases
+//card1 == card2
+//card1 == card4
+//card2 > card3
+//card2 >= card3
 //: ## Step 6
 //: Create a `struct` to model a deck of cards. It should be called `Deck` and have an array of `Card` objects as a constant property. A custom `init` function should be created that initializes the array with a card of each rank and suit. You'll want to iterate over all ranks, and then over all suits (this is an example of _nested `for` loops_). See the next 2 steps before you continue with the nested loops.
 //: ## Step 9
@@ -121,15 +155,6 @@ struct Deck {
 
 let deck = Deck()
 deck.drawCard()
-
-
-
-
-for rank in Rank.allRanks {
-    for suit in Suit.allSuits {
-        print(Card.init(rank: rank, suit: suit))
-    }
-}
 
 //: ## Step 12
 //: Create a protocol for a `CardGame`. It should have two requirements:
