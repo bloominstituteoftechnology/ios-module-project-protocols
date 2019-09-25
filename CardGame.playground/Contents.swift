@@ -49,6 +49,18 @@ extension Rank: CustomStringConvertible {
     }
 }
 
+extension Rank: Comparable {
+    static func < (lhs: Rank, rhs: Rank) -> Bool {
+            return lhs.rawValue < rhs.rawValue
+        }
+    static func == (lhs:Rank, rhs: Rank) -> Bool {
+            return lhs.rawValue == rhs.rawValue
+        }
+    }
+    
+    
+
+
 //: ## Step 3
 //: Create an enum for the suit of a playing card. The values are `hearts`, `diamonds`, `spades`, and `clubs`. Use a raw type of `String` for this enum (this will allow us to get a string version of the enum cases for free, no use of `CustomStringConvertible` required).
 //: ## Step 8
@@ -79,6 +91,14 @@ struct Card: CustomStringConvertible {
     let rank: Rank
 }
 
+extension Card: Comparable {
+static func < (lhs: Card, rhs: Card) -> Bool {
+        return lhs.rank < rhs.rank
+    }
+static func == (lhs:Card, rhs: Card) -> Bool {
+    return lhs.rank == rhs.rank && lhs.suit == lhs.suit
+    }
+}
 //: ## Step 6
 //: Create a `struct` to model a deck of cards. It should be called `Deck` and have an array of `Card` objects as a constant property. A custom `init` function should be created that initializes the array with a card of each rank and suit. You'll want to iterate over all ranks, and then over all suits (this is an example of _nested `for` loops_). See the next 2 steps before you continue with the nested loops.
 //: ## Step 9
@@ -117,14 +137,20 @@ init() {
 //: Create a protocol for a `CardGame`. It should have two requirements:
 //: * a gettable `deck` property
 //: * a `play()` method
-
+protocol CardGame {
+    var deck: Deck { get }
+    func play()
+}
 
 
 //: ## Step 13
 //: Create a protocol for tracking a card game as a delegate called `CardGameDelegate`. It should have two functional requirements:
 //: * a function called `gameDidStart` that takes a `CardGame` as an argument
 //: * a function with the following signature: `game(player1DidDraw card1: Card, player2DidDraw card2: Card)`
-
+protocol CardGameDelegate {
+    func gameDidStart(cardGame: CardGame)
+    func game(player1DidDraw card1: Card, player2DidDraw card2: Card)
+}
 
 
 //: ## Step 14
@@ -136,7 +162,30 @@ init() {
 //: * Ends in a tie, something like, "Round ends in a tie with 3 of clubs."
 //: * Player 1 wins with a higher card, e.g. "Player 1 wins with 8 of hearts."
 //: * Player 2 wins with a higher card, e.g. "Player 2 wins with king of diamonds."
-
+class HighLow: CardGame {
+    var deck: Deck
+    var delegate: CardGameDelegate?
+    init(deck: Deck, delegate: CardGameDelegate?) {
+        self.deck = deck
+        self.delegate = delegate
+    }
+    func play() {
+                let player1 = deck.drawCard()
+                let player2 = deck.drawCard()
+                
+        delegate?.gameDidStart(cardGame: self)
+                
+                if player1 == player2 {
+                    print("Round ends in a tie with \(player1).")
+                }
+                else if player1 < player2 {
+                    print("Player 2 wins with a \(player2).")
+                }
+                else {
+                    print("Player 1 wins with a \(player1).")
+        }
+            }
+}
 
 
 //: ## Step 20
