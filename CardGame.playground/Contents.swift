@@ -2,9 +2,58 @@ import Foundation
 
 //: ## Step 1
 //: Create an enumeration for the value of a playing card. The values are: `ace`, `two`, `three`, `four`, `five`, `six`, `seven`, `eight`, `nine`, `ten`, `jack`, `queen`, and `king`. Set the raw type of the enum to `Int` and assign the ace a value of `1`.
-enum Rank: Int {
-    case ace = 1, two, three, four, five, six, seven, eight, nin, ten, jack, queen, king
+enum Rank: Int, CustomStringConvertible {
+    case ace = 1, two = 2 , three = 3, four = 4 , five = 5, six = 6, seven = 7, eight = 8, nine = 9, ten = 10, jack, queen, king
+    
+    var description: String {
+    switch self{
+    case .ace:
+        return "\(Rank.ace)"
+    case .two:
+        return "\(Rank.two)"
+    case .three:
+        return "\(Rank.three)"
+    case .four:
+        return "\(Rank.four)"
+    case .five:
+        return "\(Rank.five)"
+    case .six:
+        return "\(Rank.six)"
+    case .seven:
+        return "\(Rank.seven)"
+    case .eight:
+        return "\(Rank.eight)"
+    case .nine:
+        return "\(Rank.nine)"
+        case .jack:
+        return "\(Rank.jack)"
+    case .queen:
+        return "\(Rank.queen)"
+    case .king:
+        return "\(Rank.king)"
+    default:
+        return ""
+    }
 }
+
+    enum SuitOfCard: String {
+        case heart, diamond, spade, club
+}
+
+    struct Card: CustomStringConvertible {
+        let suit: SuitOfCard
+        let rank: Rank
+        
+        var description: String {
+            return "\(rank) of \(suit)"
+        }
+        
+}
+
+
+
+
+
 
 //: ## Step 2
 //: Once you've defined the enum as described above, take a look at this built-in protocol, [CustomStringConvertible](https://developer.apple.com/documentation/swift/customstringconvertible) and make the enum conform to that protocol. Make the face cards return a string of their name, and for the numbered cards, simply have it return that number as a string.
