@@ -11,24 +11,112 @@ import Foundation
 //: ## Step 17
 //: Make the `Rank` type conform to the `Comparable` protocol. Implement the `<` and `==` functions such that they compare the `rawValue` of the `lhs` and `rhs` arguments passed in. This will allow us to compare two rank values with each other and determine whether they are equal, or if not, which one is larger.
 
+enum Rank: Int, CustomStringConvertible {
+    case ace = 1
+    case two
+    case three
+    case four
+    case five
+    case six
+    case seven
+    case eight
+    case nine
+    case ten
+    case jack
+    case queen
+    case king
+    
+    static let allRanks: [Rank] = [.ace, .two, .three, .four, .five, .six, .seven, .eight, .nine, .ten, .jack, .queen, .king]
+    
+    var description: String {
+        switch self.rawValue {
+        case 1:
+            return "ace"
+        case 2...10:
+            return String(self.rawValue)
+        case 11:
+            return "jack"
+        case 12:
+            return "queen"
+        case 13:
+            return "king"
+        default:
+            return ""
+        }
+    }
+}
 
+// Test line to make sure the static let works
+Rank.allRanks
 
+extension Rank: Comparable {
+    static func < (lhs: Rank, rhs: Rank) -> Bool {
+            return lhs.rawValue < rhs.rawValue
+    }
+    static func == (lhs: Rank, rhs: Rank) -> Bool {
+        return lhs.rawValue == rhs.rawValue
+    }
+}
+
+// Test cases
+//Rank.four == Rank.four
+//Rank.four <= Rank.queen
+//Rank.four >= Rank.four
+//Rank.ace >= Rank.king
+//let sample: Rank = .queen
+//print(sample.description)
 //: ## Step 3
 //: Create an enum for the suit of a playing card. The values are `hearts`, `diamonds`, `spades`, and `clubs`. Use a raw type of `String` for this enum (this will allow us to get a string version of the enum cases for free, no use of `CustomStringConvertible` required).
 //: ## Step 8
 //: In the suit enum, add a static computed property that returns all the suits in an array. Name this property `allSuits`.
 
+enum Suit: String {
+    case hearts = "Hearts"
+    case diamonds = "Diamonds"
+    case spades = "Spades"
+    case clubs = "Clubs"
+    
+    static let allSuits: [Suit] = [.hearts, .diamonds, .spades, .clubs]
+}
 
+// Test line to make sure static let works as intended
+// Suit.allSuits
 
 //: ## Step 4
 //: Using the two enums above, create a `struct` called `Card` to model a single playing card. It should have constant properties for each constituent piece (one for suit and one for rank).
 //: ## Step 5
 //: Make the card also conform to `CustomStringConvertible`. When turned into a string, a card's value should look something like this, "ace of spades", or "3 of diamonds".
-//: Step 18
+//: ## Step 18
 //: Make the `Card` type conform to the `Comparable` protocol. Implement the `<` and `==` methods such that they compare the ranks of the `lhs` and `rhs` arguments passed in. For the `==` method, compare **both** the rank and the suit.
 
+struct Card: CustomStringConvertible {
+    var description: String {
+        return "\(rank) of \(suit)"
+    }
+    let rank: Rank
+    let suit: Suit
+}
 
+extension Card: Comparable {
+    static func < (lhs: Card, rhs: Card) -> Bool {
+        return lhs.rank.rawValue < rhs.rank.rawValue
+    }
+    static func == (lhs: Card, rhs: Card) -> Bool {
+        return lhs.rank.rawValue == rhs.rank.rawValue
+//         I commented this out from the above line: <&& lhs.suit == rhs.suit> because we don't have any information for which suit is a higher rank than the next.  As it was, it counted a tie when the card was exactly the same, but gave player2 preference when the rank was the same and the suit was different.
+    }
+}
 
+// Test cases
+//let card1 = Card(rank: .ace, suit: .diamonds)
+//let card2 = Card(rank: .eight, suit: .spades)
+//let card3 = Card(rank: .eight, suit: .diamonds)
+//let card4 = Card(rank: .ace, suit: .diamonds)
+//
+//card1 == card2
+//card1 == card4
+//card2 < card3
+//card2 >= card3
 //: ## Step 6
 //: Create a `struct` to model a deck of cards. It should be called `Deck` and have an array of `Card` objects as a constant property. A custom `init` function should be created that initializes the array with a card of each rank and suit. You'll want to iterate over all ranks, and then over all suits (this is an example of _nested `for` loops_). See the next 2 steps before you continue with the nested loops.
 //: ## Step 9
@@ -44,21 +132,50 @@ import Foundation
 //: Add a method to the deck called `drawCard()`. It takes no arguments and it returns a `Card` object. Have it draw a random card from the deck of cards and return it.
 //: - Callout(Hint): There should be `52` cards in the deck. So what if you created a random number within those bounds and then retrieved that card from the deck? Remember that arrays are indexed from `0` and take that into account with your random number picking.
 
+struct Deck {
+    let cards: [Card]
+    
+    init() {
+        var deck: [Card] = []
+        var currentCard: Card
+        for rank in Rank.allRanks {
+            for suit in Suit.allSuits {
+                currentCard = Card.init(rank: rank, suit: suit)
+               deck.append(currentCard)
+            }
+        }
+        self.cards = deck
+    }
+    
+    func drawCard() -> Card {
+        let rand = Int.random(in: 1...52)
+        return cards[rand - 1]
+    }
+}
 
+// Test Case
+//let deck = Deck()
+//deck.drawCard()
 
 //: ## Step 12
 //: Create a protocol for a `CardGame`. It should have two requirements:
 //: * a gettable `deck` property
 //: * a `play()` method
 
-
+protocol CardGame {
+    var deck: Deck { get }
+    func play()
+}
 
 //: ## Step 13
 //: Create a protocol for tracking a card game as a delegate called `CardGameDelegate`. It should have two functional requirements:
 //: * a function called `gameDidStart` that takes a `CardGame` as an argument
 //: * a function with the following signature: `game(player1DidDraw card1: Card, player2DidDraw card2: Card)`
 
-
+protocol CardGameDelegate {
+    func gameDidStart(_ game: CardGame)
+    func game(player1DidDraw card1: Card, player2DidDraw card2: Card)
+}
 
 //: ## Step 14
 //: Create a class called `HighLow` that conforms to the `CardGame` protocol. It should have an initialized `Deck` as a property, as well as an optional delegate property of type `CardGameDelegate`.
@@ -70,13 +187,76 @@ import Foundation
 //: * Player 1 wins with a higher card, e.g. "Player 1 wins with 8 of hearts."
 //: * Player 2 wins with a higher card, e.g. "Player 2 wins with king of diamonds."
 
+class HighLow: CardGame {
+    var numberOfTurns: Int                      // added for number of turns property
+    var deck: Deck = Deck()
+    var delegate: CardGameDelegate?
+    
+    init(numberOfTurns: Int) {                  // added for number of turns property
+        self.numberOfTurns = numberOfTurns    // added for number of turns property
+    }                                           // added for number of turns property
+    
+    func play() {
+        
+        delegate?.gameDidStart(self)
+        
+        if numberOfTurns < 1 {
+            print("Invalid entry for number of turns. Must be integer greater than zero.")
+            return
+        }
+        var player1Score = 0                // added to keep score of overall match
+        var player2Score = 0                // added to keep score of overall match
+        
+        for x in 1...numberOfTurns {         // added for number of turns property
+            let player1Card = deck.drawCard()
+            let player2Card = deck.drawCard()
+            
+            print("Turn #\(x): ")              // added to show user the turn number
+            
+            delegate?.game(player1DidDraw: player1Card, player2DidDraw: player2Card)
+            
+            if player1Card == player2Card {
+                print("The players tied with a \(player1Card.rank)\n\n")
+            } else if player1Card < player2Card {
+                player2Score += 1           // added to keep score of overall match
+                print("Player 2 won with a \(player2Card.description)\n\n")
+            } else {
+                player1Score += 1           // added to keep score of overall match
+                print("Player 1 won with a \(player1Card.description)\n\n")
+            }
+        }
+        if player1Score == player2Score {      // added this entire if statement to display the score of the overall match when the number of rounds has ended.
+            print("The players tied with a score of \(player1Score).")
+        } else if player1Score > player2Score {
+            print("Player 1 won the match with a score of \(player1Score) to \(player2Score).")
+        } else {
+            print("Player 2 won the match with a score of \(player2Score) to \(player1Score).")
+        }
+    }
+}
 
+// Test case
+//for x in 1...50 {
+//    let game = HighLow()
+//    print("Game #\(x) result:")
+//    game.play()
+//}
 
 //: ## Step 20
 //: Create a class called `CardGameTracker` that conforms to the `CardGameDelegate` protocol. Implement the two required functions: `gameDidStart` and `game(player1DidDraw:player2DidDraw)`. Model `gameDidStart` after the same method in the guided project from today. As for the other method, have it print a message like the following:
 //: * "Player 1 drew a 6 of hearts, player 2 drew a jack of spades."
 
-
+class CardGameTracker: CardGameDelegate {
+        func gameDidStart(_ game: CardGame) {
+               if game is HighLow {
+                   print("Started a new game of HighLow")
+               }
+    }
+    
+    func game(player1DidDraw card1: Card, player2DidDraw card2: Card) {
+        print("Player 1 drew a \(card1.description) and Player 2 drew a \(card2.description).")
+    }
+}
 
 //: Step 21
 //: Time to test all the types you've created. Create an instance of the `HighLow` class. Set the `delegate` property of that object to an instance of `CardGameTracker`. Lastly, call the `play()` method on the game object. It should print out to the console something that looks similar to the following:
@@ -86,5 +266,10 @@ import Foundation
 //: Player 1 drew a 2 of diamonds, player 2 drew a ace of diamonds.
 //: Player 1 wins with 2 of diamonds.
 //: ```
+
+let thisGame = HighLow(numberOfTurns: 20)
+let gameTracker = CardGameTracker()
+thisGame.delegate = gameTracker
+thisGame.play()
 
 
