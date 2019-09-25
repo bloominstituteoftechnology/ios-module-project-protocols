@@ -5,54 +5,91 @@ import Foundation
 enum Rank: Int, CustomStringConvertible {
     case ace = 1, two = 2 , three = 3, four = 4 , five = 5, six = 6, seven = 7, eight = 8, nine = 9, ten = 10, jack, queen, king
     
+//    var description: String {
+//        return "\(Rank.ace), \(Rank.two) , \(Rank.three), \(Rank.four), \(Rank.five), \(Rank.six), \(Rank.seven), \(Rank.eight), \(Rank.nine), \(Rank.ten), \(Rank.jack), \(Rank.queen), \(Rank.king)"
+//    }
+    
     var description: String {
-    switch self{
-    case .ace:
-        return "\(Rank.ace)"
-    case .two:
-        return "\(Rank.two)"
-    case .three:
-        return "\(Rank.three)"
-    case .four:
-        return "\(Rank.four)"
-    case .five:
-        return "\(Rank.five)"
-    case .six:
-        return "\(Rank.six)"
-    case .seven:
-        return "\(Rank.seven)"
-    case .eight:
-        return "\(Rank.eight)"
-    case .nine:
-        return "\(Rank.nine)"
+       switch self{
+       case .ace:
+           return "1"
+       case .two:
+           return "2"
+       case .three:
+           return "3"
+       case .four:
+           return "4"
+       case .five:
+           return "5"
+       case .six:
+           return "6"
+       case .seven:
+           return "7"
+       case .eight:
+           return "8"
+       case .nine:
+           return "9"
+       case .ten:
+            return "10"
         case .jack:
-        return "\(Rank.jack)"
-    case .queen:
-        return "\(Rank.queen)"
-    case .king:
-        return "\(Rank.king)"
-    default:
-        return ""
+           return "Jack"
+       case .queen:
+           return "Queen"
+       case .king:
+           return "King"
+       }
+    }
+    
+    static var allRank: [Rank]{
+        return [ace, two, three, four, five, six, seven, eight, nine, ten, jack, queen, king]
     }
 }
 
-    enum SuitOfCard: String {
-        case heart, diamond, spade, club
+    enum Suits: String {
+        case heart
+        case diamond
+        case spade
+        case club
+        
+        static var allSuits: [Suits] {
+            return [heart, diamond, spade, club]
+        }
 }
 
+
     struct Card: CustomStringConvertible {
-        let suit: SuitOfCard
         let rank: Rank
+        let suit: Suits
+        
         
         var description: String {
             return "\(rank) of \(suit)"
         }
-        
 }
 
+    struct Deck {
 
+        var cardDeck: [Card] = []
+        
+        init() {
+            var deck: [Card] = []
+            for rank in Rank.allRank {
+                for suit in Suits.allSuits {
+                    deck.append(Card(rank: rank, suit: suit))
+                }
+            }
+            cardDeck = deck
+        }
+        
+        func drawCard() -> Card {
+            let randomCard = cardDeck.randomElement()!
+            print(randomCard)
+            return randomCard
+        }
+}
 
-
+let deck = Deck()
+deck.drawCard()
 
 
 //: ## Step 2
