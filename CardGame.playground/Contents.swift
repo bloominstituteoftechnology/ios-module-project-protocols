@@ -49,23 +49,6 @@ enum Rank: Int, CustomStringConvertible {
 // Test line to make sure the static let works
 Rank.allRanks
 
-//extension Rank: CustomStringConvertible {
-//    var description: String {
-//        switch self.rawValue {
-//        case 1...10:
-//            return String(self.rawValue)
-//        case 11:
-//            return "jack"
-//        case 12:
-//            return "queen"
-//        case 13:
-//            return "king"
-//        default:
-//            return ""
-//        }
-//    }
-//}
-
 extension Rank: Comparable {
     static func < (lhs: Rank, rhs: Rank) -> Bool {
             return lhs.rawValue < rhs.rawValue
@@ -123,13 +106,12 @@ extension Card: Comparable {
     }
 }
 
-let card1 = Card(rank: .ace, suit: .diamonds)
-let card2 = Card(rank: .eight, suit: .spades)
-let card3 = Card(rank: .eight, suit: .diamonds)
-let card4 = Card(rank: .ace, suit: .diamonds)
-
-
 // Test cases
+//let card1 = Card(rank: .ace, suit: .diamonds)
+//let card2 = Card(rank: .eight, suit: .spades)
+//let card3 = Card(rank: .eight, suit: .diamonds)
+//let card4 = Card(rank: .ace, suit: .diamonds)
+//
 //card1 == card2
 //card1 == card4
 //card2 > card3
@@ -166,7 +148,7 @@ struct Deck {
     
     func drawCard() -> Card {
         let rand = Int.random(in: 1...52)
-        return cards[rand - 1]  // as an example
+        return cards[rand - 1]
     }
 }
 
@@ -191,7 +173,7 @@ protocol CardGame {
 
 protocol CardGameDelegate {
     func gameDidStart(_ game: CardGame)
-    func game(_ game: CardGame, player1DidDraw card1: Card, player2DidDraw card2: Card) // ammended to add "_ game: CardGame,"
+    func game(player1DidDraw card1: Card, player2DidDraw card2: Card)
 }
 
 //: ## Step 14
@@ -205,24 +187,31 @@ protocol CardGameDelegate {
 //: * Player 2 wins with a higher card, e.g. "Player 2 wins with king of diamonds."
 
 class HighLow: CardGame {
-    var numberOfTurns: Int                      // added for number of turns
+    var numberOfTurns: Int                      // added for number of turns property
     var deck: Deck = Deck()
     var delegate: CardGameDelegate?
     
-    init(numberOfTurns: Int) {                  // added for number of turns
-        self.numberOfTurns = numberOfTurns      // added for number of turns
-    }                                           // added for number of turns
+    init(numberOfTurns: Int) {                  // added for number of turns property
+        self.numberOfTurns = numberOfTurns    // added for number of turns property
+    }                                           // added for number of turns property
     
     func play() {
         
         delegate?.gameDidStart(self)
         
-        for x in 1...numberOfTurns {         // added for number of turns
-        let player1Card = deck.drawCard()
-        let player2Card = deck.drawCard()
+        if numberOfTurns < 1 {
+            print("Invalid entry for number of turns. Must be integer greater than zero.")
+            return
+        }
         
-            print("Turn #\(x): ")              // added
-            delegate?.game(self, player1DidDraw: player1Card, player2DidDraw: player2Card) // added
+        for x in 1...numberOfTurns {         // added for number of turns property
+            let player1Card = deck.drawCard()
+            let player2Card = deck.drawCard()
+            
+            print("Turn #\(x): ")              // added to show user the turn number
+            
+            delegate?.game(player1DidDraw: player1Card, player2DidDraw: player2Card)
+            
             if player1Card == player2Card {
                 print("The players tied with a \(player1Card.description)\n\n")
             } else if player1Card < player2Card {
@@ -230,7 +219,7 @@ class HighLow: CardGame {
             } else {
                 print("Player 1 won with a \(player1Card.description)\n\n")
             }
-        }                                       // added for number of turns
+        }
     }
 }
 
@@ -252,7 +241,7 @@ class CardGameTracker: CardGameDelegate {
                }
     }
     
-    func game(_ game: CardGame, player1DidDraw card1: Card, player2DidDraw card2: Card) {  // ammended to add "_ game: CardGame,"
+    func game(player1DidDraw card1: Card, player2DidDraw card2: Card) {
         print("Player 1 drew a \(card1.description) and Player 2 drew a \(card2.description).")
     }
 }
@@ -266,7 +255,7 @@ class CardGameTracker: CardGameDelegate {
 //: Player 1 wins with 2 of diamonds.
 //: ```
 
-let thisGame = HighLow(numberOfTurns: 20)
+let thisGame = HighLow(numberOfTurns: 0)
 let gameTracker = CardGameTracker()
 thisGame.delegate = gameTracker
 thisGame.play()
