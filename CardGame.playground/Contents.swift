@@ -33,7 +33,6 @@ enum Rank: Int, CustomStringConvertible {
     static var allRanks: [Rank] {
         return [ace, two, three, four, five, six, seven, eight, nine, ten, jack, queen, king]
     }
-    
 }
 
 extension Rank: Comparable {
@@ -55,6 +54,8 @@ enum Suit: String {
     static var allSuits: [Suit] {
         return [hearts, diamonds, spades, clubs]
     }
+    
+    
 }
 
 struct Card: CustomStringConvertible {
@@ -79,13 +80,13 @@ struct Deck {
     let cardsForDeck: [Card]
     
     init() {
-        var deck: [Card] = []
+        var deckforGame: [Card] = []
         for rank in Rank.allRanks {
             for suit in Suit.allSuits {
-                deck.append(Card(rank: rank, suit: suit))
+                deckforGame.append(Card(rank: rank, suit: suit))
             }
         }
-        self.cardsForDeck = deck
+        self.cardsForDeck = deckforGame
     }
     
     func drawCard() -> Card {
@@ -104,7 +105,7 @@ protocol CardGameDelegate {
 }
 
 class HighLow: CardGame {
-   var numberOfTurns: Int                     
+   var numberOfTurns: Int
    var deck: Deck = Deck()
    var delegate: CardGameDelegate?
    
@@ -169,6 +170,6 @@ class CardGameTracker: CardGameDelegate {
 }
 
 let tracker = CardGameTracker()
-let game = HighLow(numberOfTurns: 5)
+let game = HighLow(numberOfTurns: 10)
 game.delegate = tracker
 game.play()
