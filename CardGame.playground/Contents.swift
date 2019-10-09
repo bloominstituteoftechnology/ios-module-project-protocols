@@ -192,7 +192,7 @@ class HighLow: CardGame {
 
 
 
-//: Step 21
+//: ## Step 21
 //: Time to test all the types you've created. Create an instance of the `HighLow` class. Set the `delegate` property of that object to an instance of `CardGameTracker`. Lastly, call the `play()` method on the game object. It should print out to the console something that looks similar to the following:
 //:
 //: ```
