@@ -94,9 +94,6 @@ struct Card: CustomStringConvertible, Comparable {
     }
 }
 
-let myCard = Card(value: .jack, suit: .diamonds)
-print(myCard)
-
 //: ## Step 6
 //: Create a `struct` to model a deck of cards. It should be called `Deck` and have an array of `Card` objects as a constant property. A custom `init` function should be created that initializes the array with a card of each rank and suit. You'll want to iterate over all ranks, and then over all suits (this is an example of _nested `for` loops_). See the next 2 steps before you continue with the nested loops.
 //: ## Step 9
@@ -171,10 +168,13 @@ protocol CardGameDelegate {
 
 class HighLow: CardGame {
     let deck = Deck()
+    var delegate: CardGameDelegate? = nil
     
     func play() {
+        delegate?.gameDidStart(self)
         let card1 = deck.drawCard()
         let card2 = deck.drawDifferentCard(from: card1) // prevent drawing exact same card
+        delegate?.game(player1DidDraw: card1, player2DidDraw: card2)
         
         if card1 > card2 {
             print("Player 1 wins with \(card1)!")
@@ -211,4 +211,7 @@ class CardGameTracker: CardGameDelegate {
 //: Player 1 wins with 2 of diamonds.
 //: ```
 
+let newGame = HighLow()
+newGame.delegate = CardGameTracker()
 
+newGame.play()
