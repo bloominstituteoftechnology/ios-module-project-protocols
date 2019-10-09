@@ -11,7 +11,7 @@ import Foundation
 //: ## Step 17
 //: Make the `Rank` type conform to the `Comparable` protocol. Implement the `<` and `==` functions such that they compare the `rawValue` of the `lhs` and `rhs` arguments passed in. This will allow us to compare two rank values with each other and determine whether they are equal, or if not, which one is larger.
 
-enum Rank: Int, CustomStringConvertible/*, Comparable*/ {
+enum Rank: Int, CustomStringConvertible, Comparable {
     
     
     case ace = 1, two = 2, three = 3, four = 4, five = 5, six = 6, seven = 7, eight = 8, nine = 9, ten = 10, jack = 11, queen = 12, king = 13
