@@ -56,13 +56,17 @@ enum Suit {
 //: ## Step 18
 //: Make the `Card` type conform to the `Comparable` protocol. Implement the `<` and `==` methods such that they compare the ranks of the `lhs` and `rhs` arguments passed in. For the `==` method, compare **both** the rank and the suit.
 
-struct Card: CustomStringConvertible {
+struct Card: CustomStringConvertible, Comparable {
     
     let suit: Suit
     let rank: Rank
 
     var description: String {
         return "\(rank) of \(suit)"
+    }
+
+    static func < (lhs: Card, rhs: Card) -> Bool {
+        lhs.rank.rawValue < rhs.rank.rawValue
     }
 }
 
