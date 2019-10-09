@@ -129,7 +129,16 @@ protocol CardGameDelegate {
 //: * Player 1 wins with a higher card, e.g. "Player 1 wins with 8 of hearts."
 //: * Player 2 wins with a higher card, e.g. "Player 2 wins with king of diamonds."
 
-
+class HighLow: CardGame {
+    var deck: Deck = Deck()
+    var cardGameDelegate: CardGameDelegate?
+    
+    func play() {
+        
+    }
+    
+    
+}
 
 //: ## Step 20
 //: Create a class called `CardGameTracker` that conforms to the `CardGameDelegate` protocol. Implement the two required functions: `gameDidStart` and `game(player1DidDraw:player2DidDraw)`. Model `gameDidStart` after the same method in the guided project from today. As for the other method, have it print a message like the following:
