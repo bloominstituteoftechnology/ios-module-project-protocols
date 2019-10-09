@@ -111,7 +111,6 @@ struct Card: CustomStringConvertible, Comparable {
 
 struct Deck {
     private var cards: [Card]
-    private var discardPile: [Card] = []
     
     init() {
         var cards: [Card] = []
@@ -123,27 +122,33 @@ struct Deck {
         self.cards = cards
     }
     
+    init(empty: Bool) {
+        self.cards = empty ? [] : Deck().cards
+    }
+    
     var cardCount: Int {
         return cards.count
     }
     
-    mutating func drawCard() -> Card {
+    mutating func drawCard() -> Card? {
         if cards.isEmpty {
-            print("Deck is empty! Re-shuffling discard pile...")
-            cards = discardPile
-            discardPile = []
+            print("Deck is empty!")
+            return nil
         }
         let i = Int.random(in: 0 ..< cards.count)
         return cards.remove(at: i)
     }
     
-    mutating func addToDiscardPile(_ card: Card) {
-        discardPile.append(card)
+    mutating func add(_ card: Card) {
+        cards.append(card)
     }
     
-    mutating func shuffleAllCards() {
-        discardPile = []
+    mutating func shuffleAll() {
         cards = Deck().cards
+    }
+    
+    mutating func removeAll() {
+        cards.removeAll()
     }
 }
 
@@ -180,11 +185,12 @@ protocol CardGameDelegate {
 class HighLow: CardGame {
     var deck = Deck()
     var delegate: CardGameDelegate? = nil
+    var discardPile = Deck(empty: true)
     
     func play() {
         delegate?.gameDidStart(self)
-        let card1 = deck.drawCard()
-        let card2 = deck.drawCard()
+        let card1 = drawCard()
+        let card2 = drawCard()
         delegate?.game(player1DidDraw: card1, player2DidDraw: card2)
         
         if card1 > card2 {
@@ -194,8 +200,23 @@ class HighLow: CardGame {
         } else {
             print("Round ends with a tie: \(card1) against \(card2)!")
         }
-        deck.addToDiscardPile(card1)
-        deck.addToDiscardPile(card2)
+        discardPile.add(card1)
+        discardPile.add(card2)
+    }
+    
+    func shuffleDiscardToDeck() {
+        print("Re-shuffling discard pile...")
+        deck = discardPile
+        discardPile.removeAll()
+    }
+    
+    func drawCard() -> Card {
+        if let card = deck.drawCard() {
+            return card
+        } else {
+            shuffleDiscardToDeck()
+            return drawCard()
+        }
     }
 }
 
@@ -229,8 +250,9 @@ newGame.delegate = CardGameTracker()
 
 newGame.play()
 
-/*
+
 // uncomment to run game 100 times (using one deck)
+/*
 for _ in 1...100 {
     newGame.play()
 }
