@@ -110,6 +110,11 @@ struct Deck {
         }
         self.cards = cards
     }
+    
+    func drawCard() -> Card {
+        let i = Int.random(in: 0 ..< cards.count)
+        return cards[i]
+    }
 }
 
 //: ## Step 12
