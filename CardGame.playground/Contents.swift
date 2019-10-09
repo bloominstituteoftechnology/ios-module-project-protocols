@@ -70,6 +70,8 @@ struct Card: CustomStringConvertible, Comparable {
     }
 }
 
+let aCard = Card(suit: .clubs, rank: .eight)
+print(aCard)
 //: ## Step 6
 //: Create a `struct` to model a deck of cards. It should be called `Deck` and have an array of `Card` objects as a constant property. A custom `init` function should be created that initializes the array with a card of each rank and suit. You'll want to iterate over all ranks, and then over all suits (this is an example of _nested `for` loops_). See the next 2 steps before you continue with the nested loops.
 //: ## Step 9
@@ -139,12 +141,16 @@ class HighLow: CardGame {
     var cardGameDelegate: CardGameDelegate?
     
     func play() {
-//        let player1Card = deck.drawCard()
-//        let player2Card = deck.drawCard()
-//        let winner = player1Card > player2Card ? "Player 1" : "Player 2"
+        let player1Card = deck.drawCard()
+        let player2Card = deck.drawCard()
+        if player1Card > player2Card {
+            print("Player 1 wins with \(player1Card)!")
+        } else if player2Card > player1Card {
+            print("Player 2 wins with \(player2Card)")
+        }else {
+            print("Round ends in a tie with \(player1Card)")
+        }
     }
-    
-    
 }
 
 //: ## Step 20
