@@ -64,6 +64,7 @@ enum Rank: Int , CustomStringConvertible {
         var ranks = [Rank]()
         
         ranks.append(contentsOf: [.ace, .two, .three, .four, .five, .six, .seven, .eight, .nine, .ten, .jack, .queen, .king])
+        return ranks
     }
 }
 
@@ -86,6 +87,8 @@ enum Suit: String {
         var suits = [Suit]()
         
         suits.append(contentsOf: [.clubs, .diamonds, .hearts, .spades])
+        
+        return suits
     }
 }
 
@@ -106,7 +109,7 @@ struct Card: CustomStringConvertible {
     let suit: Suit
     
     var description: String {
-        return ("\(cardValue) of \(suit)")
+        return ("\(rank) of \(suit)")
     }
 }
 
@@ -141,6 +144,11 @@ struct Deck {
             }
         }
     }
+    
+    func drawCard() -> Card {
+        return cards[Int.random(in: 0..<cards.count)]
+    }
+    
 }
 
 
@@ -155,12 +163,21 @@ struct Deck {
 //: * a gettable `deck` property
 //: * a `play()` method
 
+protocol CardGame {
+    var deck: Deck { get }
+    
+    func play()
+}
+
 
 
 //: ## Step 13
 //: Create a protocol for tracking a card game as a delegate called `CardGameDelegate`. It should have two functional requirements:
 //: * a function called `gameDidStart` that takes a `CardGame` as an argument
 //: * a function with the following signature: `game(player1DidDraw card1: Card, player2DidDraw card2: Card)`
+
+
+
 
 
 
