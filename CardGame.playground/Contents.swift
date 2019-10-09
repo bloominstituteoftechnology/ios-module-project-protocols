@@ -94,12 +94,9 @@ struct Deck {
         self.cards = cardHolder
     }
     
-    
-}
-
-let myDeck = Deck()
-for card in myDeck.cards {
-    print(card)
+    func drawCard() -> Card {
+        return cards[Int.random(in: 0...51)]
+    }
 }
 
 //: ## Step 12
@@ -107,7 +104,10 @@ for card in myDeck.cards {
 //: * a gettable `deck` property
 //: * a `play()` method
 
-
+protocol CardGame {
+    var deck: Deck { get }
+    func play()
+}
 
 //: ## Step 13
 //: Create a protocol for tracking a card game as a delegate called `CardGameDelegate`. It should have two functional requirements:
