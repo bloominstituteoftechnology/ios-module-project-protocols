@@ -49,7 +49,12 @@ enum CardValue: Int //,
 //: ## Step 8
 //: In the suit enum, add a static computed property that returns all the suits in an array. Name this property `allSuits`.
 
-
+enum CardSuit: String {
+    case hearts
+    case diamonds
+    case spades
+    case clubs
+}
 
 //: ## Step 4
 //: Using the two enums above, create a `struct` called `Card` to model a single playing card. It should have constant properties for each constituent piece (one for suit and one for rank).
