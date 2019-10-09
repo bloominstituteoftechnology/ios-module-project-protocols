@@ -110,7 +110,8 @@ struct Card: CustomStringConvertible, Comparable {
 //: - Callout(Hint): There should be `52` cards in the deck. So what if you created a random number within those bounds and then retrieved that card from the deck? Remember that arrays are indexed from `0` and take that into account with your random number picking.
 
 struct Deck {
-    let cards: [Card]
+    private var cards: [Card]
+    private var discardPile: [Card] = []
     
     init() {
         var cards: [Card] = []
@@ -122,17 +123,27 @@ struct Deck {
         self.cards = cards
     }
     
-    func drawCard() -> Card {
-        let i = Int.random(in: 0 ..< cards.count)
-        return cards[i]
+    var cardCount: Int {
+        return cards.count
     }
     
-    func drawDifferentCard(from oldCard: Card) -> Card {
-        var newCard = drawCard()
-        if newCard == oldCard {
-            newCard = drawDifferentCard(from: oldCard)
+    mutating func drawCard() -> Card {
+        if cards.isEmpty {
+            print("Deck is empty! Re-shuffling discard pile...")
+            cards = discardPile
+            discardPile = []
         }
-        return newCard
+        let i = Int.random(in: 0 ..< cards.count)
+        return cards.remove(at: i)
+    }
+    
+    mutating func addToDiscardPile(_ card: Card) {
+        discardPile.append(card)
+    }
+    
+    mutating func shuffleAllCards() {
+        discardPile = []
+        cards = Deck().cards
     }
 }
 
@@ -167,13 +178,13 @@ protocol CardGameDelegate {
 //: * Player 2 wins with a higher card, e.g. "Player 2 wins with king of diamonds."
 
 class HighLow: CardGame {
-    let deck = Deck()
+    var deck = Deck()
     var delegate: CardGameDelegate? = nil
     
     func play() {
         delegate?.gameDidStart(self)
         let card1 = deck.drawCard()
-        let card2 = deck.drawDifferentCard(from: card1) // prevent drawing exact same card
+        let card2 = deck.drawCard()
         delegate?.game(player1DidDraw: card1, player2DidDraw: card2)
         
         if card1 > card2 {
@@ -183,6 +194,8 @@ class HighLow: CardGame {
         } else {
             print("Round ends with a tie: \(card1) against \(card2)!")
         }
+        deck.addToDiscardPile(card1)
+        deck.addToDiscardPile(card2)
     }
 }
 
@@ -216,7 +229,8 @@ newGame.delegate = CardGameTracker()
 
 newGame.play()
 
-/* // uncomment to run game 100 times
+/*
+// uncomment to run game 100 times (using one deck)
 for _ in 1...100 {
     newGame.play()
 }
