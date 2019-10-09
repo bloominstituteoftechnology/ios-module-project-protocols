@@ -130,11 +130,14 @@ protocol CardGameDelegate {
 //: * Player 2 wins with a higher card, e.g. "Player 2 wins with king of diamonds."
 
 class HighLow: CardGame {
-    var deck: Deck = Deck()
+    
+    let deck: Deck = Deck()
     var cardGameDelegate: CardGameDelegate?
     
     func play() {
-        
+//        let player1Card = deck.drawCard()
+//        let player2Card = deck.drawCard()
+//        let winner = player1Card > player2Card ? "Player 1" : "Player 2"
     }
     
     
