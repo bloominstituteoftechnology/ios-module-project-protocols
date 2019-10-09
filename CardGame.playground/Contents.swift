@@ -63,7 +63,21 @@ enum CardSuit: String {
 //: ## Step 18
 //: Make the `Card` type conform to the `Comparable` protocol. Implement the `<` and `==` methods such that they compare the ranks of the `lhs` and `rhs` arguments passed in. For the `==` method, compare **both** the rank and the suit.
 
+struct Card: CustomStringConvertible {
+    let value: CardValue
+    let suit: CardSuit
+    
+    init(value: CardValue, suit: CardSuit) {
+        self.value = value
+        self.suit = suit
+        self.description = "\(value) of \(suit)"
+    }
+    
+    let description: String
+}
 
+let myCard = Card(value: .jack, suit: .diamonds)
+print(myCard)
 
 //: ## Step 6
 //: Create a `struct` to model a deck of cards. It should be called `Deck` and have an array of `Card` objects as a constant property. A custom `init` function should be created that initializes the array with a card of each rank and suit. You'll want to iterate over all ranks, and then over all suits (this is an example of _nested `for` loops_). See the next 2 steps before you continue with the nested loops.
