@@ -193,7 +193,7 @@ class HighLow: CardGame {
 class CardGameTracker: CardGameDelegate {
     func gameDidStart(_ game: CardGame) {
         if game is HighLow {
-            print("Started a new game of High-Low!")
+            print("Started a new game of High-Low.")
         }
     }
     
@@ -215,3 +215,9 @@ let newGame = HighLow()
 newGame.delegate = CardGameTracker()
 
 newGame.play()
+
+/* // uncomment to run game 100 times
+for _ in 1...100 {
+    newGame.play()
+}
+*/
