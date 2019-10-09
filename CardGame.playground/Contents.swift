@@ -11,9 +11,7 @@ import Foundation
 //: ## Step 17
 //: Make the `Rank` type conform to the `Comparable` protocol. Implement the `<` and `==` functions such that they compare the `rawValue` of the `lhs` and `rhs` arguments passed in. This will allow us to compare two rank values with each other and determine whether they are equal, or if not, which one is larger.
 
-enum CardValue: Int //,
-//    CustomStringConvertible
-{
+enum CardValue: Int, CustomStringConvertible, Comparable {
     case ace = 1
     case two = 2
     case three = 3
@@ -44,6 +42,14 @@ enum CardValue: Int //,
     }
     
     static let allRanks: [CardValue] = [.ace, .two, .three, .four, .five, .six, .seven, .eight, .nine, .ten, .jack, .queen, .king]
+    
+    static func < (lhs: CardValue, rhs: CardValue) -> Bool {
+        return lhs.rawValue < rhs.rawValue
+    }
+    
+    static func == (lhs: CardValue, rhs: CardValue) -> Bool {
+        return lhs.rawValue == rhs.rawValue
+    }
 }
 
 //: ## Step 3
@@ -67,7 +73,7 @@ enum CardSuit: String {
 //: ## Step 18
 //: Make the `Card` type conform to the `Comparable` protocol. Implement the `<` and `==` methods such that they compare the ranks of the `lhs` and `rhs` arguments passed in. For the `==` method, compare **both** the rank and the suit.
 
-struct Card: CustomStringConvertible {
+struct Card: CustomStringConvertible, Comparable {
     let value: CardValue
     let suit: CardSuit
     
@@ -78,6 +84,14 @@ struct Card: CustomStringConvertible {
     }
     
     let description: String
+    
+    static func < (lhs: Card, rhs: Card) -> Bool {
+        return lhs.value < rhs.value
+    }
+    
+    static func == (lhs: Card, rhs: Card) -> Bool {
+        return lhs.value == rhs.value && lhs.suit == rhs.suit
+    }
 }
 
 let myCard = Card(value: .jack, suit: .diamonds)
