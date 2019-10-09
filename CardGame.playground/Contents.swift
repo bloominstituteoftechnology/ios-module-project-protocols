@@ -114,7 +114,6 @@ while counter <= 50 {
             deckArray.append(populate) }
 
     counter += 1
-//        print("\(deckArray[counter].rank) of \(deckArray[counter].suit)")
 }
 
 var playerOneRand = Int.random(in: 0...51)
