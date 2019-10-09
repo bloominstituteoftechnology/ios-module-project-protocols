@@ -129,6 +129,14 @@ struct Deck {
         let i = Int.random(in: 0 ..< cards.count)
         return cards[i]
     }
+    
+    func drawDifferentCard(from oldCard: Card) -> Card {
+        var newCard = drawCard()
+        if newCard == oldCard {
+            newCard = drawDifferentCard(from: oldCard)
+        }
+        return newCard
+    }
 }
 
 //: ## Step 12
