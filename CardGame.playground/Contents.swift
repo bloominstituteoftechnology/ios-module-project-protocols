@@ -124,7 +124,7 @@ extension Card: Comparable {
 //: Create a `struct` to model a deck of cards. It should be called `Deck` and have an array of `Card` objects as a constant property. A custom `init` function should be created that initializes the array with a card of each rank and suit. You'll want to iterate over all ranks, and then over all suits (this is an example of _nested `for` loops_). See the next 2 steps before you continue with the nested loops.
 
 struct Deck {
-    let cards: [Card]
+    var cards: [Card]
     
     init() {
         var tempCards = [Card]()
@@ -138,9 +138,13 @@ struct Deck {
     }
     
     // Step 11
-    func drawCard() -> Card {
+    mutating func drawCard() -> Card {
         let cardIndex = Int.random(in: 1...cards.count) - 1
-        return (cards[cardIndex])
+        
+        // Functionality for actually drawing a card out from the deck
+        let drawCard = cards[cardIndex] // Set to a seperate Card constant to return because removing card out of deck.
+        cards.remove(at: cardIndex)
+        return (drawCard)
     }
 }
 
@@ -189,19 +193,37 @@ class HighLow : CardGame {
     func play() {
         // Step 15:
         delegate?.gameDidStart(self)
-        
-        let player1Card = deck.drawCard()
-        let player2Card = deck.drawCard()
-        
-        delegate?.game(player1DidDraw: player1Card, player2DidDraw: player2Card)
-        //Step 19:
-        if(player1Card == player2Card) {
-            print("Round ends with a tie of \(player1Card.description)")
-        } else if (player2Card < player1Card) {
-            print("Player 1 wind with \(player1Card.description)")
-        } else if (player1Card < player2Card) {
-            print("Player 2 wins with \(player2Card.description)")
+        var player1Score = 0
+        var player2Score = 0
+       
+        while !deck.cards.isEmpty {
+            let player1Card = deck.drawCard()
+            let player2Card = deck.drawCard()
+           
+            delegate?.game(player1DidDraw: player1Card, player2DidDraw: player2Card)
+            
+            if(player1Card.rank == player2Card.rank) {
+                print("Round ends with a tie of \(player1Card.rank)")
+            } else if (player2Card < player1Card) {
+                print("Player 1 wins with \(player1Card.description)")
+                player1Score += 1
+            } else if (player1Card < player2Card) {
+                print("Player 2 wins with \(player2Card.description)")
+                player2Score += 2
+            }
         }
+        
+        
+        print("Player 1 has a score of \(player1Score) and Player 2 has a score of \(player2Score)")
+        
+        if(player1Score == player2Score) {
+            print("The game ended in a Tie")
+        } else if (player2Score < player1Score) {
+            print("Player 1 wins")
+        } else if (player1Score < player2Score) {
+            print("Player 2 wins")
+        }
+
     }
 }
 
