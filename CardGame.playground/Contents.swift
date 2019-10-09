@@ -167,8 +167,13 @@ class HighLow: CardGame {
     var deck = Deck()
     
     func play() {
+        
+        delegate?.gameDidStart(game: self)
+        
         let player1card = deck.drawCard()
         let player2card = deck.drawCard()
+        
+        delegate?.game(player1DidDraw: player1card, player2DidDraw: player2card)
         
         if player1card == player2card {
             print("Round ends in a tie with \(player1card.rank) of \(player1card.suit)")
