@@ -169,7 +169,22 @@ protocol CardGameDelegate {
 //: * Player 1 wins with a higher card, e.g. "Player 1 wins with 8 of hearts."
 //: * Player 2 wins with a higher card, e.g. "Player 2 wins with king of diamonds."
 
-
+class HighLow: CardGame {
+    let deck = Deck()
+    
+    func play() {
+        let card1 = deck.drawCard()
+        let card2 = deck.drawDifferentCard(from: card1) // prevent drawing exact same card
+        
+        if card1 > card2 {
+            print("Player 1 wins with \(card1)!")
+        } else if card2 > card1 {
+            print("Player 2 wins with \(card2)!")
+        } else {
+            print("Round ends with a tie: \(card1) against \(card2)!")
+        }
+    }
+}
 
 //: ## Step 20
 //: Create a class called `CardGameTracker` that conforms to the `CardGameDelegate` protocol. Implement the two required functions: `gameDidStart` and `game(player1DidDraw:player2DidDraw)`. Model `gameDidStart` after the same method in the guided project from today. As for the other method, have it print a message like the following:
