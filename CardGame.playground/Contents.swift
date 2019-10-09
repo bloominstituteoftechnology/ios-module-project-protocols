@@ -143,12 +143,20 @@ struct Deck {
         cards.append(card)
     }
     
+    mutating func add(_ cards: [Card]) {
+        for card in cards {
+            add(card)
+        }
+    }
+    
     mutating func shuffleAll() {
         cards = Deck().cards
     }
     
-    mutating func removeAll() {
+    mutating func removeAll() -> [Card] {
+        let pile = cards
         cards.removeAll()
+        return pile
     }
 }
 
@@ -206,8 +214,8 @@ class HighLow: CardGame {
     
     func shuffleDiscardToDeck() {
         print("Re-shuffling discard pile...")
-        deck = discardPile
-        discardPile.removeAll()
+        let pile = discardPile.removeAll()
+        deck.add(pile)
     }
     
     func drawCard() -> Card {
