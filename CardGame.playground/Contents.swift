@@ -28,11 +28,11 @@ enum Rank: Int, CustomStringConvertible/*, Comparable*/ {
     }
 
     static var allRanks: [Rank] = [.ace, .two, .three, .four, .five, .six, .seven, .eight, .nine, .ten, .jack, .queen, .king]
-//
-//
-//    static func < (lhs: Rank, rhs: Rank) -> Bool {
-//        lhs.rawValue < rhs.rawValue
-//    }
+
+
+    static func < (lhs: Rank, rhs: Rank) -> Bool {
+        lhs.rawValue < rhs.rawValue
+    }
     
 }
 
