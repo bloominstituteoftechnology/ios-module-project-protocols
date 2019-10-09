@@ -10,14 +10,38 @@ import Foundation
 //: Take a look at the Swift docs for the [Comparable](https://developer.apple.com/documentation/swift/comparable) protocol. In particular, look at the two functions called `<` and `==`.
 //: ## Step 17
 //: Make the `Rank` type conform to the `Comparable` protocol. Implement the `<` and `==` functions such that they compare the `rawValue` of the `lhs` and `rhs` arguments passed in. This will allow us to compare two rank values with each other and determine whether they are equal, or if not, which one is larger.
-enum Rank: Int, Comparable {
-    static func < (lhs: Rank, rhs: Rank) -> Bool {
-        return lhs.rawValue < rhs.rawValue
-  }
-    static func == (lhs: Rank, rhs: Rank) -> Bool {
-        return lhs.rawValue == rhs.rawValue
-}
-    static let allRanks: [Rank] = [.ace, .two, .three, .four, .five, .six, .seven, .eight, .nine, .ten, .jack, .queen, .king]
+
+enum cardValue: Int, CustomStringConvertible, Comparable {
+    
+    static func < (lhs: cardValue, rhs: cardValue) -> Bool {
+        lhs.rawValue < rhs.rawValue
+    }
+    static func == (lhs: cardValue, rhs: cardValue) -> Bool {
+        lhs.rawValue == rhs.rawValue
+    }
+    
+    
+    var description: String {
+        switch self {
+        case .ace: return "Ace"
+        case .two: return "2"
+        case .three: return "3"
+        case .four: return "4"
+        case .five: return "5"
+        case .six: return "6"
+        case .seven: return "7"
+        case .eight: return "8"
+        case .nine: return "9"
+        case .ten: return "10"
+        case .jack: return "Jack"
+        case .queen: return "Queen"
+        case .king: return "King"
+    }
+    }
+    
+    static var allRanks: [cardValue] {
+       return [.ace, .two, .three, .four, .five, .six , .seven, .eight, .nine, .ten, .jack, .queen, .king]
+    }
     
     case ace = 1
     case two = 2
@@ -34,40 +58,22 @@ enum Rank: Int, Comparable {
     case king = 13
 }
 
-extension Rank: CustomStringConvertible {
-    var description: String {
-        switch self {
-        case .two, .three, .four, .five, .six, .seven, .eight, .nine, .ten:
-            return String(rawValue)
-        case .ace:
-            return "ace"
-        case .jack:
-            return "jack"
-        case .queen:
-            return "queen"
-        case .king:
-            return "king"
-        }
-        
-        
-    }
-    
-    
-}
 //: ## Step 3
 //: Create an enum for the suit of a playing card. The values are `hearts`, `diamonds`, `spades`, and `clubs`. Use a raw type of `String` for this enum (this will allow us to get a string version of the enum cases for free, no use of `CustomStringConvertible` required).
 //: ## Step 8
 //: In the suit enum, add a static computed property that returns all the suits in an array. Name this property `allSuits`.
-enum Suit: String {
+
+enum cardSuit: String {
     
-    static let suits: [Suit] = [.hearts, .diamonds, .spades, .clubs]
+    static var allSuits: [cardSuit] {
+        [.hearts, .diamonds, .spades, .clubs]
+    }
     
     case hearts = "hearts"
     case diamonds = "diamonds"
     case spades = "spades"
-    case clubs = "clubls"
+    case clubs = "clubs"
 }
-
 
 //: ## Step 4
 //: Using the two enums above, create a `struct` called `Card` to model a single playing card. It should have constant properties for each constituent piece (one for suit and one for rank).
@@ -75,22 +81,23 @@ enum Suit: String {
 //: Make the card also conform to `CustomStringConvertible`. When turned into a string, a card's value should look something like this, "ace of spades", or "3 of diamonds".
 //: Step 18
 //: Make the `Card` type conform to the `Comparable` protocol. Implement the `<` and `==` methods such that they compare the ranks of the `lhs` and `rhs` arguments passed in. For the `==` method, compare **both** the rank and the suit.
+
 struct Card: CustomStringConvertible, Comparable{
     static func < (lhs: Card, rhs: Card) -> Bool {
-        return lhs.cardRank < rhs.cardRank
+        lhs.rank.rawValue < rhs.rank.rawValue
     }
-    
     static func == (lhs: Card, rhs: Card) -> Bool {
-        return lhs.cardRank == rhs.cardRank && lhs.cardSuit == rhs.cardSuit
-    }
-    var description: String {
-        return "\(cardRank) of \(cardSuit)"
+        lhs.rank.rawValue == rhs.rank.rawValue && lhs.suit == rhs.suit
     }
     
-    let cardSuit: Suit
-    let cardRank: Rank
+    
+    var description: String {
+        return "\(rank) of \(suit)"
+    }
+    
+    var rank: cardValue
+    var suit: cardSuit
 }
-
 
 //: ## Step 6
 //: Create a `struct` to model a deck of cards. It should be called `Deck` and have an array of `Card` objects as a constant property. A custom `init` function should be created that initializes the array with a card of each rank and suit. You'll want to iterate over all ranks, and then over all suits (this is an example of _nested `for` loops_). See the next 2 steps before you continue with the nested loops.
@@ -106,46 +113,42 @@ struct Card: CustomStringConvertible, Comparable{
 //: ## Step 11
 //: Add a method to the deck called `drawCard()`. It takes no arguments and it returns a `Card` object. Have it draw a random card from the deck of cards and return it.
 //: - Callout(Hint): There should be `52` cards in the deck. So what if you created a random number within those bounds and then retrieved that card from the deck? Remember that arrays are indexed from `0` and take that into account with your random number picking.
+
 struct Deck {
-    var cards = [Card]()
+    var cards: [Card] = []
     
-    init(ranks: [Rank], suits: [Suit]) {
-        self.cards = []
-        for suit in suits {
-            for rank in ranks {
-                let card = Card(cardSuit: suit, cardRank: rank)
-                cards.append(card)
+    init() {
+        for rank in cardValue.allRanks {
+            for suit in cardSuit.allSuits {
+                cards.append(Card(rank: rank, suit: suit))
             }
         }
     }
     
     func drawCard() -> Card {
-        let randomNum = Int.random(in: 1...52)
-        return cards[randomNum]
+        return cards[Int.random(in: 0...51)]
     }
 }
-
 
 //: ## Step 12
 //: Create a protocol for a `CardGame`. It should have two requirements:
 //: * a gettable `deck` property
 //: * a `play()` method
+
 protocol CardGame {
-    var adeck: Deck { get }
-    
+    var deck: Deck { get }
     func play()
 }
-
 
 //: ## Step 13
 //: Create a protocol for tracking a card game as a delegate called `CardGameDelegate`. It should have two functional requirements:
 //: * a function called `gameDidStart` that takes a `CardGame` as an argument
 //: * a function with the following signature: `game(player1DidDraw card1: Card, player2DidDraw card2: Card)`
+
 protocol CardGameDelegate {
-    func gameDidStart(cardgame: CardGame)
+    func gameDidStart(game: CardGame)
     func game(player1DidDraw card1: Card, player2DidDraw card2: Card)
 }
-
 
 //: ## Step 14
 //: Create a class called `HighLow` that conforms to the `CardGame` protocol. It should have an initialized `Deck` as a property, as well as an optional delegate property of type `CardGameDelegate`.
@@ -156,54 +159,45 @@ protocol CardGameDelegate {
 //: * Ends in a tie, something like, "Round ends in a tie with 3 of clubs."
 //: * Player 1 wins with a higher card, e.g. "Player 1 wins with 8 of hearts."
 //: * Player 2 wins with a higher card, e.g. "Player 2 wins with king of diamonds."
+
 class HighLow: CardGame {
-    var adeck = Deck(ranks: [.ace, .two, .three, .four, .five, .six, .seven, .eight, .nine, .ten, .jack, .queen, .king], suits: [.hearts, .diamonds, .spades, .clubs])
     
-    var dele: CardGameDelegate?
+    var delegate: CardGameDelegate?
     
-    
+    var deck = Deck()
     
     func play() {
+        let player1card = deck.drawCard()
+        let player2card = deck.drawCard()
         
-        dele?.gameDidStart(cardgame: self)
-        
-        let card1 = adeck.drawCard()
-        let card2 = adeck.drawCard()
-        
-        dele?.game(player1DidDraw: card1, player2DidDraw: card2)
-        
-        if card1 == card2 {
-            print("Round ends in a tie with \(card1.cardRank) of \(card1.cardSuit)")
-        } else if card1 < card2 {
-            print("Player 2 wins with \(card2.cardRank) of \(card2.cardSuit)")
+        if player1card == player2card {
+            print("Round ends in a tie with \(player1card.rank) of \(player1card.suit)")
+        } else if player1card < player2card {
+            print("Player 2 wins with \(player2card.rank) of \(player2card.suit)")
         } else {
-            print("Player 1 wins with \(card1.cardRank) of \(card1.cardSuit)")
+            print("Player 1 wins with \(player1card.rank) of \(player1card.suit)")
         }
-        
     }
-    
-    
 }
-
 
 //: ## Step 20
 //: Create a class called `CardGameTracker` that conforms to the `CardGameDelegate` protocol. Implement the two required functions: `gameDidStart` and `game(player1DidDraw:player2DidDraw)`. Model `gameDidStart` after the same method in the guided project from today. As for the other method, have it print a message like the following:
 //: * "Player 1 drew a 6 of hearts, player 2 drew a jack of spades."
+
 class CardGameTracker: CardGameDelegate {
-    func gameDidStart(cardgame: CardGame) {
-        if cardgame is HighLow {
-            print("Started a new game of High Low")
+    func gameDidStart(game: CardGame) {
+        if game is HighLow {
+            print("Started a new game of HighLow.")
         }
-       
+        print("The game is using a standard deck of cards.")
     }
     
     func game(player1DidDraw card1: Card, player2DidDraw card2: Card) {
-        print("Player 1 drew \(card1.cardRank) of \(card1.cardSuit), player 2 drew \(card2.cardRank) of \(card2.cardSuit)")
+        print("Player 1 drew a \(card1.rank) of \(card1.suit), Player 2 drew a \(card2.rank) of \(card2.suit)")
     }
     
     
 }
-
 
 //: Step 21
 //: Time to test all the types you've created. Create an instance of the `HighLow` class. Set the `delegate` property of that object to an instance of `CardGameTracker`. Lastly, call the `play()` method on the game object. It should print out to the console something that looks similar to the following:
@@ -213,8 +207,7 @@ class CardGameTracker: CardGameDelegate {
 //: Player 1 drew a 2 of diamonds, player 2 drew a ace of diamonds.
 //: Player 1 wins with 2 of diamonds.
 //: ```
-//let tracker = CardGameTracker()
-let instance = HighLow()
-instance.dele = CardGameTracker()
 
-instance.play()
+let hilo = HighLow()
+hilo.delegate = CardGameTracker()
+hilo.play()
