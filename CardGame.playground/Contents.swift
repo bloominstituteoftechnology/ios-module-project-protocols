@@ -4,8 +4,6 @@ enum Rank: Int {
     case ace = 1, one, two, three, four, five, six, seven, eight, nine, ten, jack, queen, king
 }
 
-var blah = Rank.ace.rawValue
-
 enum Suit: String {
     case hearts
     case diamonds
@@ -23,10 +21,7 @@ var populate: Card
 var populate2: Card
 var deckArray = [Card]()
 
-populate = Card(rank: .ace, suit: .hearts)
-populate2 = Card(rank: .one, suit: .clubs)
-
-deckArray.append(populate2)
+populate = Card(rank: .ace, suit: .spades)
 
 while counter <= 50 {
     if counter >= 0 && counter <= 12 {
