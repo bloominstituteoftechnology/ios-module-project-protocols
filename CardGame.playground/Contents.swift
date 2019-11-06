@@ -184,11 +184,11 @@ class HighLow: CardGame {
         delegate?.game(player1DidDraw: player1Cards, player2DidDraw: player2Cards)
         
         if player1Cards == player2Cards {
-            print("Round ends in a tie with the \(player1Cards.description)")
+            print("Round ends in a tie with the \(player1Cards.description).")
         } else if player1Cards > player2Cards {
-            print("Player 1 wins with the \(player1Cards.description)")
+            print("Player 1 wins with the \(player1Cards.description).")
         } else {
-            print("Player 2 wins with the \(player2Cards.description)")
+            print("Player 2 wins with the \(player2Cards.description).")
         }
     }
 }
@@ -206,7 +206,7 @@ class CardGameTracker: CardGameDelegate {
     }
     
     func game(player1DidDraw card1: Card, player2DidDraw card2: Card) {
-        print("Player 1 drew a \(card1.description), player 2 drew a \(card2.description)")
+        print("Player 1 drew a \(card1.description), player 2 drew a \(card2.description).")
     }
 }
 
@@ -219,5 +219,8 @@ class CardGameTracker: CardGameDelegate {
 //: Player 1 drew a 2 of diamonds, player 2 drew a ace of diamonds.
 //: Player 1 wins with 2 of diamonds.
 //: ```
+let tracker = CardGameTracker()
 
+let highLow = HighLow(delegate: tracker)
 
+highLow.play()
