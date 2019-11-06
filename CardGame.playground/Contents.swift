@@ -10,6 +10,48 @@ import Foundation
 //: Take a look at the Swift docs for the [Comparable](https://developer.apple.com/documentation/swift/comparable) protocol. In particular, look at the two functions called `<` and `==`.
 //: ## Step 17
 //: Make the `Rank` type conform to the `Comparable` protocol. Implement the `<` and `==` functions such that they compare the `rawValue` of the `lhs` and `rhs` arguments passed in. This will allow us to compare two rank values with each other and determine whether they are equal, or if not, which one is larger.
+enum Cards: Int, CustomStringConvertible, Comparable {
+
+    case ace = 1
+    case two
+    case three
+    case four
+    case five
+    case six
+    case seven
+    case eight
+    case nine
+    case ten
+    case jack
+    case queen
+    case king
+    
+    var description: String {
+        switch self {
+        case .two, .three, .four, .five, .six, .seven, .eight, .nine, .ten:
+            return "\(self.rawValue)"
+        case .ace:
+            return "Ace"
+        case .jack:
+            return "Jack"
+        case .queen:
+            return "Queen"
+        case .king:
+            return "King"
+        }
+    }
+    
+    static var allRanks: [Cards] {
+        return [ace, two, three, four, five, six, seven, eight, nine, ten, jack, queen, king]
+    }
+    static func < (lhs: Cards, rhs: Cards) -> Bool {
+        return lhs.rawValue < rhs.rawValue
+     }
+    static func == (lhs: Cards, rhs: Cards) -> Bool {
+        return lhs.rawValue == rhs.rawValue
+    }
+}
+
 
 
 
