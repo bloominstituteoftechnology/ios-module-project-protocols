@@ -11,7 +11,8 @@ import Foundation
 //: ## Step 17
 //: Make the `Rank` type conform to the `Comparable` protocol. Implement the `<` and `==` functions such that they compare the `rawValue` of the `lhs` and `rhs` arguments passed in. This will allow us to compare two rank values with each other and determine whether they are equal, or if not, which one is larger.
 enum Rank: Int, CustomStringConvertible, Comparable {
-    case ace, two, three, four, five, six, seven, eight, nine, ten
+    case ace = 1
+    case two, three, four, five, six, seven, eight, nine, ten
     case jack, queen, king
     
     var description: String {
@@ -46,13 +47,13 @@ enum Rank: Int, CustomStringConvertible, Comparable {
 //: ## Step 8
 //: In the suit enum, add a static computed property that returns all the suits in an array. Name this property `allSuits`.
 enum Suit: String {
-    case hearts
-    case diamonds
-    case spades
-    case clubs
+    case Hearts
+    case Diamonds
+    case Spades
+    case Clubs
     
     static var allSuits: [Suit] {
-        return [ hearts, diamonds, spades, clubs ]
+        return [ Hearts, Diamonds, Spades, Clubs ]
     }
 }
 //: ## Step 4
@@ -181,5 +182,6 @@ class CardGameTracker: CardGameDelegate {
 //: Player 1 drew a 2 of diamonds, player 2 drew a ace of diamonds.
 //: Player 1 wins with 2 of diamonds.
 //: ```
-
-
+let tracker = CardGameTracker()
+let highLow = HighLow(delegate: tracker)
+highLow.play()
