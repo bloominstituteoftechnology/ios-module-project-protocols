@@ -2,7 +2,28 @@ import Foundation
 
 //: ## Step 1
 //: Create an enumeration for the value of a playing card. The values are: `ace`, `two`, `three`, `four`, `five`, `six`, `seven`, `eight`, `nine`, `ten`, `jack`, `queen`, and `king`. Set the raw type of the enum to `Int` and assign the ace a value of `1`.
-
+enum Rank: Int, CustomStringConvertible {
+    
+    case ace = 1 , two = 2, three = 3, four = 4, five = 5, six = 6, seven = 7, eight = 8, nine = 9, ten = 10, jack = 11, queen = 12, king = 13
+    
+    var description: String {
+        switch self {
+        case .ace: return "Ace"
+        case .two: return "2"
+        case .three: return "3"
+        case .four: return "4"
+        case .five: return "5"
+        case .six: return "6"
+        case .seven: return "7"
+        case .eight: return "8"
+        case .nine: return "9"
+        case .ten: return "10"
+        case .jack: return "Jack"
+        case .queen: return "Queen"
+        case .king: return "King"
+        }
+    }
+}
 
 
 
@@ -15,14 +36,27 @@ import Foundation
 
 //: ## Step 3
 //: Create an enum for the suit of a playing card. The values are `hearts`, `diamonds`, `spades`, and `clubs`. Use a raw type of `String` for this enum (this will allow us to get a string version of the enum cases for free, no use of `CustomStringConvertible` required).
-
+enum Suit: String {
+    case hearts, diamonds, spades, clubs
+}
 
 
 
 //: ## Step 4
 //: Using the two enums above, create a `struct` called `Card` to model a single playing card. It should have constant properties for each constituent piece (one for suit and one for rank).
-
-
+struct Card: CustomStringConvertible {
+    
+    let card: Rank
+    let suit: Suit
+    
+    var description: String {
+        if card == .ace || card == .jack || card == .queen || card == .king {
+            return "\(suit) of \(card)"
+        } else {
+            return "\(card) of \(suit)"
+        }
+    }
+}
 
 
 //: ## Step 5
@@ -32,7 +66,9 @@ import Foundation
 
 //: ## Step 6
 //: Create a `struct` to model a deck of cards. It should be called `Deck` and have an array of `Card` objects as a constant property. A custom `init` function should be created that initializes the array with a card of each rank and suit. You'll want to iterate over all ranks, and then over all suits (this is an example of _nested `for` loops_). See the next 2 steps before you continue with the nested loops.
-
+struct Deck {
+        
+}
 
 
 
