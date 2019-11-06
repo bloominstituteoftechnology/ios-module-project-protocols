@@ -51,10 +51,6 @@ enum Cards: Int, CustomStringConvertible, Comparable {
         return lhs.rawValue == rhs.rawValue
     }
 }
-
-
-
-
 //: ## Step 3
 //: Create an enum for the suit of a playing card. The values are `hearts`, `diamonds`, `spades`, and `clubs`. Use a raw type of `String` for this enum (this will allow us to get a string version of the enum cases for free, no use of `CustomStringConvertible` required).
 //: ## Step 8
@@ -70,8 +66,6 @@ enum Suit: String {
         return [spades, clubs, hearts, diamonds]
     }
 }
-
-
 //: ## Step 4
 //: Using the two enums above, create a `struct` called `Card` to model a single playing card. It should have constant properties for each constituent piece (one for suit and one for rank).
 //: ## Step 5
@@ -95,8 +89,6 @@ struct Card: CustomStringConvertible, Comparable {
         return lhs.card == rhs.card && lhs.suit == rhs.suit
     }
 }
-
-
 //: ## Step 6
 //: Create a `struct` to model a deck of cards. It should be called `Deck` and have an array of `Card` objects as a constant property. A custom `init` function should be created that initializes the array with a card of each rank and suit. You'll want to iterate over all ranks, and then over all suits (this is an example of _nested `for` loops_). See the next 2 steps before you continue with the nested loops.
 //: ## Step 9
@@ -130,8 +122,6 @@ struct Deck {
         return cards[Int.random(in: 0...51)]
     }
 }
-
-
 //: ## Step 12
 //: Create a protocol for a `CardGame`. It should have two requirements:
 //: * a gettable `deck` property
@@ -141,8 +131,6 @@ protocol CardGame {
     var deck: Deck { get }
     func play()
 }
-
-
 //: ## Step 13
 //: Create a protocol for tracking a card game as a delegate called `CardGameDelegate`. It should have two functional requirements:
 //: * a function called `gameDidStart` that takes a `CardGame` as an argument
@@ -153,8 +141,6 @@ protocol CardGameDelegate {
     func game(player1DidDraw card1: Card, player2DidDraw card2: Card)
     
 }
-
-
 //: ## Step 14
 //: Create a class called `HighLow` that conforms to the `CardGame` protocol. It should have an initialized `Deck` as a property, as well as an optional delegate property of type `CardGameDelegate`.
 //: ## Step 15
@@ -192,8 +178,6 @@ class HighLow: CardGame {
         }
     }
 }
-
-
 //: ## Step 20
 //: Create a class called `CardGameTracker` that conforms to the `CardGameDelegate` protocol. Implement the two required functions: `gameDidStart` and `game(player1DidDraw:player2DidDraw)`. Model `gameDidStart` after the same method in the guided project from today. As for the other method, have it print a message like the following:
 //: * "Player 1 drew a 6 of hearts, player 2 drew a jack of spades."
@@ -209,8 +193,6 @@ class CardGameTracker: CardGameDelegate {
         print("Player 1 drew a \(card1.description), player 2 drew a \(card2.description).")
     }
 }
-
-
 //: Step 21
 //: Time to test all the types you've created. Create an instance of the `HighLow` class. Set the `delegate` property of that object to an instance of `CardGameTracker`. Lastly, call the `play()` method on the game object. It should print out to the console something that looks similar to the following:
 //:
