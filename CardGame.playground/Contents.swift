@@ -197,7 +197,18 @@ class HighLow: CardGame {
 //: ## Step 20
 //: Create a class called `CardGameTracker` that conforms to the `CardGameDelegate` protocol. Implement the two required functions: `gameDidStart` and `game(player1DidDraw:player2DidDraw)`. Model `gameDidStart` after the same method in the guided project from today. As for the other method, have it print a message like the following:
 //: * "Player 1 drew a 6 of hearts, player 2 drew a jack of spades."
-
+class CardGameTracker: CardGameDelegate {
+    
+    func gameDidStart(_ game: CardGame) {
+        if game is HighLow {
+            print("Started a new game of High Low!")
+        }
+    }
+    
+    func game(player1DidDraw card1: Card, player2DidDraw card2: Card) {
+        print("Player 1 drew a \(card1.description), player 2 drew a \(card2.description)")
+    }
+}
 
 
 //: Step 21
