@@ -28,6 +28,10 @@ enum Rank: Int, CustomStringConvertible {
             return "Ace"
         }
     }
+    
+    static var allRanks: [Rank] {
+        return [ ace, two, three, four, five, six, seven, eight, nine, ten, jack, queen, king ]
+    }
 }
 //: ## Step 3
 //: Create an enum for the suit of a playing card. The values are `hearts`, `diamonds`, `spades`, and `clubs`. Use a raw type of `String` for this enum (this will allow us to get a string version of the enum cases for free, no use of `CustomStringConvertible` required).
@@ -38,16 +42,25 @@ enum Suit: String {
     case diamonds
     case spades
     case clubs
+    
+    static var allSuits: [Suit] {
+        return [ hearts, diamonds, spades, clubs ]
+    }
 }
 //: ## Step 4
 //: Using the two enums above, create a `struct` called `Card` to model a single playing card. It should have constant properties for each constituent piece (one for suit and one for rank).
 //: ## Step 5
 //: Make the card also conform to `CustomStringConvertible`. When turned into a string, a card's value should look something like this, "ace of spades", or "3 of diamonds".
-//: Step 18
+//: ## Step 18
 //: Make the `Card` type conform to the `Comparable` protocol. Implement the `<` and `==` methods such that they compare the ranks of the `lhs` and `rhs` arguments passed in. For the `==` method, compare **both** the rank and the suit.
-
-
-
+struct Card: CustomStringConvertible {
+    let rank: Rank
+    let suit: Suit
+    
+    var description: String {
+        return "\(rank) of \(suit)"
+    }
+}
 //: ## Step 6
 //: Create a `struct` to model a deck of cards. It should be called `Deck` and have an array of `Card` objects as a constant property. A custom `init` function should be created that initializes the array with a card of each rank and suit. You'll want to iterate over all ranks, and then over all suits (this is an example of _nested `for` loops_). See the next 2 steps before you continue with the nested loops.
 //: ## Step 9
@@ -62,9 +75,23 @@ enum Suit: String {
 //: ## Step 11
 //: Add a method to the deck called `drawCard()`. It takes no arguments and it returns a `Card` object. Have it draw a random card from the deck of cards and return it.
 //: - Callout(Hint): There should be `52` cards in the deck. So what if you created a random number within those bounds and then retrieved that card from the deck? Remember that arrays are indexed from `0` and take that into account with your random number picking.
-
-
-
+struct Deck {
+    let cards: [Card]
+    
+    init() {
+        var newCards = [Card]()
+        for rank in Rank.allRanks {
+            for suit in Suit.allSuits {
+                newCards.append(Card(rank: rank, suit: suit))
+            }
+        }
+        cards = newCards
+    }
+    
+    func drawCard() -> Card {
+        return cards[Int.random(in: 0 ... 51)]
+    }
+}
 //: ## Step 12
 //: Create a protocol for a `CardGame`. It should have two requirements:
 //: * a gettable `deck` property
@@ -97,7 +124,7 @@ enum Suit: String {
 
 
 
-//: Step 21
+//: ## Step 21
 //: Time to test all the types you've created. Create an instance of the `HighLow` class. Set the `delegate` property of that object to an instance of `CardGameTracker`. Lastly, call the `play()` method on the game object. It should print out to the console something that looks similar to the following:
 //:
 //: ```
