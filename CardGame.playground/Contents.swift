@@ -59,7 +59,17 @@ enum Cards: Int, CustomStringConvertible, Comparable {
 //: Create an enum for the suit of a playing card. The values are `hearts`, `diamonds`, `spades`, and `clubs`. Use a raw type of `String` for this enum (this will allow us to get a string version of the enum cases for free, no use of `CustomStringConvertible` required).
 //: ## Step 8
 //: In the suit enum, add a static computed property that returns all the suits in an array. Name this property `allSuits`.
-
+enum Suit: String {
+    
+    case spades
+    case clubs
+    case hearts
+    case diamonds
+    
+    static var allSuits: [Suit] {
+        return [spades, clubs, hearts, diamonds]
+    }
+}
 
 
 //: ## Step 4
