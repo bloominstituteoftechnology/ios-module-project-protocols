@@ -164,7 +164,34 @@ protocol CardGameDelegate {
 //: * Ends in a tie, something like, "Round ends in a tie with 3 of clubs."
 //: * Player 1 wins with a higher card, e.g. "Player 1 wins with 8 of hearts."
 //: * Player 2 wins with a higher card, e.g. "Player 2 wins with king of diamonds."
+class HighLow: CardGame {
 
+    var deck: Deck
+    var delegate: CardGameDelegate?
+    
+    init(delegate: CardGameDelegate?) {
+        self.deck = Deck()
+        self.delegate = delegate
+    }
+    
+    func play() {
+        
+        delegate?.gameDidStart(self)
+        
+        let player1Cards = deck.drawCard()
+        let player2Cards = deck.drawCard()
+        
+        delegate?.game(player1DidDraw: player1Cards, player2DidDraw: player2Cards)
+        
+        if player1Cards == player2Cards {
+            print("Round ends in a tie with the \(player1Cards.description)")
+        } else if player1Cards > player2Cards {
+            print("Player 1 wins with the \(player1Cards.description)")
+        } else {
+            print("Player 2 wins with the \(player2Cards.description)")
+        }
+    }
+}
 
 
 //: ## Step 20
