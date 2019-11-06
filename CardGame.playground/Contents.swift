@@ -78,7 +78,23 @@ enum Suit: String {
 //: Make the card also conform to `CustomStringConvertible`. When turned into a string, a card's value should look something like this, "ace of spades", or "3 of diamonds".
 //: Step 18
 //: Make the `Card` type conform to the `Comparable` protocol. Implement the `<` and `==` methods such that they compare the ranks of the `lhs` and `rhs` arguments passed in. For the `==` method, compare **both** the rank and the suit.
-
+struct Card: CustomStringConvertible, Comparable {
+    
+    let card: Cards
+    let suit: Suit
+    
+    var description: String {
+        return "\(card) of \(suit)"
+    }
+    
+    static func < (lhs: Card, rhs: Card) -> Bool {
+        return lhs.card < rhs.card
+    }
+    
+    static func == (lhs: Card, rhs: Card) -> Bool {
+        return lhs.card == rhs.card && lhs.suit == rhs.suit
+    }
+}
 
 
 //: ## Step 6
