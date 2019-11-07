@@ -23,6 +23,8 @@ enum Rank: Int, CustomStringConvertible {
         case .king: return "King"
         }
     }
+    
+    static var allRanks : [Rank] = [.ace, .two, .three, .four, .five, .six, .seven, .eight, .nine, .ten, .jack, .queen, .king]
 }
 
 
@@ -38,6 +40,10 @@ enum Rank: Int, CustomStringConvertible {
 //: Create an enum for the suit of a playing card. The values are `hearts`, `diamonds`, `spades`, and `clubs`. Use a raw type of `String` for this enum (this will allow us to get a string version of the enum cases for free, no use of `CustomStringConvertible` required).
 enum Suit: String {
     case hearts, diamonds, spades, clubs
+    
+    static var allSuits: [Suit] {
+        return [.hearts, .diamonds, .spades, .clubs]
+    }
 }
 
 
@@ -67,7 +73,21 @@ struct Card: CustomStringConvertible {
 //: ## Step 6
 //: Create a `struct` to model a deck of cards. It should be called `Deck` and have an array of `Card` objects as a constant property. A custom `init` function should be created that initializes the array with a card of each rank and suit. You'll want to iterate over all ranks, and then over all suits (this is an example of _nested `for` loops_). See the next 2 steps before you continue with the nested loops.
 struct Deck {
-        
+    let cards: [Card]
+    
+    init() {
+        var cards: [Card] = []
+        for suit in Suit.allSuits {
+            for rank in Rank.allRanks {
+                cards.append(Card(card: rank, suit: suit))
+            }
+        }
+        self.cards = cards
+    }
+    
+    func drawCard() -> Card {
+        let randomNumber = Int.random(in: 1...cards.count) - 1
+        return cards[randomNumber]    }
 }
 
 
@@ -114,7 +134,11 @@ struct Deck {
 //: Create a protocol for a `CardGame`. It should have two requirements:
 //: * a gettable `deck` property
 //: * a `play()` method
-
+protocol CardGame {
+    var deck: Deck { get }
+    
+    func play()
+}
 
 
 
@@ -122,7 +146,10 @@ struct Deck {
 //: Create a protocol for tracking a card game as a delegate called `CardGameDelegate`. It should have two functional requirements:
 //: * a function called `gameDidStart` that takes a `CardGame` as an argument
 //: * a function with the following signature: `game(player1DidDraw card1: Card, player2DidDraw card2: Card)`
-
+protocol CardGameDelegate {
+    func gameDidStart(game: CardGame)
+    func game(player1DidDraw card1: Card, player2DidDraw card2: Card)
+}
 
 
 
