@@ -145,11 +145,13 @@ extension Suit {
 //: Add a method to the deck called `drawCard()`. It takes no arguments and it returns a `Card` object. Have it draw a random card from the deck of cards and return it.
 //: - Callout(Hint): There should be `52` cards in the deck. So what if you created a random number within those bounds and then retrieved that card from the deck? Remember that arrays are indexed from `0` and take that into account with your random number picking.
 
-//extension Deck {
-//    func drawCard() -> Card {
-//        var drawnCard: Card = deckInstance()
-//    }
-//}
+extension Deck {
+    func drawCard() -> Card {
+        let drawnCard: Card = deckInstance[Int.random(in: 0...51)]
+        return drawnCard
+
+    }
+}
 
 
 
@@ -158,7 +160,10 @@ extension Suit {
 //: * a gettable `deck` property
 //: * a `play()` method
 
-
+protocol CardGame {
+    var deck: Deck {get}
+    func play()
+}
 
 
 //: ## Step 13
@@ -166,13 +171,29 @@ extension Suit {
 //: * a function called `gameDidStart` that takes a `CardGame` as an argument
 //: * a function with the following signature: `game(player1DidDraw card1: Card, player2DidDraw card2: Card)`
 
-
+protocol CardGameDelegate {
+    func gameDidStart(game: CardGame)
+    func game(player1DidDraw card1: Card, player2DidDraw card2: Card)
+}
 
 
 //: ## Step 14
 //: Create a class called `HighLow` that conforms to the `CardGame` protocol. It should have an initialized `Deck` as a property, as well as an optional delegate property of type `CardGameDelegate`.
-
-
+//
+//class HighLow: CardGame {
+//    var deck: Deck
+//
+//    func play() {
+//        <#code#>
+//    }
+//    let delegate: CardGameDelegate?
+//
+//    init() {
+//        self.deck = Deck()
+//
+//    }
+//
+//}
 
 
 //: ## Step 15
