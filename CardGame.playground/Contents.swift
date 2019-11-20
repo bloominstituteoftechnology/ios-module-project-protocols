@@ -103,7 +103,7 @@ struct Card {
 //: Make the card also conform to `CustomStringConvertible`. When turned into a string, a card's value should look something like this, "ace of spades", or "3 of diamonds".
 extension Card: CustomStringConvertible {
     var description: String {
-        return String(self.rank.rawValue) + " of " + self.suit.rawValue
+        return String(self.rank.description) + " of " + self.suit.rawValue
     }
 }
 
@@ -197,8 +197,6 @@ protocol CardGameDelegate {
 class HighLow: CardGame {
     var deck = Deck()
     var delegate: CardGameDelegate?
-    
-   
     
     func play() {
         
