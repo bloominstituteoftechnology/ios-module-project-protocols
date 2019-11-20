@@ -62,23 +62,39 @@ extension Card: CustomStringConvertible {
 // print(card.description)
 //: ## Step 6
 //: Create a `struct` to model a deck of cards. It should be called `Deck` and have an array of `Card` objects as a constant property. A custom `init` function should be created that initializes the array with a card of each rank and suit. You'll want to iterate over all ranks, and then over all suits (this is an example of _nested `for` loops_). See the next 2 steps before you continue with the nested loops.
-
-
-
-
-
+struct Deck {
+    let cards: [Card]
+    
+    init() {
+        var cardsArray: [Card] = []
+        for suit in Suit.allSuits {
+            for rank in Rank.allRanks {
+                cardsArray.append(Card(rank: rank, suit: suit))
+            }
+        }
+        cards = cardsArray
+    }
+}
 //: ## Step 7
 //: In the rank enum, add a static computed property that returns all the ranks in an array. Name this property `allRanks`. This is needed because you can't iterate over all cases from an enum automatically.
-
-
-
-
+extension Rank {
+    static var allRanks: [Rank] {
+        var rankArray: [Rank] = []
+        for value in 1...13 {
+            if let rank = Rank(rawValue: value) {
+                rankArray.append(rank)
+            }
+        }
+        return rankArray
+    }
+}
 //: ## Step 8
 //: In the suit enum, add a static computed property that returns all the suits in an array. Name this property `allSuits`.
-
-
-
-
+extension Suit {
+    static var allSuits: [Suit] {
+        return [.hearts, .diamonds, .spades, .clubs]
+    }
+}
 //: ## Step 9
 //: Back to the `Deck` and the nested loops. Now that you have a way to get arrays of all rank values and all suit values, create 2 `for` loops in the `init` method, one nested inside the other, where you iterate over each value of rank, and then iterate over each value of suit. See an example below to get an idea of how this will work. Imagine an enum that contains the 4 cardinal directions, and imagine that enum has a property `allDirections` that returns an array of them.
 //: ```
@@ -86,9 +102,7 @@ extension Card: CustomStringConvertible {
 //:
 //:}
 //:```
-
-
-
+// Step 9 complete. (See initializer in Step 6)
 //: ## Step 10
 //: These loops will allow you to match up every rank with every suit. Make a `Card` object from all these pairings and append each card to the `cards` property of the deck. At the end of the `init` method, the `cards` array should contain a full deck of standard playing card objects.
 
