@@ -137,16 +137,21 @@ class HighLow: CardGame {
     var delegate: CardGameDelegate?
     
     func play() {
+        delegate?.gameDidStart(cardGame: self)
+        
         if let player1Card = deck.drawCard(),
             let player2Card = deck.drawCard() {
+            
+            delegate?.game(player1DidDraw: player1Card, player2DidDraw: player2Card)
+            
             if player1Card > player2Card {
-                print("Player 1 wins! (\(player1Card.description) beats \(player2Card.description))")
+                print("Player 1 wins with the \(player1Card.description).")
             } else if player2Card > player1Card{
-                print("Player 2 wins! (\(player2Card.description) beats \(player1Card.description))")
+                print("Player 2 wins with the \(player2Card.description).")
             } else if player1Card == player2Card {
-                print("It's a draw! (both players have \(player1Card.description))")
+                print("It's a draw with the \(player1Card.description).")
             } else {
-                print("It's a draw! (\(player1Card.description) and \(player2Card.description))")
+                print("It's a draw with the \(player1Card.description) and \(player2Card.description).")
             }
         } else {
             print("There are not enough cards in the deck to play High-Low. This game requires a minimum of two cards.")
@@ -188,9 +193,17 @@ extension Card: Comparable {
 //: ## Step 20
 //: Create a class called `CardGameTracker` that conforms to the `CardGameDelegate` protocol. Implement the two required functions: `gameDidStart` and `game(player1DidDraw:player2DidDraw)`. Model `gameDidStart` after the same method in the guided project from today. As for the other method, have it print a message like the following:
 //: * "Player 1 drew a 6 of hearts, player 2 drew a jack of spades."
-
-
-
+class CardGameTracker: CardGameDelegate {
+    func gameDidStart(cardGame: CardGame) {
+        if cardGame is HighLow {
+            print("Started a new game of High-Low")
+        }
+    }
+    
+    func game(player1DidDraw card1: Card, player2DidDraw card2: Card) {
+        print("Player 1 drew a \(card1.description), player 2 drew a \(card2.description).")
+    }
+}
 //: Step 21
 //: Time to test all the types you've created. Create an instance of the `HighLow` class. Set the `delegate` property of that object to an instance of `CardGameTracker`. Lastly, call the `play()` method on the game object. It should print out to the console something that looks similar to the following:
 //:
