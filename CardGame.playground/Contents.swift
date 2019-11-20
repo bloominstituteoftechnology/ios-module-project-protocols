@@ -90,11 +90,11 @@ struct Card: CustomStringConvertible {
     let rank: Rank
     let suit: Suit
     var description: String {
-        return String(self.rank.rawValue) + " of " + self.suit.rawValue
+        return String(self.rank.description) + " of " + self.suit.rawValue
     }
     
     static func > (lhs: Card, rhs: Card) -> Bool {
-        return lhs.rank < rhs.rank
+        return lhs.rank > rhs.rank
     }
     static func == (lhs: Card, rhs: Card) -> Bool {
         return lhs.rank == rhs.rank && lhs.suit == rhs.suit
@@ -210,7 +210,7 @@ class HighLow: CardGame {
         else if player1 > player2 {
             print("Player 1 Wins with a \(player1)")
         } else {
-            print("Player 2 Wins")
+            print("Player 2 Wins \(player2)")
         }
     }
 }
