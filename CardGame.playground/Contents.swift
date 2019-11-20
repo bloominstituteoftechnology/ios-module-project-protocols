@@ -17,7 +17,9 @@ enum Rank: Int {
     case queen
     case king
     
-    static var allRanks: [Int] = [ace.rawValue, two.rawValue, three.rawValue, four.rawValue, five.rawValue, six.rawValue, seven.rawValue, eight.rawValue, nine.rawValue, ten.rawValue, jack.rawValue, queen.rawValue, king.rawValue]
+    static var allRanks: [Rank] {
+        return [.ace, .two, .three, .four, .five, .six, .seven, .eight, .nine, .ten, .jack, .queen, .king]
+    }
     
 }
 
@@ -41,7 +43,9 @@ enum Suit: String {
     case spades = "Spades"
     case clubs = "Clubs"
     
-    static var allSuits: [String] = [hearts.rawValue, diamonds.rawValue, spades.rawValue, clubs.rawValue]
+    static var allSuits: [Suit] {
+        return [.hearts, .diamonds, .spades, .clubs]
+    }
 }
 
 
@@ -72,15 +76,23 @@ struct Card {
     struct Deck {
         let deck: [Card] = []
 
-        init(cardDescription: Card) {
+        init() {
+            var cards: [Card] = []
             for rank in Rank.allRanks {
                 for suit in Suit.allSuits {
-                    deck.append(cardDescription)
+                    let aCard = Card(suit: suit, rank: rank)
+                    cards.append(aCard)
                     
-                    self.deck = [cardDescription]
                 }
         }
+            self.deck = cards
 }
+        func drawCard() -> Card {
+            let randomNumber = Int.random(in: 0...deck.count)
+            return deck[randomNumber]
+            
+        }
+        
 }
 
 
@@ -109,23 +121,6 @@ struct Card {
 
 //: ## Step 10
 //: These loops will allow you to match up every rank with every suit. Make a `Card` object from all these pairings and append each card to the `cards` property of the deck. At the end of the `init` method, the `cards` array should contain a full deck of standard playing card objects.
-let ace = (Card(suit: .clubs, rank: .ace), Card(suit: .diamonds, rank: .ace), Card(suit: .hearts, rank: .ace), Card(suit: .spades, rank: .ace))
-
-
-let two = (Card(suit: .clubs, rank: .two), Card(suit: .diamonds, rank: .two), Card(suit: .hearts, rank: .two), Card(suit: .spades, rank: .two))
-let three = (Card(suit: .clubs, rank: .three), Card(suit: .diamonds, rank: .three), Card(suit: .hearts, rank: .three), Card(suit: .hearts, rank: .three))
-let four = (Card(suit: .clubs, rank: .four), Card(suit: .diamonds, rank: .four), Card(suit: .hearts, rank: .four), Card(suit: .spades, rank: .three))
-let five = (Card(suit: .clubs, rank: .five), Card(suit: .diamonds, rank: .four), Card(suit: .hearts, rank: .five), Card(suit: .spades, rank: .five))
-let six = (Card(suit: .clubs, rank: .six), Card(suit: .diamonds, rank: .six), Card(suit: .hearts, rank: .six), Card(suit: .spades, rank: .six))
-let seven = (Card(suit: .clubs, rank: .seven), Card(suit: .diamonds, rank: .seven), Card(suit: .hearts, rank: .seven), Card(suit: .spades, rank: .seven))
-let eight = (Card(suit: .clubs, rank: .eight), Card(suit: .diamonds, rank: .eight), Card(suit: .hearts, rank: .eight), Card(suit: .hearts, rank: .eight))
-let nine = (Card(suit: .clubs, rank: .nine), Card(suit: .diamonds, rank: .nine), Card(suit: .hearts, rank: .nine), Card(suit: .spades, rank: .nine))
-let ten = (Card(suit: .clubs, rank: .ten), Card(suit: .diamonds, rank: .ten), Card(suit: .hearts, rank: .ten), Card(suit: .spades, rank: .ten))
-let jack = (Card(suit: .clubs, rank: .jack), Card(suit: .diamonds, rank: .queen), Card(suit: .hearts, rank: .queen), Card(suit: .spades, rank: .jack))
-let queen = (Card(suit: .clubs, rank: .queen), Card(suit: .diamonds, rank: .queen), Card(suit: .hearts, rank: .queen), Card(suit: .spades, rank: .queen))
-
-
-
 
 //: ## Step 12
 //: Create a protocol for a `CardGame`. It should have two requirements:
@@ -154,11 +149,13 @@ protocol CardGameDelegate {
 //: ## Step 14
 //: Create a class called `HighLow` that conforms to the `CardGame` protocol. It should have an initialized `Deck` as a property, as well as an optional delegate property of type `CardGameDelegate`.
 class HighLow: CardGame {
-    var deck: Deck
+    var deck = Deck()
     var delegate: CardGameDelegate?
     
     func play() {
         delegate?.gameDidStart(self)
+        let player1 = deck.drawCard()
+        let player2 = deck.drawCard()
     }
     init(deck: Deck, delegate: CardGameDelegate?) {
         self.deck = deck
@@ -170,7 +167,7 @@ class HighLow: CardGame {
 
 //: ## Step 15
 //: As part of the protocol conformance, implement a method called `play()`. The method should draw 2 cards from the deck, one for player 1 and one for player 2. These cards will then be compared to see which one is higher. The winning player will be printed along with a description of the winning card. Work will need to be done to the `Suit` and `Rank` types above, so see the next couple steps before continuing with this step.
-
+CardGame.play(<#T##CardGame#>)
 
 
 
@@ -184,14 +181,13 @@ class HighLow: CardGame {
 //: Make the `Rank` type conform to the `Comparable` protocol. Implement the `<` and `==` functions such that they compare the `rawValue` of the `lhs` and `rhs` arguments passed in. This will allow us to compare two rank values with each other and determine whether they are equal, or if not, which one is larger.
 extension Rank: Comparable {
     static func < (lhs: Rank, rhs: Rank) -> Bool {
-        if lhs.rawValue != rhs.rawValue {
-            
-        }
-        return lhs.rawValue < lhs.rawValue
-    }
+        return lhs.rawValue < rhs.rawValue
     
 }
-
+    static func == (lhs: Rank, rhs: Rank) -> Bool {
+        return lhs.rawValue == rhs.rawValue
+    }
+}
 
 
 
