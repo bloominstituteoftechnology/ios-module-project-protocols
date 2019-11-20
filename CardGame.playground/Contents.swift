@@ -101,7 +101,8 @@ struct Deck {
     }
     
     func drawCard() -> Card {
-        return (deckOfCards[Int.random(in: 0...51)])
+        return (deckOfCards[Int.random(in: 0...deckOfCards.count)])
+        
     }
 }
 
@@ -167,6 +168,31 @@ protocol CardGameDelegate {
 
 //: ## Step 14
 //: Create a class called `HighLow` that conforms to the `CardGame` protocol. It should have an initialized `Deck` as a property, as well as an optional delegate property of type `CardGameDelegate`.
+class HighLow: CardGame {
+    var deck = Deck()
+    var delegate: CardGameDelegate?
+    
+    func play() {
+        delegate?.gameDidStart(game: self)
+        let player1 = deck.drawCard()
+        let player2 = deck.drawCard()
+        
+        if player1 > player2 {
+            print("Player 1 Wins with \(player1)")
+        } else if player2 > player1 {
+            print("Player 2 wins with \(player2)")
+        } else {
+            print(" Round ends in a tie with \(player1)")
+        }
+    }
+    init(deck: Deck, delegate: CardGameDelegate?) {
+        self.deck = deck
+        self.delegate = delegate
+    }
+    }
+
+
+
 
 
 
@@ -175,24 +201,38 @@ protocol CardGameDelegate {
 //: As part of the protocol conformance, implement a method called `play()`. The method should draw 2 cards from the deck, one for player 1 and one for player 2. These cards will then be compared to see which one is higher. The winning player will be printed along with a description of the winning card. Work will need to be done to the `Suit` and `Rank` types above, so see the next couple steps before continuing with this step.
 
 
-
+//done
 
 //: ## Step 16
 //: Take a look at the Swift docs for the [Comparable](https://developer.apple.com/documentation/swift/comparable) protocol. In particular, look at the two functions called `<` and `==`.
 
-
+//done
 
 
 //: ## Step 17
 //: Make the `Rank` type conform to the `Comparable` protocol. Implement the `<` and `==` functions such that they compare the `rawValue` of the `lhs` and `rhs` arguments passed in. This will allow us to compare two rank values with each other and determine whether they are equal, or if not, which one is larger.
-
+extension Rank: Comparable {
+    static func < (lhs: Rank, rhs: Rank) -> Bool {
+        return lhs.rawValue < rhs.rawValue
+    }
+    static func == (lhs: Rank, rhs: Rank) -> Bool {
+        return lhs.rawValue == rhs.rawValue
+    }
+}
 
 
 
 
 //: Step 18
 //: Make the `Card` type conform to the `Comparable` protocol. Implement the `<` and `==` methods such that they compare the ranks of the `lhs` and `rhs` arguments passed in. For the `==` method, compare **both** the rank and the suit.
-
+extension Card: Comparable {
+    static func < (lhs: Card, rhs: Card) -> Bool {
+        lhs.cardRank.rawValue < rhs.cardRank.rawValue
+    }
+    static func == (lhs: Card, rhs: Card) -> Bool {
+        lhs.cardSuit.rawValue == rhs.cardSuit.rawValue
+    }
+}
 
 
 
@@ -203,12 +243,22 @@ protocol CardGameDelegate {
 //: * Player 1 wins with a higher card, e.g. "Player 1 wins with 8 of hearts."
 //: * Player 2 wins with a higher card, e.g. "Player 2 wins with king of diamonds."
 
-
+//done
 
 //: ## Step 20
 //: Create a class called `CardGameTracker` that conforms to the `CardGameDelegate` protocol. Implement the two required functions: `gameDidStart` and `game(player1DidDraw:player2DidDraw)`. Model `gameDidStart` after the same method in the guided project from today. As for the other method, have it print a message like the following:
 //: * "Player 1 drew a 6 of hearts, player 2 drew a jack of spades."
-
+class CardGameTracker: CardGameDelegate {
+    func gameDidStart(game: CardGame) {
+        if game is HighLow {
+            print("New Game of High Low has Started")
+        }
+    }
+    
+    func game(player1DidDraw card1: Card, player2DidDraw card2: Card) {
+        print("Player 1 drew \(card1), Player 2 drew \(card2)")
+    }
+}
 
 
 //: Step 21
@@ -219,5 +269,7 @@ protocol CardGameDelegate {
 //: Player 1 drew a 2 of diamonds, player 2 drew a ace of diamonds.
 //: Player 1 wins with 2 of diamonds.
 //: ```
-
+let newGame = HighLow()
+newGame.CardGameDelegate = CardGameTracker()
+newGame.play()
 
