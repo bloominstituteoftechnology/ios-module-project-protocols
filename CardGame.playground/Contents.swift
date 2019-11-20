@@ -182,7 +182,6 @@ class HighLow: CardGame{
         }else{
             print("\(player1 > player2 ? "Player 1" : "Player 2") wins with a \(player1 > player2 ? player1 : player2).")
         }
-
     }
 }
 //: ## Step 20
@@ -192,7 +191,6 @@ class CardGameTracker: CardGameDelegate{
     func gameDidStart(cardGame: CardGame) {
         print("Started a new game of High Low!")
     }
-    
     func game(player1DidDraw card1: Card, player2DidDraw card2: Card) {
         print("Player 1 drew a \(card1), player 2 drew a \(card2)")
     }
