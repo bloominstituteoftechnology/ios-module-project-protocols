@@ -101,7 +101,7 @@ struct Deck {
     }
     
     func drawCard() -> Card {
-        return (deckOfCards[Int.random(in: 0...deckOfCards.count)])
+        return (deckOfCards[Int.random(in: 0...51)])
         
     }
 }
@@ -185,10 +185,10 @@ class HighLow: CardGame {
             print(" Round ends in a tie with \(player1)")
         }
     }
-    init(deck: Deck, delegate: CardGameDelegate?) {
-        self.deck = deck
-        self.delegate = delegate
-    }
+//    init(deck: Deck, delegate: CardGameDelegate?) {
+//        self.deck = deck
+//        self.delegate = delegate
+//    }
     }
 
 
@@ -270,6 +270,6 @@ class CardGameTracker: CardGameDelegate {
 //: Player 1 wins with 2 of diamonds.
 //: ```
 let highLowGame = HighLow()
-highLowGame.CardGameDelegate = CardGameTracker()
+highLowGame.delegate = CardGameTracker()
 highLowGame.play()
 
