@@ -183,7 +183,7 @@ protocol CardGameDelegate {
 class HighLow: CardGame {
     
     var deck: Deck
-    weak var delegate: CardGameDelegate?
+    var delegate: CardGameDelegate?
     
 
     init() {
@@ -191,7 +191,6 @@ class HighLow: CardGame {
         
         
     }
-
 }
 
 
@@ -199,6 +198,18 @@ class HighLow: CardGame {
 //: As part of the protocol conformance, implement a method called `play()`. The method should draw 2 cards from the deck, one for player 1 and one for player 2. These cards will then be compared to see which one is higher. The winning player will be printed along with a description of the winning card. Work will need to be done to the `Suit` and `Rank` types above, so see the next couple steps before continuing with this step.
 extension HighLow {
     func play() {
+        let playerOneCard = deck.drawCard()
+        let playerTwoCard = deck.drawCard()
+        
+        if playerOneCard == playerTwoCard {
+            print("Round ends in a tie with \(playerTwoCard.cardRank) of \(playerTwoCard.cardSuit)")
+        } else if playerOneCard < playerTwoCard {
+            print("Player 2 wins with \(playerTwoCard.cardRank) of \(playerTwoCard.cardSuit)")
+        } else if playerTwoCard < playerOneCard {
+            print("Player 1 wins with \(playerOneCard.cardRank) of \(playerOneCard.cardSuit)")
+        } else {
+            print("hold on nowm somethin ain't right :|")
+        }
         
     }
 }
@@ -212,6 +223,17 @@ extension HighLow {
 
 //: ## Step 17
 //: Make the `Rank` type conform to the `Comparable` protocol. Implement the `<` and `==` functions such that they compare the `rawValue` of the `lhs` and `rhs` arguments passed in. This will allow us to compare two rank values with each other and determine whether they are equal, or if not, which one is larger.
+extension Rank: Comparable {
+    static func < (lhs: Rank, rhs: Rank) -> Bool {
+        return lhs.rawValue < rhs.rawValue
+    }
+    static func == (lhs: Rank, rhs: Rank) -> Bool {
+        return lhs.rawValue == rhs.rawValue
+    }
+    
+    
+}
+
 
 
 
@@ -219,10 +241,15 @@ extension HighLow {
 
 //: Step 18
 //: Make the `Card` type conform to the `Comparable` protocol. Implement the `<` and `==` methods such that they compare the ranks of the `lhs` and `rhs` arguments passed in. For the `==` method, compare **both** the rank and the suit.
-
-
-
-
+extension Card: Comparable {
+    static func < (lhs: Card, rhs: Card) -> Bool {
+        return lhs.cardRank < rhs.cardRank
+    }
+    static func == (lhs: Card, rhs: Card) -> Bool {
+        return lhs.cardRank == rhs.cardRank && lhs.cardSuit == rhs.cardSuit
+    }
+    
+}
 
 //: ## Step 19
 //: Back to the `play()` method. With the above types now conforming to `Comparable`, you can write logic to compare the drawn cards and print out 1 of 3 possible message types:
@@ -235,7 +262,17 @@ extension HighLow {
 //: ## Step 20
 //: Create a class called `CardGameTracker` that conforms to the `CardGameDelegate` protocol. Implement the two required functions: `gameDidStart` and `game(player1DidDraw:player2DidDraw)`. Model `gameDidStart` after the same method in the guided project from today. As for the other method, have it print a message like the following:
 //: * "Player 1 drew a 6 of hearts, player 2 drew a jack of spades."
-
+class CardGameTracker: CardGameDelegate {
+    func gameDidStart(game: CardGame) {
+        <#code#>
+    }
+    
+    func game(player1DidDraw card1: Card, player2DidDraw card2: Card) {
+        print("Player 1 drew a \(card1.cardRank) of \(card1.cardSuit), player 2 drew a \(card2.cardRank) of \(card2.cardSuit).")
+    }
+    
+    
+}
 
 
 //: Step 21
