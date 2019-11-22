@@ -82,7 +82,52 @@ struct Card {
 
 //: ## Step 5
 //: Make the card also conform to `CustomStringConvertible`. When turned into a string, a card's value should look something like this, "ace of spades", or "3 of diamonds".
-
+extension Card: CustomStringConvertible {
+    var description: String {
+        var descriptionString = ""
+        switch rank {
+        case .ace:
+            descriptionString = "ace of"
+            case .two:
+            descriptionString = "two of"
+            case .three:
+            descriptionString = "three of"
+            case .four:
+            descriptionString = "four of"
+            case .five:
+            descriptionString = "five of"
+            case .six:
+            descriptionString = "six of"
+            case .seven:
+            descriptionString = "seven of"
+            case .eight:
+            descriptionString = "eight of"
+            case .nine:
+            descriptionString = "nine of"
+            case .ten:
+            descriptionString = "ten of"
+            case .jack:
+            descriptionString = "jack of"
+            case .queen:
+            descriptionString = "queen of"
+            case .king:
+            descriptionString = "king of"
+        }
+        switch suit {
+        case .hearts:
+            return "\(descriptionString) hearts"
+        case .diamonds:
+            return "\(descriptionString) diamonds"
+        case .spades:
+            return "\(descriptionString) spades"
+        case .clubs:
+            return "\(descriptionString) clubs"
+            
+        }
+    }
+    
+    
+}
 
 
 //: ## Step 6
