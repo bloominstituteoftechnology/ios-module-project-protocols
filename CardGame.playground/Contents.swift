@@ -152,6 +152,11 @@ struct Deck {
             }
         }
     }
+    
+    func drawCard() -> Card {
+        let randomNumber = Int.random(in: 0...51)
+        return cards[randomNumber]
+    }
 }
 
 
