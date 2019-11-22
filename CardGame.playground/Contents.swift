@@ -12,6 +12,7 @@ enum Rank: Int {
     case seven
     case eight
     case nine
+    case ten
     case jack
     case queen
     case king
@@ -24,15 +25,35 @@ enum Rank: Int {
 //: Once you've defined the enum as described above, take a look at this built-in protocol, [CustomStringConvertible](https://developer.apple.com/documentation/swift/customstringconvertible) and make the enum conform to that protocol. Make the face cards return a string of their name, and for the numbered cards, simply have it return that number as a string.
 extension Rank: CustomStringConvertible {
     var description: String {
-        switch self {
-        case ace:
-            return "1"
-        case two:
-        }
+        switch self {// a switch statement doesn't need a exclausive clause/default if you include all cases
+        case .ace:
+            return "ace"
+        case .two:
+            return "2"
+        case .three:
+            return "3"
+        case .four:
+            return "4"
+        case .five:
+            return "5"
+        case .six:
+            return "6"
+        case .seven:
+            return "7"
+        case .eight:
+            return "8"
+        case .nine:
+            return "9"
+        case .ten:
+            return "10"
+        case .jack:
+            return "jack"
+        case .queen:
+            return "queen"
+        case .king:
+            return "king"
         
-    }
-    
-    
+        }
 }
 
 
@@ -59,9 +80,11 @@ struct Card {
 
 //: ## Step 5
 //: Make the card also conform to `CustomStringConvertible`. When turned into a string, a card's value should look something like this, "ace of spades", or "3 of diamonds".
-
-
-
+    extension Card: CustomStringConvertible {
+        var description: String {
+            return "\(rank) of \(suit)"
+        }
+    }
 //: ## Step 6
 //: Create a `struct` to model a deck of cards. It should be called `Deck` and have an array of `Card` objects as a constant property. A custom `init` function should be created that initializes the array with a card of each rank and suit. You'll want to iterate over all ranks, and then over all suits (this is an example of _nested `for` loops_). See the next 2 steps before you continue with the nested loops.
 struct Deck {
@@ -70,6 +93,7 @@ struct Deck {
     init(){
         for rank in Rank {
             for suit in Suit {
+                card.append(rank.suit)
                 
             }
         }
@@ -190,3 +214,4 @@ struct Deck {
 //: ```
 
 
+}
