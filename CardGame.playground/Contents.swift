@@ -250,7 +250,23 @@ class HighLow: CardGame {
 
 //: ## Step 17
 //: Make the `Rank` type conform to the `Comparable` protocol. Implement the `<` and `==` functions such that they compare the `rawValue` of the `lhs` and `rhs` arguments passed in. This will allow us to compare two rank values with each other and determine whether they are equal, or if not, which one is larger.
-
+extension Rank: Comparable {
+    static func < (lhs: Rank, rhs: Rank) -> Bool {
+        if lhs.rawValue < rhs.rawValue {
+            return true
+        } else {
+            return false
+        }
+        
+    }
+    
+    static func == (lhs: Rank, rhs: Rank) -> Bool {
+    if lhs.rawValue == rhs.rawValue {
+        return true
+    } else {
+        return false
+    }
+}
 
 
 
