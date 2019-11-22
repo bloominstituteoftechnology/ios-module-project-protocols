@@ -228,7 +228,16 @@ class HighLow: CardGame {
     var delegate: CardGameDelegate?
     
     func play() {
+        let player1Card = deck.drawCard()
+        let player2Card = deck.drawCard()
         
+        if player1Card == player2Card {
+            print("Round ends in a tie with \(player1Card.description)")
+        } else if player1Card > player2Card {
+            print("Player 1 wins with \(player1Card.description)")
+        } else if player2Card > player1Card {
+            print("Player 2 wins with \(player2Card.description)")
+        }
     }
     
     
