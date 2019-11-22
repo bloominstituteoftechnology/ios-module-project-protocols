@@ -97,29 +97,29 @@ extension Card: CustomStringConvertible {
         switch rank {
         case .ace:
             descriptionString = "ace of"
-            case .two:
+        case .two:
             descriptionString = "two of"
-            case .three:
+        case .three:
             descriptionString = "three of"
-            case .four:
+        case .four:
             descriptionString = "four of"
-            case .five:
+        case .five:
             descriptionString = "five of"
-            case .six:
+        case .six:
             descriptionString = "six of"
-            case .seven:
+        case .seven:
             descriptionString = "seven of"
-            case .eight:
+        case .eight:
             descriptionString = "eight of"
-            case .nine:
+        case .nine:
             descriptionString = "nine of"
-            case .ten:
+        case .ten:
             descriptionString = "ten of"
-            case .jack:
+        case .jack:
             descriptionString = "jack of"
-            case .queen:
+        case .queen:
             descriptionString = "queen of"
-            case .king:
+        case .king:
             descriptionString = "king of"
         }
         switch suit {
@@ -261,10 +261,11 @@ extension Rank: Comparable {
     }
     
     static func == (lhs: Rank, rhs: Rank) -> Bool {
-    if lhs.rawValue == rhs.rawValue {
-        return true
-    } else {
-        return false
+        if lhs.rawValue == rhs.rawValue {
+            return true
+        } else {
+            return false
+        }
     }
 }
 
@@ -273,7 +274,23 @@ extension Rank: Comparable {
 
 //: Step 18
 //: Make the `Card` type conform to the `Comparable` protocol. Implement the `<` and `==` methods such that they compare the ranks of the `lhs` and `rhs` arguments passed in. For the `==` method, compare **both** the rank and the suit.
-
+extension Card: Comparable {
+    static func < (lhs: Card, rhs: Card) -> Bool {
+        if lhs.rank.rawValue < rhs.rank.rawValue {
+            return true
+        } else {
+            return false
+        }
+    }
+    
+    static func == (lhs: Card, rhs: Card) -> Bool {
+        if lhs.rank.rawValue == rhs.rank.rawValue && lhs.suit == rhs.suit {
+            return true
+        } else {
+            return false
+        }
+    }
+}
 
 
 
