@@ -108,22 +108,20 @@ struct Deck {
     }
 }
 
-let deck = Deck()
 
-print(deck)
 
 
 
 
 //: ## Step 7
 //: In the rank enum, add a static computed property that returns all the ranks in an array. Name this property `allRanks`. This is needed because you can't iterate over all cases from an enum automatically.
-
+//I made the enums conform to CaseIterable instead
 
 
 
 //: ## Step 8
 //: In the suit enum, add a static computed property that returns all the suits in an array. Name this property `allSuits`.
-
+//I made the enums conform to CaseIterable instead
 
 
 
@@ -134,7 +132,10 @@ print(deck)
 //:
 //:}
 //:```
+//done in step 6
+let deck = Deck()
 
+print(deck)
 
 
 //: ## Step 10
