@@ -98,7 +98,7 @@ print(aceSpades.description)
 struct Deck {
     let cards: [Card]
     init() {
-        var cardArray = [Card]()
+        var cardArray = [Card]() //cant append to cards
         for suit in Suits.allCases {
             for card in Cards.allCases {
                 cardArray.append(Card(suit: suit, rank: card))
@@ -133,14 +133,15 @@ struct Deck {
 //:}
 //:```
 //done in step 6
-let deck = Deck()
-
-print(deck)
 
 
 //: ## Step 10
 //: These loops will allow you to match up every rank with every suit. Make a `Card` object from all these pairings and append each card to the `cards` property of the deck. At the end of the `init` method, the `cards` array should contain a full deck of standard playing card objects.
+//done in step 6
 
+let deck = Deck()
+
+print(deck)
 
 
 
@@ -148,16 +149,24 @@ print(deck)
 //: ## Step 11
 //: Add a method to the deck called `drawCard()`. It takes no arguments and it returns a `Card` object. Have it draw a random card from the deck of cards and return it.
 //: - Callout(Hint): There should be `52` cards in the deck. So what if you created a random number within those bounds and then retrieved that card from the deck? Remember that arrays are indexed from `0` and take that into account with your random number picking.
+extension Deck {
+    func drawCard() -> Card {
+        let randomCard = Int.random(in: 0 ..< 52)
+        return self.cards[randomCard]
+    }
+}
 
-
-
+deck.drawCard()
 
 
 //: ## Step 12
 //: Create a protocol for a `CardGame`. It should have two requirements:
 //: * a gettable `deck` property
 //: * a `play()` method
-
+protocol CardGame {
+    var deck: Deck { get }
+    func play()
+}
 
 
 
@@ -165,19 +174,34 @@ print(deck)
 //: Create a protocol for tracking a card game as a delegate called `CardGameDelegate`. It should have two functional requirements:
 //: * a function called `gameDidStart` that takes a `CardGame` as an argument
 //: * a function with the following signature: `game(player1DidDraw card1: Card, player2DidDraw card2: Card)`
-
+protocol CardGameDelegate {
+    func gameDidStart(game: CardGame)
+    func game(player1DidDraw card1: Card, player2DidDraw card2: Card)
+}
 
 
 
 //: ## Step 14
 //: Create a class called `HighLow` that conforms to the `CardGame` protocol. It should have an initialized `Deck` as a property, as well as an optional delegate property of type `CardGameDelegate`.
-
+class HighLow: CardGame {
+    var deck = Deck()
+    var delegate: CardGameDelegate?
+    
+    func play() {
+        let player1Card = deck.drawCard()
+        let player2Card = deck.drawCard()
+        if player1Card.rank.rawValue > player2Card.rank.rawValue {
+            
+        }
+    }
+    
+}
 
 
 
 //: ## Step 15
 //: As part of the protocol conformance, implement a method called `play()`. The method should draw 2 cards from the deck, one for player 1 and one for player 2. These cards will then be compared to see which one is higher. The winning player will be printed along with a description of the winning card. Work will need to be done to the `Suit` and `Rank` types above, so see the next couple steps before continuing with this step.
-
+//implemented in Step 14
 
 
 
