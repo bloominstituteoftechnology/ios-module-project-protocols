@@ -1,5 +1,4 @@
 import Foundation
-
 //: ## Step 1
 //: Create an enumeration for the value of a playing card. The values are: `ace`, `two`, `three`, `four`, `five`, `six`, `seven`, `eight`, `nine`, `ten`, `jack`, `queen`, and `king`. Set the raw type of the enum to `Int` and assign the ace a value of `1`.
 enum Rank: Int, CustomStringConvertible {
@@ -88,6 +87,11 @@ struct Deck {
         }
         self.cards = cards
     }
+    
+    func drawCard() -> Card {
+        let randomNumber = Int.random(in: 0...51)
+        return cards[randomNumber]
+    }
 }
 
 
@@ -134,21 +138,31 @@ struct Deck {
 //: Create a protocol for a `CardGame`. It should have two requirements:
 //: * a gettable `deck` property
 //: * a `play()` method
-
-
-
-
+protocol CardGame {
+    var deck: Deck { get }
+    func play()
+}
 //: ## Step 13
 //: Create a protocol for tracking a card game as a delegate called `CardGameDelegate`. It should have two functional requirements:
 //: * a function called `gameDidStart` that takes a `CardGame` as an argument
 //: * a function with the following signature: `game(player1DidDraw card1: Card, player2DidDraw card2: Card)`
-
-
-
-
+protocol CardGameDelegate {
+    func gameDidStart(game: CardGame)
+    func game(player1DidDraw card1: Card, player2DidDraw card2: Card)
+}
 //: ## Step 14
 //: Create a class called `HighLow` that conforms to the `CardGame` protocol. It should have an initialized `Deck` as a property, as well as an optional delegate property of type `CardGameDelegate`.
-
+class HighLow: CardGame {
+    var deck = Deck()
+    var delegate: CardGameDelegate?
+    
+    func play() {
+        let player1Card = deck.drawCard()
+        let player2Card = deck.drawCard()
+    }
+    
+    
+}
 
 
 
