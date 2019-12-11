@@ -63,20 +63,33 @@ print(ace.description)
 
 //: ## Step 3
 //: Create an enum for the suit of a playing card. The values are `hearts`, `diamonds`, `spades`, and `clubs`. Use a raw type of `String` for this enum (this will allow us to get a string version of the enum cases for free, no use of `CustomStringConvertible` required).
-
+enum Suits: String {
+    case hearts
+    case diamonds
+    case spades
+    case clubs
+}
 
 
 
 //: ## Step 4
 //: Using the two enums above, create a `struct` called `Card` to model a single playing card. It should have constant properties for each constituent piece (one for suit and one for rank).
-
+struct Card {
+    let suit: Suits
+    let rank: Cards
+}
 
 
 
 //: ## Step 5
 //: Make the card also conform to `CustomStringConvertible`. When turned into a string, a card's value should look something like this, "ace of spades", or "3 of diamonds".
-
-
+extension Card: CustomStringConvertible {
+    var description: String {
+        return "\(self.rank) of \(self.suit)"
+    }
+}
+let aceSpades = Card(suit: .spades, rank: .ace)
+print(aceSpades.description)
 
 //: ## Step 6
 //: Create a `struct` to model a deck of cards. It should be called `Deck` and have an array of `Card` objects as a constant property. A custom `init` function should be created that initializes the array with a card of each rank and suit. You'll want to iterate over all ranks, and then over all suits (this is an example of _nested `for` loops_). See the next 2 steps before you continue with the nested loops.
