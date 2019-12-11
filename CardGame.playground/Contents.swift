@@ -51,6 +51,10 @@ enum Suit: String {
     case diamonds = "diamonds"
     case spades = "spades"
     case clubs = "clubs"
+    
+    static var allSuits: [Suit] {
+        return [.hearts, .diamonds, .spades, .clubs]
+    }
 }
 
 
@@ -75,7 +79,13 @@ struct Card: CustomStringConvertible {
 struct Deck {
     let cards: [Card]
     
-    init(cards:[Card]) {
+    init() {
+        var cards = [Card]()
+        for suit in Suit.allSuits {
+            for rank in Rank.allRanks {
+                cards.append(Card(suit: suit, rank: rank))
+            }
+        }
         self.cards = cards
     }
 }
