@@ -4,9 +4,12 @@ import Foundation
 
 //: ## Step 1
 //: Create an enumeration for the value of a playing card. The values are: `ace`, `two`, `three`, `four`, `five`, `six`, `seven`, `eight`, `nine`, `ten`, `jack`, `queen`, and `king`. Set the raw type of the enum to `Int` and assign the ace a value of `1`.
-enum Card: Int, CustomStringConvertible {
+enum Rank: Int, CustomStringConvertible {
     var description: String {
+        // Reminder: could this have been done better? using return "\(self)" broke playground
         switch self {
+        case .ace:
+            return "ace"
         case .jack:
             return "jack"
         case .queen:
@@ -37,25 +40,40 @@ enum Card: Int, CustomStringConvertible {
 
 //: ## Step 2
 //: Once you've defined the enum as described above, take a look at this built-in protocol, [CustomStringConvertible](https://developer.apple.com/documentation/swift/customstringconvertible) and make the enum conform to that protocol. Make the face cards return a string of their name, and for the numbered cards, simply have it return that number as a string.
-
-
+// See Step 1
 
 
 //: ## Step 3
 //: Create an enum for the suit of a playing card. The values are `hearts`, `diamonds`, `spades`, and `clubs`. Use a raw type of `String` for this enum (this will allow us to get a string version of the enum cases for free, no use of `CustomStringConvertible` required).
-
+enum Suit: String {
+    case hearts = "hearts"
+    case diamonds = "diamonds"
+    case spades = "spades"
+    case clubs = "clubs"
+}
 
 
 
 //: ## Step 4
 //: Using the two enums above, create a `struct` called `Card` to model a single playing card. It should have constant properties for each constituent piece (one for suit and one for rank).
+struct Card: CustomStringConvertible {
+    var description: String {
+        return "\(rank) of \(suit)"
+    }
+    
+    let suit: Suit
+    let rank: Rank
+}
 
+// Delete later
+//let testCard: Card = Card(suit: .diamonds, rank: .three)
+//print(testCard.description)
 
 
 
 //: ## Step 5
 //: Make the card also conform to `CustomStringConvertible`. When turned into a string, a card's value should look something like this, "ace of spades", or "3 of diamonds".
-
+// See Step 4
 
 
 //: ## Step 6
