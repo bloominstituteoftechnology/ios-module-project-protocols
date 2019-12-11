@@ -2,7 +2,7 @@ import Foundation
 
 //: ## Step 1
 //: Create an enumeration for the value of a playing card. The values are: `ace`, `two`, `three`, `four`, `five`, `six`, `seven`, `eight`, `nine`, `ten`, `jack`, `queen`, and `king`. Set the raw type of the enum to `Int` and assign the ace a value of `1`.
-enum Cards: Int {
+enum Rank: Int {
     case ace = 1
     case two = 2
     case three = 3
@@ -23,7 +23,7 @@ enum Cards: Int {
 
 //: ## Step 2
 //: Once you've defined the enum as described above, take a look at this built-in protocol, [CustomStringConvertible](https://developer.apple.com/documentation/swift/customstringconvertible) and make the enum conform to that protocol. Make the face cards return a string of their name, and for the numbered cards, simply have it return that number as a string.
-extension Cards: CustomStringConvertible, CaseIterable {
+extension Rank: CustomStringConvertible, CaseIterable {
     var description: String {
         switch self {
         case .ace:
@@ -57,7 +57,7 @@ extension Cards: CustomStringConvertible, CaseIterable {
     }
 }
 
-let ace = Cards.ace
+let ace = Rank.ace
 print(ace.description)
 
 
@@ -76,7 +76,7 @@ enum Suits: String, CaseIterable {
 //: Using the two enums above, create a `struct` called `Card` to model a single playing card. It should have constant properties for each constituent piece (one for suit and one for rank).
 struct Card {
     let suit: Suits
-    let rank: Cards
+    let rank: Rank
 }
 
 
@@ -100,7 +100,7 @@ struct Deck {
     init() {
         var cardArray = [Card]() //cant append to cards
         for suit in Suits.allCases {
-            for card in Cards.allCases {
+            for card in Rank.allCases {
                 cardArray.append(Card(suit: suit, rank: card))
             }
         }
@@ -186,17 +186,25 @@ protocol CardGameDelegate {
 class HighLow: CardGame {
     var deck = Deck()
     var delegate: CardGameDelegate?
-    
+
+//    Ends in a tie, something like, "Round ends in a tie with 3 of clubs."
+//    Player 1 wins with a higher card, e.g. "Player 1 wins with 8 of hearts."
+//    Player 2 wins with a higher card, e.g. "Player 2 wins with king of diamonds."
     func play() {
         let player1Card = deck.drawCard()
         let player2Card = deck.drawCard()
         if player1Card.rank.rawValue > player2Card.rank.rawValue {
-            
+            print("Player 1 wins with a \(player1Card.description)!\nPlayer 2 had a \(player2Card.description)")
+        } else {
+            print("Player 2 wins with a \(player2Card.description)!\nPlayer 1 had a \(player1Card.description)")
         }
     }
     
 }
 
+let thisGame = HighLow()
+
+thisGame.play()
 
 
 //: ## Step 15
@@ -207,20 +215,36 @@ class HighLow: CardGame {
 
 //: ## Step 16
 //: Take a look at the Swift docs for the [Comparable](https://developer.apple.com/documentation/swift/comparable) protocol. In particular, look at the two functions called `<` and `==`.
-
+//ok... :)
 
 
 
 //: ## Step 17
 //: Make the `Rank` type conform to the `Comparable` protocol. Implement the `<` and `==` functions such that they compare the `rawValue` of the `lhs` and `rhs` arguments passed in. This will allow us to compare two rank values with each other and determine whether they are equal, or if not, which one is larger.
-
+extension Rank: Comparable {
+    static func < (lhs: Rank, rhs: Rank) -> Bool {
+        return lhs.rawValue < rhs.rawValue
+    }
+    
+    static func == (lhs: Rank, rhs: Rank) -> Bool {
+        return lhs.rawValue == rhs.rawValue
+    }
+}
 
 
 
 
 //: Step 18
 //: Make the `Card` type conform to the `Comparable` protocol. Implement the `<` and `==` methods such that they compare the ranks of the `lhs` and `rhs` arguments passed in. For the `==` method, compare **both** the rank and the suit.
-
+extension Card: Comparable {
+    static func < (lhs: Card, rhs: Card) -> Bool {
+        return lhs.rank.rawValue < rhs.rank.rawValue
+    }
+    
+    static func == (lhs: Card, rhs: Card) -> Bool {
+        return lhs.rank.rawValue == rhs.rank.rawValue
+    }
+}
 
 
 
@@ -230,13 +254,62 @@ class HighLow: CardGame {
 //: * Ends in a tie, something like, "Round ends in a tie with 3 of clubs."
 //: * Player 1 wins with a higher card, e.g. "Player 1 wins with 8 of hearts."
 //: * Player 2 wins with a higher card, e.g. "Player 2 wins with king of diamonds."
+//had to create 2 HighLow classes in order to complete all challenges, or move HighLowClass down in order to re-implement the play() func
+class HighLowTheSequel: CardGame {
+    var deck = Deck()
+    var delegate: CardGameDelegate?
 
+//    Ends in a tie, something like, "Round ends in a tie with 3 of clubs."
+//    Player 1 wins with a higher card, e.g. "Player 1 wins with 8 of hearts."
+//    Player 2 wins with a higher card, e.g. "Player 2 wins with king of diamonds."
+    func play() {
+        delegate?.gameDidStart(game: self) //TODO: maybe this doesn't go here (step 20)
+        let player1Card = deck.drawCard()
+        let player2Card = deck.drawCard()
+        delegate?.game(player1DidDraw: player1Card, player2DidDraw: player2Card) //TODO: maybe this doesn't go here (step 20)
+        //MARK: TESTING:
+        //Equal:
+//        let player1Card = Card(suit: .spades, rank: .ace)
+//        let player2Card = Card(suit: .clubs, rank: .ace)
+        
+        //Player 1 win:
+//        let player1Card = Card(suit: .spades, rank: .king)
+//        let player2Card = Card(suit: .clubs, rank: .queen)
+        
+        //Player 2 win:
+//        let player1Card = Card(suit: .spades, rank: .queen)
+//        let player2Card = Card(suit: .clubs, rank: .king)
+        
+        
+        if player1Card == player2Card {
+            print("Round ends in a tie with \(player1Card.description)")
+        } else if player1Card < player2Card {
+            print("Player 2 wins with \(player2Card.description)")
+        } else {
+            print("Player 1 wins with \(player1Card.description)")
+        }
+    }
+}
+
+let sequelGame = HighLowTheSequel()
+sequelGame.play()
 
 
 //: ## Step 20
 //: Create a class called `CardGameTracker` that conforms to the `CardGameDelegate` protocol. Implement the two required functions: `gameDidStart` and `game(player1DidDraw:player2DidDraw)`. Model `gameDidStart` after the same method in the guided project from today. As for the other method, have it print a message like the following:
 //: * "Player 1 drew a 6 of hearts, player 2 drew a jack of spades."
-
+class CardGameTracker: CardGameDelegate {
+    
+    func gameDidStart(game: CardGame) {
+        print()
+        print("Started a new game of High Low")
+    }
+    
+    func game(player1DidDraw card1: Card, player2DidDraw card2: Card) {
+        print("Player 1 drew a(n) \(card1)\nPlayer 2 drew a(n) \(card2)")
+    }
+    
+}
 
 
 //: Step 21
@@ -247,5 +320,7 @@ class HighLow: CardGame {
 //: Player 1 drew a 2 of diamonds, player 2 drew a ace of diamonds.
 //: Player 1 wins with 2 of diamonds.
 //: ```
-
+let cardTracker = CardGameTracker()
+sequelGame.delegate = cardTracker
+sequelGame.play()
 
