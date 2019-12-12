@@ -81,13 +81,21 @@ struct Deck {
     }
 }
 
-extension Card: CustomStringConvertible {
+extension Card: CustomStringConvertible, Comparable {
     var description: String {
         return "\(self.rank) of \(self.suit)"
     }
+    
+    static func < (lhs: Card, rhs: Card) -> Bool {
+        return lhs.rank.rawValue < rhs.rank.rawValue
+    }
+    
+    static func == (lhs: Card, rhs: Card) -> Bool {
+        return lhs.rank.rawValue == rhs.rank.rawValue
+    }
 }
 
-extension Card.Ranks: CustomStringConvertible {
+extension Card.Ranks: CustomStringConvertible, Comparable {
     var description: String {
         switch self {
         case .ace:
@@ -118,6 +126,15 @@ extension Card.Ranks: CustomStringConvertible {
             return "King"
         }
     }
+    
+    static func < (lhs: Card.Ranks, rhs: Card.Ranks) -> Bool {
+        return lhs.rawValue < rhs.rawValue
+    }
+    
+    static func == (lhs: Card.Ranks, rhs: Card.Ranks) -> Bool {
+        return lhs.rawValue == rhs.rawValue
+    }
+    
 }
 
 class HighLow: CardGame {
@@ -125,16 +142,42 @@ class HighLow: CardGame {
     var delegate: CardGameDelegate?
     
     func play() {
+        delegate?.gameDidStart(game: self)
         let player1Card = deck.drawCard()
         let player2Card = deck.drawCard()
-        if player1Card.rank.rawValue > player2Card.rank.rawValue {
-            print("Player 1 wins with a \(player1Card.description)!\nPlayer 2 had a \(player2Card.description)")
+        
+        delegate?.game(player1DidDraw: player1Card, player2DidDraw: player2Card)
+        
+        if player1Card == player2Card {
+            print("Round ends in a tie with \(player1Card.description)")
+        } else if player1Card > player2Card {
+            print("Player 1 wins with a \(player1Card.description)")
         } else {
-            print("Player 2 wins with a \(player2Card.description)!\nPlayer 1 had a \(player1Card.description)")
+            print("Player 2 wins with a \(player2Card.description)")
         }
     }
     
 }
+
+class CardGameTracker: CardGameDelegate {
+    var numberOfTurns = 0
+    func gameDidStart(game: CardGame) {
+        numberOfTurns = 0
+        print("Started a new game!")
+    }
+    
+    func game(player1DidDraw card1: Card, player2DidDraw card2: Card) {
+        numberOfTurns += 1
+        print("Player 1 drew a \(card1), Player 2 drew a \(card2)")
+    }
+    
+}
+
+let myHighlow = HighLow()
+let tracker = CardGameTracker()
+
+myHighlow.delegate = tracker
+myHighlow.play()
 //: ## Step 1
 //: Create an enumeration for the value of a playing card. The values are: `ace`, `two`, `three`, `four`, `five`, `six`, `seven`, `eight`, `nine`, `ten`, `jack`, `queen`, and `king`. Set the raw type of the enum to `Int` and assign the ace a value of `1`.
 /// DID THIS ABOVE
@@ -195,28 +238,20 @@ class HighLow: CardGame {
 /// DONE! I LOOKED AT IT.
 //: ## Step 17
 //: Make the `Rank` type conform to the `Comparable` protocol. Implement the `<` and `==` functions such that they compare the `rawValue` of the `lhs` and `rhs` arguments passed in. This will allow us to compare two rank values with each other and determine whether they are equal, or if not, which one is larger.
-
+/// DONE THIS ABOVE
 //: Step 18
 //: Make the `Card` type conform to the `Comparable` protocol. Implement the `<` and `==` methods such that they compare the ranks of the `lhs` and `rhs` arguments passed in. For the `==` method, compare **both** the rank and the suit.
-
-
-
-
-
+/// DONE THIS ABOVE
 //: ## Step 19
 //: Back to the `play()` method. With the above types now conforming to `Comparable`, you can write logic to compare the drawn cards and print out 1 of 3 possible message types:
 //: * Ends in a tie, something like, "Round ends in a tie with 3 of clubs."
 //: * Player 1 wins with a higher card, e.g. "Player 1 wins with 8 of hearts."
 //: * Player 2 wins with a higher card, e.g. "Player 2 wins with king of diamonds."
-
-
-
+/// DONE THIS ABOVE
 //: ## Step 20
 //: Create a class called `CardGameTracker` that conforms to the `CardGameDelegate` protocol. Implement the two required functions: `gameDidStart` and `game(player1DidDraw:player2DidDraw)`. Model `gameDidStart` after the same method in the guided project from today. As for the other method, have it print a message like the following:
 //: * "Player 1 drew a 6 of hearts, player 2 drew a jack of spades."
-
-
-
+/// DONE THIS ABOVE
 //: Step 21
 //: Time to test all the types you've created. Create an instance of the `HighLow` class. Set the `delegate` property of that object to an instance of `CardGameTracker`. Lastly, call the `play()` method on the game object. It should print out to the console something that looks similar to the following:
 //:
@@ -225,5 +260,4 @@ class HighLow: CardGame {
 //: Player 1 drew a 2 of diamonds, player 2 drew a ace of diamonds.
 //: Player 1 wins with 2 of diamonds.
 //: ```
-
-
+/// DONE THIS ABOVE
