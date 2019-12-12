@@ -156,21 +156,16 @@ class HighLow: CardGame {
             print("Player 2 wins with a \(player2Card.description)")
         }
     }
-    
 }
 
 class CardGameTracker: CardGameDelegate {
-    var numberOfTurns = 0
     func gameDidStart(game: CardGame) {
-        numberOfTurns = 0
         print("Started a new game!")
     }
     
     func game(player1DidDraw card1: Card, player2DidDraw card2: Card) {
-        numberOfTurns += 1
         print("Player 1 drew a \(card1), Player 2 drew a \(card2)")
     }
-    
 }
 
 let myHighlow = HighLow()
@@ -186,10 +181,7 @@ myHighlow.play()
 /// DID THIS ABOVE
 //: ## Step 3
 //: Create an enum for the suit of a playing card. The values are `hearts`, `diamonds`, `spades`, and `clubs`. Use a raw type of `String` for this enum (this will allow us to get a string version of the enum cases for free, no use of `CustomStringConvertible` required).
-/// DID THIS ABOVE
-//: ## Step 4
-//: Using the two enums above, create a `struct` called `Card` to model a single playing card. It should have constant properties for each constituent piece (one for suit and one for rank).
-/// DID THIS ABOVE
+/// DID THIS ABOVE/// DID THIS ABOVE
 //: ## Step 5
 //: Make the card also conform to `CustomStringConvertible`. When turned into a string, a card's value should look something like this, "ace of spades", or "3 of diamonds".
 /// DID THIS ABOVE
