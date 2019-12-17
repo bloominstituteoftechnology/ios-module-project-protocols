@@ -16,10 +16,22 @@ enum Rank: Int {
     case jack = 11
     case queen = 12
     case king = 13
+    static var allRanks: [Rank] {
+        return [.ace,
+                .two,
+                .three,
+                .four,
+                .five,
+                .six,
+                .seven,
+                .eight,
+                .nine,
+                .ten,
+                .jack,
+                .queen,
+                .king]
+    }
 }
-
-
-
 
 //: ## Step 2
 //: Once you've defined the enum as described above, take a look at this built-in protocol, [CustomStringConvertible](https://developer.apple.com/documentation/swift/customstringconvertible) and make the enum conform to that protocol. Make the face cards return a string of their name, and for the numbered cards, simply have it return that number as a string.
@@ -151,7 +163,7 @@ print(deck)
 //: - Callout(Hint): There should be `52` cards in the deck. So what if you created a random number within those bounds and then retrieved that card from the deck? Remember that arrays are indexed from `0` and take that into account with your random number picking.
 extension Deck {
     func drawCard() -> Card {
-        let randomCard = Int.random(in: 0 ..< 52)
+        let randomCard = Int.random(in: 0..<52)
         return self.cards[randomCard]
     }
 }
@@ -186,10 +198,10 @@ protocol CardGameDelegate {
 class HighLow: CardGame {
     var deck = Deck()
     var delegate: CardGameDelegate?
-
-//    Ends in a tie, something like, "Round ends in a tie with 3 of clubs."
-//    Player 1 wins with a higher card, e.g. "Player 1 wins with 8 of hearts."
-//    Player 2 wins with a higher card, e.g. "Player 2 wins with king of diamonds."
+    
+    //    Ends in a tie, something like, "Round ends in a tie with 3 of clubs."
+    //    Player 1 wins with a higher card, e.g. "Player 1 wins with 8 of hearts."
+    //    Player 2 wins with a higher card, e.g. "Player 2 wins with king of diamonds."
     func play() {
         let player1Card = deck.drawCard()
         let player2Card = deck.drawCard()
@@ -258,10 +270,10 @@ extension Card: Comparable {
 class HighLowTheSequel: CardGame {
     var deck = Deck()
     var delegate: CardGameDelegate?
-
-//    Ends in a tie, something like, "Round ends in a tie with 3 of clubs."
-//    Player 1 wins with a higher card, e.g. "Player 1 wins with 8 of hearts."
-//    Player 2 wins with a higher card, e.g. "Player 2 wins with king of diamonds."
+    
+    //    Ends in a tie, something like, "Round ends in a tie with 3 of clubs."
+    //    Player 1 wins with a higher card, e.g. "Player 1 wins with 8 of hearts."
+    //    Player 2 wins with a higher card, e.g. "Player 2 wins with king of diamonds."
     func play() {
         delegate?.gameDidStart(game: self) //TODO: maybe this doesn't go here (step 20)
         let player1Card = deck.drawCard()
@@ -269,16 +281,16 @@ class HighLowTheSequel: CardGame {
         delegate?.game(player1DidDraw: player1Card, player2DidDraw: player2Card) //TODO: maybe this doesn't go here (step 20)
         //MARK: TESTING:
         //Equal:
-//        let player1Card = Card(suit: .spades, rank: .ace)
-//        let player2Card = Card(suit: .clubs, rank: .ace)
+        //        let player1Card = Card(suit: .spades, rank: .ace)
+        //        let player2Card = Card(suit: .clubs, rank: .ace)
         
         //Player 1 win:
-//        let player1Card = Card(suit: .spades, rank: .king)
-//        let player2Card = Card(suit: .clubs, rank: .queen)
+        //        let player1Card = Card(suit: .spades, rank: .king)
+        //        let player2Card = Card(suit: .clubs, rank: .queen)
         
         //Player 2 win:
-//        let player1Card = Card(suit: .spades, rank: .queen)
-//        let player2Card = Card(suit: .clubs, rank: .king)
+        //        let player1Card = Card(suit: .spades, rank: .queen)
+        //        let player2Card = Card(suit: .clubs, rank: .king)
         
         
         if player1Card == player2Card {
