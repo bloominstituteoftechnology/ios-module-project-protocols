@@ -3,8 +3,27 @@ import Foundation
 //: ## Step 1
 //: Create an enumeration for the value of a playing card. The values are: `ace`, `two`, `three`, `four`, `five`, `six`, `seven`, `eight`, `nine`, `ten`, `jack`, `queen`, and `king`. Set the raw type of the enum to `Int` and assign the ace a value of `1`.
 
-
-
+enum  Rank: Int, CustomStringConvertible, CaseIterable{
+    //var description: String
+    
+    var description: String{
+        return("need to fix")
+    }
+    
+    case ace = 1
+    case two = 2
+    case three = 3
+    case four = 4
+    case five = 5
+    case six = 6
+    case seven = 7
+    case eight = 8
+    case nine = 9
+    case ten = 10
+    case jack = 11
+    case queen = 12
+    case king = 13
+}
 
 
 //: ## Step 2
@@ -12,17 +31,28 @@ import Foundation
 
 
 
-
 //: ## Step 3
 //: Create an enum for the suit of a playing card. The values are `hearts`, `diamonds`, `spades`, and `clubs`. Use a raw type of `String` for this enum (this will allow us to get a string version of the enum cases for free, no use of `CustomStringConvertible` required).
 
-
+enum Suits: String, CaseIterable{
+    case diamonds
+    case hearts
+    case spades
+    case clubs
+}
 
 
 //: ## Step 4
 //: Using the two enums above, create a `struct` called `Card` to model a single playing card. It should have constant properties for each constituent piece (one for suit and one for rank).
 
-
+struct Card: CustomStringConvertible{
+    var description: String{
+        return value.description + " of " + suit.rawValue
+    }
+    
+    let suit: Suits
+    let value: Rank
+}
 
 
 //: ## Step 5
@@ -33,7 +63,21 @@ import Foundation
 //: ## Step 6
 //: Create a `struct` to model a deck of cards. It should be called `Deck` and have an array of `Card` objects as a constant property. A custom `init` function should be created that initializes the array with a card of each rank and suit. You'll want to iterate over all ranks, and then over all suits (this is an example of _nested `for` loops_). See the next 2 steps before you continue with the nested loops.
 
-
+struct Deck{
+    var deck: [Card]
+    
+    init (deck: [Card]){
+        self.deck = deck
+        for suit in Suits.allCases{
+            for rank in Rank.allCases{
+                self.deck.append(Card(suit: suit, value: rank))
+            }
+            
+        }
+        
+    }
+    
+}
 
 
 
