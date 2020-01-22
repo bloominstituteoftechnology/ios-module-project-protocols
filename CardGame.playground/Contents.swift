@@ -32,7 +32,12 @@ enum Rank: Int, CustomStringConvertible {
     case jack
     case queen
     case king
-}
+    
+    static var allRanks: [Rank] {
+        return [.ace, .two, .three, .four, .five, .six, .seven, .eight, .nine, .ten, .jack, .queen, .king]
+        }
+    }
+
 
 
 
@@ -50,6 +55,10 @@ enum SuitOfPlayingCard: String {
     case diamonds
     case spades
     case clubs
+    
+    static var allSuit: [SuitOfPlayingCard] {
+        return [.clubs, .diamonds, .hearts, .spades]
+    }
 }
 
 
@@ -66,25 +75,38 @@ struct Card: CustomStringConvertible {
     
 }
 
-// let card1 = Card(rank: .ace, suit: .diamonds)
+//
 
 //: ## Step 5
 //: Make the card also conform to `CustomStringConvertible`. When turned into a string, a card's value should look something like this, "ace of spades", or "3 of diamonds".
-
+let card1 = Card(rank: .ace, suit: .diamonds)
 
 
 //: ## Step 6
 //: Create a `struct` to model a deck of cards. It should be called `Deck` and have an array of `Card` objects as a constant property. A custom `init` function should be created that initializes the array with a card of each rank and suit. You'll want to iterate over all ranks, and then over all suits (this is an example of _nested `for` loops_). See the next 2 steps before you continue with the nested loops.
-
-
-
+struct Deck {
+    let cards: [Card]
+   
+    init() {
+        var cards: [Card] = []
+        for ranks in Rank.allRanks {
+            for suit in SuitOfPlayingCard.allSuit {
+                let singleCard = Card(rank: ranks, suit: suit)
+                cards.append(singleCard)
+            }
+        }
+        self.cards = cards
+}
+    func drawCard() -> Card {
+        return cards[Int.random(in: 0...51)]
+        
+    }
+}
 
 
 //: ## Step 7
 //: In the rank enum, add a static computed property that returns all the ranks in an array. Name this property `allRanks`. This is needed because you can't iterate over all cases from an enum automatically.
-
-
-
+   
 
 //: ## Step 8
 //: In the suit enum, add a static computed property that returns all the suits in an array. Name this property `allSuits`.
@@ -104,7 +126,10 @@ struct Card: CustomStringConvertible {
 
 //: ## Step 10
 //: These loops will allow you to match up every rank with every suit. Make a `Card` object from all these pairings and append each card to the `cards` property of the deck. At the end of the `init` method, the `cards` array should contain a full deck of standard playing card objects.
-
+let deck = Deck()
+for card in deck.cards {
+    print("\(card.rank) of \(card.suit)")
+}
 
 
 
