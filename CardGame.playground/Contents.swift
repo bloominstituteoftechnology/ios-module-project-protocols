@@ -2,8 +2,53 @@ import Foundation
 
 //: ## Step 1
 //: Create an enumeration for the value of a playing card. The values are: `ace`, `two`, `three`, `four`, `five`, `six`, `seven`, `eight`, `nine`, `ten`, `jack`, `queen`, and `king`. Set the raw type of the enum to `Int` and assign the ace a value of `1`.
-
-
+ enum Rank: Int,CustomStringConvertible {
+     case ace = 1
+     case two = 2
+     case three = 3
+     case four = 4
+     case five = 5
+     case six = 6
+     case seven = 7
+     case eight = 8
+     case nine = 9
+     case ten = 10
+     case jack = 11
+     case queen = 12
+     case king = 13
+    
+    var description: String {
+         switch self {
+         case .ace:
+             return "ace"
+         case .two:
+             return "2"
+         case .three:
+             return "3"
+         case .four:
+             return "4"
+         case .five:
+             return "5"
+         case .six:
+             return "6"
+         case .seven:
+             return "7"
+         case .eight:
+             return "8"
+         case .nine:
+             return "9"
+         case .ten:
+             return "10"
+         case .jack:
+             return "jack"
+         case .queen:
+             return "queen"
+         case .king:
+             return "King"
+         }
+     }
+     static var allRanks: [Rank] = [.ace,.two,.three,.four,.five,.six,.seven,.eight,.nine,.ten,.jack,.queen,.king]
+ }
 
 
 
@@ -15,13 +60,48 @@ import Foundation
 
 //: ## Step 3
 //: Create an enum for the suit of a playing card. The values are `hearts`, `diamonds`, `spades`, and `clubs`. Use a raw type of `String` for this enum (this will allow us to get a string version of the enum cases for free, no use of `CustomStringConvertible` required).
-
+enum Suit: String {
+    case hearts = "hearts"
+    case diamonds = "diamond"
+    case spades = "spades"
+    case clubs = "clubs"
+    
+    static var allSuits: [Suit] {
+        return [.hearts, .diamonds, .spades, .clubs]
+    }
+}
 
 
 
 //: ## Step 4
 //: Using the two enums above, create a `struct` called `Card` to model a single playing card. It should have constant properties for each constituent piece (one for suit and one for rank).
-
+struct Card: CustomStringConvertible, Comparable {
+ 
+    static func < (lhs: Card, rhs: Card) -> Bool {
+        if lhs.rank != rhs.rank {
+            return lhs.rank.rawValue < rhs.rank.rawValue
+        } else {
+            return false
+        }
+    }
+    
+    static func == (lhs: Card, rhs: Card) -> Bool {
+        if lhs.rank == rhs.rank &&
+            lhs.suit == rhs.suit {
+            return true
+        } else {
+            return false
+        }
+    }
+    
+    let suit: Suit
+    let rank: Rank
+     
+    // Step 5
+    var description: String {
+        return "\(rank) of \(suit)"
+    }
+}
 
 
 
@@ -32,7 +112,20 @@ import Foundation
 
 //: ## Step 6
 //: Create a `struct` to model a deck of cards. It should be called `Deck` and have an array of `Card` objects as a constant property. A custom `init` function should be created that initializes the array with a card of each rank and suit. You'll want to iterate over all ranks, and then over all suits (this is an example of _nested `for` loops_). See the next 2 steps before you continue with the nested loops.
-
+struct Deck {
+    
+    let cards: [Card]
+     
+    init() {
+         var cards = [Card]()
+         for suit in Suit.allSuits {
+             for rank in Rank.allRanks {
+                 cards.append(Card(suit: suit, rank: rank))
+             }
+         }
+         self.cards = cards
+     }
+}
 
 
 
