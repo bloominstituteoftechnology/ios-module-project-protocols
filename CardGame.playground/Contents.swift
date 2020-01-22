@@ -56,9 +56,17 @@ enum SuitOfPlayingCard: String {
 
 //: ## Step 4
 //: Using the two enums above, create a `struct` called `Card` to model a single playing card. It should have constant properties for each constituent piece (one for suit and one for rank).
-struct Card
+struct Card: CustomStringConvertible {
+    var description: String {
+        return "\(rank) of \(suit)"
+    }
+    var rank: Rank
+    var suit: SuitOfPlayingCard
+    
+    
+}
 
-
+// let card1 = Card(rank: .ace, suit: .diamonds)
 
 //: ## Step 5
 //: Make the card also conform to `CustomStringConvertible`. When turned into a string, a card's value should look something like this, "ace of spades", or "3 of diamonds".
