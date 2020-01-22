@@ -18,7 +18,8 @@ import Foundation
      case king = 13
     
     var description: String {
-         switch self {
+        // Step 2
+        switch self {
          case .ace:
              return "ace"
          case .two:
@@ -47,8 +48,26 @@ import Foundation
              return "King"
          }
      }
+    
+    // Step 7
      static var allRanks: [Rank] = [.ace,.two,.three,.four,.five,.six,.seven,.eight,.nine,.ten,.jack,.queen,.king]
+    
+    
+    // Step 17
+    
+    static func < (lhs: Rank, rhs: Rank) -> Bool {
+           if lhs.rawValue != rhs.rawValue {
+               return lhs.rawValue < rhs.rawValue
+           } else {
+               return false
+           }
+       }
+       
+       static func == (lhs: Rank, rhs: Rank) -> Bool {
+           return lhs.rawValue == rhs.rawValue
+       }
  }
+
 
 
 
@@ -66,6 +85,7 @@ enum Suit: String {
     case spades = "spades"
     case clubs = "clubs"
     
+    // Step 8
     static var allSuits: [Suit] {
         return [.hearts, .diamonds, .spades, .clubs]
     }
@@ -76,7 +96,7 @@ enum Suit: String {
 //: ## Step 4
 //: Using the two enums above, create a `struct` called `Card` to model a single playing card. It should have constant properties for each constituent piece (one for suit and one for rank).
 struct Card: CustomStringConvertible, Comparable {
- 
+ // Step 18
     static func < (lhs: Card, rhs: Card) -> Bool {
         if lhs.rank != rhs.rank {
             return lhs.rank.rawValue < rhs.rank.rawValue
@@ -101,8 +121,8 @@ struct Card: CustomStringConvertible, Comparable {
     var description: String {
         return "\(rank) of \(suit)"
     }
+     
 }
-
 
 
 //: ## Step 5
@@ -118,13 +138,20 @@ struct Deck {
      
     init() {
          var cards = [Card]()
-         for suit in Suit.allSuits {
+        // Step 9 and 10
+        for suit in Suit.allSuits {
              for rank in Rank.allRanks {
                  cards.append(Card(suit: suit, rank: rank))
              }
          }
          self.cards = cards
      }
+    
+    // Step 11
+    func drawCard() -> Card {
+        let randomNumber = Int.random(in: 0...51)
+        return cards[randomNumber]
+    }
 }
 
 
@@ -171,7 +198,10 @@ struct Deck {
 //: Create a protocol for a `CardGame`. It should have two requirements:
 //: * a gettable `deck` property
 //: * a `play()` method
-
+protocol CardGame {
+    var deck: Deck { get }
+    func play()
+}
 
 
 
@@ -179,14 +209,39 @@ struct Deck {
 //: Create a protocol for tracking a card game as a delegate called `CardGameDelegate`. It should have two functional requirements:
 //: * a function called `gameDidStart` that takes a `CardGame` as an argument
 //: * a function with the following signature: `game(player1DidDraw card1: Card, player2DidDraw card2: Card)`
-
+protocol CardGameDelegate {
+    func gameDidStart(game: CardGame)
+    func game(player1DidDraw card1: Card, player2DidDraw card2: Card)
+}
 
 
 
 //: ## Step 14
 //: Create a class called `HighLow` that conforms to the `CardGame` protocol. It should have an initialized `Deck` as a property, as well as an optional delegate property of type `CardGameDelegate`.
 
-
+class HighLow: CardGame {
+    var deck: Deck = Deck()
+    var delegate: CardGameDelegate?
+    
+    
+    // Step 15 and 19
+    func play() {
+        
+        delegate?.gameDidStart(game: self)
+        let player1Card = deck.drawCard()
+        let player2Card = deck.drawCard()
+        
+        delegate?.game(player1DidDraw: player1Card, player2DidDraw: player2Card)
+        
+        if player1Card == player2Card {
+            print("Round ends in a tie with \(player1Card)")
+        } else if player2Card < player1Card {
+            print("Player 1 wins with \(player1Card)")
+        } else if player1Card < player2Card {
+            print("Player 2 wins with \(player2Card)")
+        }
+    }
+}
 
 
 //: ## Step 15
@@ -226,7 +281,15 @@ struct Deck {
 //: ## Step 20
 //: Create a class called `CardGameTracker` that conforms to the `CardGameDelegate` protocol. Implement the two required functions: `gameDidStart` and `game(player1DidDraw:player2DidDraw)`. Model `gameDidStart` after the same method in the guided project from today. As for the other method, have it print a message like the following:
 //: * "Player 1 drew a 6 of hearts, player 2 drew a jack of spades."
-
+class CardGameTracker: CardGameDelegate {
+    func gameDidStart(game: CardGame) {
+        print("Beginning a new game of High Low")
+    }
+    
+    func game(player1DidDraw card1: Card, player2DidDraw card2: Card) {
+        print("Player 1 drew \(card1), player 2 drew \(card2)")
+    }
+}
 
 
 //: Step 21
@@ -237,5 +300,7 @@ struct Deck {
 //: Player 1 drew a 2 of diamonds, player 2 drew a ace of diamonds.
 //: Player 1 wins with 2 of diamonds.
 //: ```
-
+let highLow = HighLow()
+highLow.delegate = CardGameTracker()
+highLow.play()
 
