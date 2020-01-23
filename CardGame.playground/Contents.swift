@@ -3,6 +3,48 @@ import Foundation
 //: ## Step 1
 //: Create an enumeration for the value of a playing card. The values are: `ace`, `two`, `three`, `four`, `five`, `six`, `seven`, `eight`, `nine`, `ten`, `jack`, `queen`, and `king`. Set the raw type of the enum to `Int` and assign the ace a value of `1`.
 
+// 4 > 3 -> would run as 'true'
+// Example: Rank.ace < Rank.two -> Would run as 'true'
+enum Rank: Int, CustomStringConvertible, Comparable {
+    static func < (lhs: Rank, rhs: Rank) -> Bool {
+        return lhs.rawValue < rhs.rawValue
+    }
+    
+    var description: String {
+        switch self {
+        
+        case .ace:
+            return "ace"
+        case .jack:
+            return "jack"
+        case .queen:
+            return "queen"
+        case .king:
+            return "king"
+        default:
+            return "\(self.rawValue)"
+        }
+    }
+    
+    case ace = 1
+    case two = 2
+    case three = 3
+    case four = 4
+    case five = 5
+    case six = 6
+    case seven = 7
+    case eight = 8
+    case nine = 9
+    case ten = 10
+    case jack
+    case queen
+    case king
+    
+    static var allRanks: [Rank] {
+        return [.ace, .two, .three, .four, .five, .six, .seven, .eight, .nine, .ten, .jack, .queen, .king]
+        }
+    }
+
 
 
 
@@ -15,33 +57,68 @@ import Foundation
 
 //: ## Step 3
 //: Create an enum for the suit of a playing card. The values are `hearts`, `diamonds`, `spades`, and `clubs`. Use a raw type of `String` for this enum (this will allow us to get a string version of the enum cases for free, no use of `CustomStringConvertible` required).
-
+enum SuitOfPlayingCard: String {
+    case hearts
+    case diamonds
+    case spades
+    case clubs
+    
+    static var allSuit: [SuitOfPlayingCard] {
+        return [.clubs, .diamonds, .hearts, .spades]
+    }
+}
 
 
 
 //: ## Step 4
 //: Using the two enums above, create a `struct` called `Card` to model a single playing card. It should have constant properties for each constituent piece (one for suit and one for rank).
+struct Card: CustomStringConvertible, Comparable {
+    static func < (lhs: Card, rhs: Card) -> Bool {
+        return lhs.rank < rhs.rank
+    }
+    
+    var description: String {
+        return "\(rank) of \(suit)"
+    }
+    var rank: Rank
+    var suit: SuitOfPlayingCard
+    
+    
+}
 
-
-
+//
 
 //: ## Step 5
 //: Make the card also conform to `CustomStringConvertible`. When turned into a string, a card's value should look something like this, "ace of spades", or "3 of diamonds".
-
+let card1 = Card(rank: .ace, suit: .diamonds)
 
 
 //: ## Step 6
 //: Create a `struct` to model a deck of cards. It should be called `Deck` and have an array of `Card` objects as a constant property. A custom `init` function should be created that initializes the array with a card of each rank and suit. You'll want to iterate over all ranks, and then over all suits (this is an example of _nested `for` loops_). See the next 2 steps before you continue with the nested loops.
-
-
-
-
+struct Deck {
+    let cards: [Card]
+   
+    init() {
+        var cards: [Card] = []
+        for ranks in Rank.allRanks {
+            for suit in SuitOfPlayingCard.allSuit {
+                let singleCard = Card(rank: ranks, suit: suit)
+                cards.append(singleCard)
+            }
+        }
+        self.cards = cards
+}
+    func drawCard() -> Card {
+        return cards[Int.random(in: 0...51)]
+        
+    }
+}
+let myDeck = Deck()
+myDeck.drawCard()
 
 //: ## Step 7
 //: In the rank enum, add a static computed property that returns all the ranks in an array. Name this property `allRanks`. This is needed because you can't iterate over all cases from an enum automatically.
-
-
-
+   
 
 //: ## Step 8
 //: In the suit enum, add a static computed property that returns all the suits in an array. Name this property `allSuits`.
@@ -61,7 +138,10 @@ import Foundation
 
 //: ## Step 10
 //: These loops will allow you to match up every rank with every suit. Make a `Card` object from all these pairings and append each card to the `cards` property of the deck. At the end of the `init` method, the `cards` array should contain a full deck of standard playing card objects.
-
+let deck = Deck()
+for card in deck.cards {
+    print("\(card.rank) of \(card.suit)")
+}
 
 
 
@@ -78,7 +158,10 @@ import Foundation
 //: Create a protocol for a `CardGame`. It should have two requirements:
 //: * a gettable `deck` property
 //: * a `play()` method
-
+protocol CardGame {
+    var deck: Deck { get }
+    func play()
+}
 
 
 
@@ -86,8 +169,25 @@ import Foundation
 //: Create a protocol for tracking a card game as a delegate called `CardGameDelegate`. It should have two functional requirements:
 //: * a function called `gameDidStart` that takes a `CardGame` as an argument
 //: * a function with the following signature: `game(player1DidDraw card1: Card, player2DidDraw card2: Card)`
-
-
+    // Class:  Protocol
+class HighLow: CardGame {
+    var deck: Deck = Deck() //() init
+    
+    func play() {
+        var player1 = deck.drawCard()
+        var player2 = deck.drawCard()
+        if player1 < player2 {
+            print("Player2 wins \(player2.rank) of \(player2.suit)")
+        } else if player2 < player1 {
+            print("Player1 wins \(player1.rank) of \(player1.suit)")
+        } else {
+            print("Round ends with tie with \(player1.rank) \(player1.suit)")
+        }
+    }
+    
+    
+}
+HighLow().play()
 
 
 //: ## Step 14
