@@ -111,15 +111,25 @@ struct Deck {
         
   }
      var cards: [Card] = []
+    
+    func drawCard() -> Card {
+        func random() -> Int {
+            return Int.random(in: 1...52)
+        }
+        return cards[random()]
+     }
 }
+
+
 
 var cardOptions = Deck(suit: "diamonds", rank: "Two")
 
 cardOptions.cards.append(cardValue)
 
-func drawCard() -> Card {
-    
-}
+
+
+
+
 
 
 
