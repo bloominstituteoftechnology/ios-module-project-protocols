@@ -1,40 +1,142 @@
 import Foundation
+import UIKit
+
+protocol CardGame {
+    var deck: Deck { get }
+    func play()
+}
+
+protocol CardGameDelegate {
+    func gameDidStart(game: CardGame)
+    func game(player1DidDraw card1 : Card, player2DidDraw card2 : Card)
+}
 
 //: ## Step 1
 //: Create an enumeration for the value of a playing card. The values are: `ace`, `two`, `three`, `four`, `five`, `six`, `seven`, `eight`, `nine`, `ten`, `jack`, `queen`, and `king`. Set the raw type of the enum to `Int` and assign the ace a value of `1`.
-
+enum Rank : Int {
+    case ace = 1
+    case two = 2
+    case three = 3
+    case four = 4
+    case five = 5
+    case six = 6
+    case seven = 7
+    case eight = 8
+    case nine = 9
+    case ten = 10
+    case jack = 11
+    case queen = 12
+    case king = 13
+    
+    static var allRanks: [Rank]  {
+        get {
+            let allRanks = [   self.ace,
+                               self.two,
+                               self.three,
+                               self.four,
+                               self.five,
+                               self.six,
+                               self.seven,
+                               self.eight,
+                               self.nine,
+                               self.ten,
+                               self.jack,
+                               self.queen,
+                               self.king     ]
+            
+            return allRanks
+        }
+        
+    }
+}
 
 
 
 
 //: ## Step 2
 //: Once you've defined the enum as described above, take a look at this built-in protocol, [CustomStringConvertible](https://developer.apple.com/documentation/swift/customstringconvertible) and make the enum conform to that protocol. Make the face cards return a string of their name, and for the numbered cards, simply have it return that number as a string.
-
+extension Rank : CustomStringConvertible {
+    var description: String {
+        var newString = ""
+        switch self {
+        case .ace : return "Ace"
+        case .jack : return "Jack"
+        case .king : return "King"
+        case .queen :return "Queen"
+           
+          
+        case .two,.three,.four,.five,.six,.seven,.eight,.nine,.ten :
+            newString = "\(self.rawValue)"
+            return newString
+        }
+    }
+}
 
 
 
 //: ## Step 3
 //: Create an enum for the suit of a playing card. The values are `hearts`, `diamonds`, `spades`, and `clubs`. Use a raw type of `String` for this enum (this will allow us to get a string version of the enum cases for free, no use of `CustomStringConvertible` required).
-
+enum Suit : String {
+    case hearts
+    case diamonds
+    case spades
+    case clubs
+    
+    static var allSuits : [Suit] {
+        get {
+            let allSuits = [ self.clubs,self.hearts,self.diamonds,self.spades ]
+            return allSuits
+        }
+    }
+}
 
 
 
 //: ## Step 4
 //: Using the two enums above, create a `struct` called `Card` to model a single playing card. It should have constant properties for each constituent piece (one for suit and one for rank).
-
+struct Card : CustomStringConvertible {
+    let rank : Rank
+    let suit : Suit
+    
+    var description: String {
+           get {
+               return "\(rank) of \(suit)"
+           }
+       }
+}
 
 
 
 //: ## Step 5
 //: Make the card also conform to `CustomStringConvertible`. When turned into a string, a card's value should look something like this, "ace of spades", or "3 of diamonds".
-
+// Above
 
 
 //: ## Step 6
 //: Create a `struct` to model a deck of cards. It should be called `Deck` and have an array of `Card` objects as a constant property. A custom `init` function should be created that initializes the array with a card of each rank and suit. You'll want to iterate over all ranks, and then over all suits (this is an example of _nested `for` loops_). See the next 2 steps before you continue with the nested loops.
-
-
-
+struct Deck {
+    let cards : [Card]
+    
+    init() {
+         var deck = [Card]()
+        for rank in Rank.allRanks {
+            for suit in Suit.allSuits {
+               
+                let card = Card(rank: rank, suit: suit)
+              
+                deck.append(card)
+            }
+        }
+        
+        cards = deck
+    }
+    
+    func drawCard() -> Card {
+        let randomIndex = Int.random(in: 0...51)
+        return cards[randomIndex]
+    }
+    
+}
 
 
 //: ## Step 7
@@ -45,6 +147,7 @@ import Foundation
 
 //: ## Step 8
 //: In the suit enum, add a static computed property that returns all the suits in an array. Name this property `allSuits`.
+// Step 13
 
 
 
@@ -56,13 +159,74 @@ import Foundation
 //:
 //:}
 //:```
-
-
-
+// Step 14, 15 //19
+class HighLow : CardGame {
+    var deck: Deck = Deck()
+    var delegate : CardGameDelegate?
+    
+   
+    func play() {
+        let card1 = deck.drawCard()
+        let card2 = deck.drawCard()
+        delegate?.gameDidStart(game: self)
+        delegate?.game(player1DidDraw: card1, player2DidDraw: card2)
+        
+        
+        if card1 == card2 {
+            print("Round ends in a tie with 3 of clubs.")
+        } else if card1 > card2 {
+            print("Player 1 wins with \(card1.rank.description) of \(card1.suit.rawValue)")
+        } else if card1 < card2 {
+            print("Player 2 wins with \(card2.rank.description) of \(card2.suit.rawValue).")
+        } else if card1.rank == card2.rank && card1.suit != card2.suit {
+            print("Good game!")
+        }
+    }
+}
+//17
+extension Rank : Comparable {
+    static func < (lhs: Rank, rhs: Rank) -> Bool {
+       
+            return lhs.rawValue < rhs.rawValue
+        
+    }
+    static func == (lhs: Rank, rhs: Rank) -> Bool {
+        return lhs.rawValue == rhs.rawValue
+        }
+    }
+    
+//18
+extension Card: Comparable {
+    static func < (lhs: Card, rhs: Card) -> Bool {
+        return lhs.rank.rawValue < rhs.rank.rawValue
+    }
+    static func == (lhs: Card, rhs: Card) -> Bool {
+        return lhs.rank.rawValue == rhs.rank.rawValue && lhs.suit.rawValue == lhs.suit.rawValue
+           }
+    
+}
 //: ## Step 10
 //: These loops will allow you to match up every rank with every suit. Make a `Card` object from all these pairings and append each card to the `cards` property of the deck. At the end of the `init` method, the `cards` array should contain a full deck of standard playing card objects.
+//20
 
-
+class CardGameTracker : CardGameDelegate {
+    func gameDidStart(game: CardGame) {
+        if game is HighLow {
+            print("Start the name of High Low")
+        }
+      
+    }
+    
+    func game(player1DidDraw card1: Card, player2DidDraw card2: Card) {
+        print("Player 1 drew a \(card1.rank.description) of \(card1.suit.rawValue),Player 2 drew a \(card2.rank.description) of \(card2.suit.rawValue)")
+    }
+    
+    
+}
+// 21
+let game = HighLow()
+game.delegate = CardGameTracker()
+game.play()
 
 
 
