@@ -5,7 +5,7 @@ import Foundation
 
 
 enum Rank: Int, CustomStringConvertible, Comparable {
- 
+    
     case ace = 1
     case two = 2
     case three = 3
@@ -40,11 +40,11 @@ enum Rank: Int, CustomStringConvertible, Comparable {
     }
     static func < (lhs: Rank, rhs: Rank) -> Bool {
         return lhs.rawValue < rhs.rawValue
-     }
-     static func == (lhs: Rank, rhs: Rank) -> Bool {
-         return lhs.rawValue == rhs.rawValue
-      }
-
+    }
+    static func == (lhs: Rank, rhs: Rank) -> Bool {
+        return lhs.rawValue == rhs.rawValue
+    }
+    
 }
 
 //: ## Step 2
@@ -80,10 +80,10 @@ struct Card: CustomStringConvertible, Comparable {
         return lhs.rank < rhs.rank
         
     }
-     static func == (lhs: Card, rhs: Card) -> Bool {
-         return lhs.rank == rhs.rank &&
-                lhs.suit == rhs.suit
-      }
+    static func == (lhs: Card, rhs: Card) -> Bool {
+        return lhs.rank == rhs.rank &&
+            lhs.suit == rhs.suit
+    }
 }
 
 
@@ -172,18 +172,8 @@ protocol CardGame {
 //: Create a protocol for tracking a card game as a delegate called `CardGameDelegate`. It should have two functional requirements:
 //: * a function called `gameDidStart` that takes a `CardGame` as an argument
 //: * a function with the following signature: `game(player1DidDraw card1: Card, player2DidDraw card2: Card)`
-/*
-
- Back to the play() method. With the above types now conforming to Comparable, you can write logic to compare the drawn cards and print out 1 of 3 possible message types:
- Ends in a tie, something like, "Round ends in a tie with 3 of clubs."
- Player 1 wins with a higher card, e.g. "Player 1 wins with 8 of hearts."
- Player 2 wins with a higher card, e.g. "Player 2 wins with king of diamonds."
- Time to test all the types you've created. Create an instance of the HighLow class. Lastly, call the play() method on the game object.
-
- */
-
 class HighLow: CardGame {
-
+    
     
     var deck = Deck()
     
@@ -192,7 +182,7 @@ class HighLow: CardGame {
         let secondCard = deck.drawCard()
         
         if firstCard == secondCard {
-               print("Ends in a tie with \(firstCard)")
+            print("Ends in a tie with \(firstCard)")
         }
         if firstCard > secondCard {
             print("Player 1 wins with \(firstCard)")
@@ -200,7 +190,7 @@ class HighLow: CardGame {
             print("Player 2 wins with \(secondCard)")
         }
     }
-   
+    
     
 }
 
