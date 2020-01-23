@@ -2,6 +2,49 @@ import Foundation
 
 //: ## Step 1
 //: Create an enumeration for the value of a playing card. The values are: `ace`, `two`, `three`, `four`, `five`, `six`, `seven`, `eight`, `nine`, `ten`, `jack`, `queen`, and `king`. Set the raw type of the enum to `Int` and assign the ace a value of `1`.
+enum Rank: Int, CustomStringConvertible, Comparable {
+    static func < (lhs: Rank, rhs: Rank) -> Bool {
+        return lhs.rawValue < rhs.rawValue
+    }
+
+    
+    
+    case ace = 1
+    case two
+    case three
+    case four
+    case five
+    case six
+    case seven
+    case eight
+    case nine
+    case ten
+    case jack
+    case queen
+    case king
+    
+    static var allRanks: [Rank] {
+        return [.ace, .two, .three, .four, .five, .six, .seven, .eight, .nine, .ten, .jack, .queen, .king]
+        }
+    
+    
+    var description: String {
+            switch self {
+            case .ace:
+                return "Ace"
+            case .jack:
+                return "Jack"
+            case .queen:
+                return "Queen"
+            case .king:
+                return "King"
+            default:
+                return "\(self.rawValue)"
+
+        }
+    }
+}
+
 
 
 
@@ -10,19 +53,40 @@ import Foundation
 //: ## Step 2
 //: Once you've defined the enum as described above, take a look at this built-in protocol, [CustomStringConvertible](https://developer.apple.com/documentation/swift/customstringconvertible) and make the enum conform to that protocol. Make the face cards return a string of their name, and for the numbered cards, simply have it return that number as a string.
 
-
+    
 
 
 //: ## Step 3
 //: Create an enum for the suit of a playing card. The values are `hearts`, `diamonds`, `spades`, and `clubs`. Use a raw type of `String` for this enum (this will allow us to get a string version of the enum cases for free, no use of `CustomStringConvertible` required).
-
-
+enum PlayingCardSuit: String {
+    case hearts
+    case diamonds
+    case spades
+    case clubs
+    
+    static var allSuits: [PlayingCardSuit] {
+        return [.clubs, .diamonds, .hearts, .spades]
+    }
+}
 
 
 //: ## Step 4
 //: Using the two enums above, create a `struct` called `Card` to model a single playing card. It should have constant properties for each constituent piece (one for suit and one for rank).
+struct Card: CustomStringConvertible, Comparable {
+    static func < (lhs: Card, rhs: Card) -> Bool {
+        return lhs.rank < rhs.rank
+    }
+    var description: String {
+        return "\(rank) of \(suit)"
+    }
+    var rank: Rank
+    var suit: PlayingCardSuit
+    
+    
+}
 
-
+//let card1 = Card(rank: .ace, suit: .spades)
+//print(card1)
 
 
 //: ## Step 5
@@ -32,13 +96,31 @@ import Foundation
 
 //: ## Step 6
 //: Create a `struct` to model a deck of cards. It should be called `Deck` and have an array of `Card` objects as a constant property. A custom `init` function should be created that initializes the array with a card of each rank and suit. You'll want to iterate over all ranks, and then over all suits (this is an example of _nested `for` loops_). See the next 2 steps before you continue with the nested loops.
+struct Deck {
+    let cards: [Card]
+    
+    init() {
+        var cards: [Card] = []
+        
+        for rank in Rank.allRanks {
+            for suit in PlayingCardSuit.allSuits {
+                let singleCard = Card(rank: rank, suit: suit)
+                cards.append(singleCard)
+            }
+        }
+        self.cards = cards
+    }
+    func drawCard() -> Card {
+        return cards[Int.random(in: 1...51)]
+    }
 
-
-
-
-
+}
+let myDeck = Deck()
+myDeck.drawCard()
+myDeck.drawCard()
 //: ## Step 7
 //: In the rank enum, add a static computed property that returns all the ranks in an array. Name this property `allRanks`. This is needed because you can't iterate over all cases from an enum automatically.
+
 
 
 
@@ -61,7 +143,10 @@ import Foundation
 
 //: ## Step 10
 //: These loops will allow you to match up every rank with every suit. Make a `Card` object from all these pairings and append each card to the `cards` property of the deck. At the end of the `init` method, the `cards` array should contain a full deck of standard playing card objects.
-
+let deck = Deck()
+for card in deck.cards  {
+    print("\(card.rank) of \(card.suit)")
+}
 
 
 
@@ -74,11 +159,16 @@ import Foundation
 
 
 
+
 //: ## Step 12
 //: Create a protocol for a `CardGame`. It should have two requirements:
 //: * a gettable `deck` property
 //: * a `play()` method
-
+protocol CardGame {
+    var deck: Deck { get }
+    
+    func play()
+}
 
 
 
@@ -96,12 +186,27 @@ import Foundation
 
 
 
+
 //: ## Step 15
 //: As part of the protocol conformance, implement a method called `play()`. The method should draw 2 cards from the deck, one for player 1 and one for player 2. These cards will then be compared to see which one is higher. The winning player will be printed along with a description of the winning card. Work will need to be done to the `Suit` and `Rank` types above, so see the next couple steps before continuing with this step.
-
-
-
-
+class HighLow: CardGame {
+    var deck: Deck = Deck() //() init
+    
+    func play() {
+        var player1 = deck.drawCard()
+        var player2 = deck.drawCard()
+        if player1 < player2 {
+            print("Player2 wins \(player2.rank) of \(player2.suit)")
+        } else if player2 < player1 {
+            print("Player1 wins \(player1.rank) of \(player1.suit)")
+        } else {
+            print("Round ends with tie with \(player1.rank) \(player1.suit)")
+        }
+    }
+    
+    
+}
+HighLow().play()
 //: ## Step 16
 //: Take a look at the Swift docs for the [Comparable](https://developer.apple.com/documentation/swift/comparable) protocol. In particular, look at the two functions called `<` and `==`.
 
@@ -144,5 +249,6 @@ import Foundation
 //: Player 1 drew a 2 of diamonds, player 2 drew a ace of diamonds.
 //: Player 1 wins with 2 of diamonds.
 //: ```
+
 
 
