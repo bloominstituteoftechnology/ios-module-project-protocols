@@ -2,7 +2,14 @@ import Foundation
 
 //: ## Step 1
 //: Create an enumeration for the value of a playing card. The values are: `ace`, `two`, `three`, `four`, `five`, `six`, `seven`, `eight`, `nine`, `ten`, `jack`, `queen`, and `king`. Set the raw type of the enum to `Int` and assign the ace a value of `1`.
-enum Rank: Int, CustomStringConvertible {
+
+// 4 > 3 -> would run as 'true'
+// Example: Rank.ace < Rank.two -> Would run as 'true'
+enum Rank: Int, CustomStringConvertible, Comparable {
+    static func < (lhs: Rank, rhs: Rank) -> Bool {
+        return lhs.rawValue < rhs.rawValue
+    }
+    
     var description: String {
         switch self {
         
@@ -65,7 +72,11 @@ enum SuitOfPlayingCard: String {
 
 //: ## Step 4
 //: Using the two enums above, create a `struct` called `Card` to model a single playing card. It should have constant properties for each constituent piece (one for suit and one for rank).
-struct Card: CustomStringConvertible {
+struct Card: CustomStringConvertible, Comparable {
+    static func < (lhs: Card, rhs: Card) -> Bool {
+        return lhs.rank < rhs.rank
+    }
+    
     var description: String {
         return "\(rank) of \(suit)"
     }
@@ -102,7 +113,8 @@ struct Deck {
         
     }
 }
-
+let myDeck = Deck()
+myDeck.drawCard()
 
 //: ## Step 7
 //: In the rank enum, add a static computed property that returns all the ranks in an array. Name this property `allRanks`. This is needed because you can't iterate over all cases from an enum automatically.
@@ -146,7 +158,10 @@ for card in deck.cards {
 //: Create a protocol for a `CardGame`. It should have two requirements:
 //: * a gettable `deck` property
 //: * a `play()` method
-
+protocol CardGame {
+    var deck: Deck { get }
+    func play()
+}
 
 
 
@@ -154,8 +169,25 @@ for card in deck.cards {
 //: Create a protocol for tracking a card game as a delegate called `CardGameDelegate`. It should have two functional requirements:
 //: * a function called `gameDidStart` that takes a `CardGame` as an argument
 //: * a function with the following signature: `game(player1DidDraw card1: Card, player2DidDraw card2: Card)`
-
-
+    // Class:  Protocol
+class HighLow: CardGame {
+    var deck: Deck = Deck() //() init
+    
+    func play() {
+        var player1 = deck.drawCard()
+        var player2 = deck.drawCard()
+        if player1 < player2 {
+            print("Player2 wins \(player2.rank) of \(player2.suit)")
+        } else if player2 < player1 {
+            print("Player1 wins \(player1.rank) of \(player1.suit)")
+        } else {
+            print("Round ends with tie with \(player1.rank) \(player1.suit)")
+        }
+    }
+    
+    
+}
+HighLow().play()
 
 
 //: ## Step 14
