@@ -17,18 +17,31 @@ enum Rank: Int {
     case jack
     case queen
     case king
+    
+//    static var allRanks: String {
+//        get {
+//            return  // question #7
+//        }}
 }
 
 //: ## Step 2
 //: Once you've defined the enum as described above, take a look at this built-in protocol, [CustomStringConvertible](https://developer.apple.com/documentation/swift/customstringconvertible) and make the enum conform to that protocol. Make the face cards return a string of their name, and for the numbered cards, simply have it return that number as a string.
-
+ // Is this all I do??
 extension Rank: CustomStringConvertible {
     var description: String {
-        return rawValue.description
+        switch self {
+        case .two, .three, .four, .five, .six, .seven, .eight, .nine, .ten:
+            return "\(rawValue.description)"
+        case .jack, .queen, .king, .ace:
+            return "\(self)"
+        default:
+            break
+        }
+        
+//        return rawValue.description
     }
 }
-
-
+print(Rank.six)
 //: ## Step 3
 //: Create an enum for the suit of a playing card. The values are `hearts`, `diamonds`, `spades`, and `clubs`. Use a raw type of `String` for this enum (this will allow us to get a string version of the enum cases for free, no use of `CustomStringConvertible` required).
 
@@ -38,6 +51,11 @@ enum Suit: String {
     case diamonds
     case spades
     case clubs
+    
+    static var allSuits: String {
+    get {
+        return // question #8
+    }}
 }
 
 
@@ -67,8 +85,26 @@ extension Card: CustomStringConvertible {
 //: Create a `struct` to model a deck of cards. It should be called `Deck` and have an array of `Card` objects as a constant property. A custom `init` function should be created that initializes the array with a card of each rank and suit. You'll want to iterate over all ranks, and then over all suits (this is an example of _nested `for` loops_). See the next 2 steps before you continue with the nested loops.
 struct Deck {
     
-    let cards = [Suit(), Rank()]
+    let card: [Card] = []
+    
+    init(suit: String, rank: String) {
+        self.card = []
+        
+        for _ in Rank.allRanks {
+            
+        for _ in Suit.allSuits {
+      }
+    }
+        
+        
+  }
+     var cards: [Card] = []
 }
+
+var cardOptions = Deck(
+
+
+
 
 
 
