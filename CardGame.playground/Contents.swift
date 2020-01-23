@@ -173,7 +173,7 @@ class HighLow : CardGame {
         
         
         if card1 == card2 {
-            print("Round ends in a tie with 3 of clubs.")
+            print("Round ends in a tie with \(card1.rank.description) of \(card1.suit.rawValue).")
         } else if card1 > card2 {
             print("Player 1 wins with \(card1.rank.description) of \(card1.suit.rawValue)")
         } else if card1 < card2 {
