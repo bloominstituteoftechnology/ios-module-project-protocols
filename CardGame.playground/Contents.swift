@@ -5,23 +5,23 @@ import Foundation
 enum Rank: Int {
     
     case ace = 1
-    case two
-    case three
-    case four
-    case five
-    case six
-    case seven
-    case eight
-    case nine
-    case ten
-    case jack
-    case queen
-    case king
+    case two = 2
+    case three = 3
+    case four = 4
+    case five = 5
+    case six = 6
+    case seven = 7
+    case eight = 8
+    case nine = 9
+    case ten = 10
+    case jack = 11
+    case queen = 12
+    case king = 13
     
-//    static var allRanks: String {
-//        get {
-//            return  // question #7
-//        }}
+    static var allRanks: [String] {
+        get {
+            return [] // question #7
+        }}
 }
 
 //: ## Step 2
@@ -29,19 +29,27 @@ enum Rank: Int {
  // Is this all I do??
 extension Rank: CustomStringConvertible {
     var description: String {
+        var newString = ""
+        
         switch self {
         case .two, .three, .four, .five, .six, .seven, .eight, .nine, .ten:
-            return "\(rawValue.description)"
-        case .jack, .queen, .king, .ace:
-            return "\(self)"
+            newString = "\(self.rawValue)"
+           print(newString)
+        case .ace, .jack, .queen, .king:
+            newString = String(self.description)
+            print(newString)
         default:
             break
-        }
         
-//        return rawValue.description
+        }
+         return newString
     }
 }
-print(Rank.six)
+
+
+
+
+
 //: ## Step 3
 //: Create an enum for the suit of a playing card. The values are `hearts`, `diamonds`, `spades`, and `clubs`. Use a raw type of `String` for this enum (this will allow us to get a string version of the enum cases for free, no use of `CustomStringConvertible` required).
 
@@ -52,9 +60,9 @@ enum Suit: String {
     case spades
     case clubs
     
-    static var allSuits: String {
+    static var allSuits: [String] {
     get {
-        return // question #8
+        return []
     }}
 }
 
@@ -63,12 +71,12 @@ enum Suit: String {
 //: ## Step 4
 //: Using the two enums above, create a `struct` called `Card` to model a single playing card. It should have constant properties for each constituent piece (one for suit and one for rank).
 struct Card {
-    let suit: Suit
-    let rank: Rank
+    var suit: [String]
+    let rank: [String]
     
-    init(suit: Suit, rank: Rank) {
-    self.suit = suit
-    self.rank = rank
+    init(Suit: String, Rank: String) {
+    self.suit = []
+    self.rank = []
  }
 }
 
@@ -81,6 +89,9 @@ extension Card: CustomStringConvertible {
     }
 }
 
+let cardValue = Card(Suit: "diamonds", Rank: "2")
+
+print(cardValue)
 //: ## Step 6
 //: Create a `struct` to model a deck of cards. It should be called `Deck` and have an array of `Card` objects as a constant property. A custom `init` function should be created that initializes the array with a card of each rank and suit. You'll want to iterate over all ranks, and then over all suits (this is an example of _nested `for` loops_). See the next 2 steps before you continue with the nested loops.
 struct Deck {
@@ -88,22 +99,27 @@ struct Deck {
     let card: [Card] = []
     
     init(suit: String, rank: String) {
-        self.card = []
         
-        for _ in Rank.allRanks {
-            
-        for _ in Suit.allSuits {
+        
+        for rank in Rank.allRanks {
+            print(rank)
+        for suit in Suit.allSuits {
+            print(suit)
+            print("\(rank) of \(suit)")
       }
     }
-        
         
   }
      var cards: [Card] = []
 }
 
-var cardOptions = Deck(
+var cardOptions = Deck(suit: "diamonds", rank: "Two")
 
+cardOptions.cards.append(cardValue)
 
+func drawCard() -> Card {
+    
+}
 
 
 
@@ -112,14 +128,8 @@ var cardOptions = Deck(
 //: ## Step 7
 //: In the rank enum, add a static computed property that returns all the ranks in an array. Name this property `allRanks`. This is needed because you can't iterate over all cases from an enum automatically.
 
-
-
-
 //: ## Step 8
 //: In the suit enum, add a static computed property that returns all the suits in an array. Name this property `allSuits`.
-
-
-
 
 //: ## Step 9
 //: Back to the `Deck` and the nested loops. Now that you have a way to get arrays of all rank values and all suit values, create 2 `for` loops in the `init` method, one nested inside the other, where you iterate over each value of rank, and then iterate over each value of suit. See an example below to get an idea of how this will work. Imagine an enum that contains the 4 cardinal directions, and imagine that enum has a property `allDirections` that returns an array of them.
