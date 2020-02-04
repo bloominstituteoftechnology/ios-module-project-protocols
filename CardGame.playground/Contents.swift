@@ -16,6 +16,8 @@ enum PlayingCardValue: Int {
     case jack
     case queen
     case king
+    
+    static var allRanks: [PlayingCardValue] = [.ace, .two, .three, .four, .five, .six, .seven, .eigth, .nine, .ten, .jack, .queen, .king]
 }
 //: ## Step 2
 //: Once you've defined the enum as described above, take a look at this built-in protocol, [CustomStringConvertible](https://developer.apple.com/documentation/swift/customstringconvertible) and make the enum conform to that protocol. Make the face cards return a string of their name, and for the numbered cards, simply have it return that number as a string.
@@ -47,6 +49,8 @@ print(newCard.description)
 //: Create an enum for the suit of a playing card. The values are `hearts`, `diamonds`, `spades`, and `clubs`. Use a raw type of `String` for this enum (this will allow us to get a string version of the enum cases for free, no use of `CustomStringConvertible` required).
 enum Suit: String {
     case hearts, diamonds, spades, clubs
+    
+    static var allSuits: [Suit] = [.hearts, .diamonds, .spades, .clubs]
 }
 
 //: ## Step 4
@@ -76,15 +80,11 @@ print(newCard2.description)
 
 //: ## Step 7
 //: In the rank enum, add a static computed property that returns all the ranks in an array. Name this property `allRanks`. This is needed because you can't iterate over all cases from an enum automatically.
-
-
-
+//DONE
 
 //: ## Step 8
 //: In the suit enum, add a static computed property that returns all the suits in an array. Name this property `allSuits`.
-
-
-
+//DONE
 
 //: ## Step 9
 //: Back to the `Deck` and the nested loops. Now that you have a way to get arrays of all rank values and all suit values, create 2 `for` loops in the `init` method, one nested inside the other, where you iterate over each value of rank, and then iterate over each value of suit. See an example below to get an idea of how this will work. Imagine an enum that contains the 4 cardinal directions, and imagine that enum has a property `allDirections` that returns an array of them.
