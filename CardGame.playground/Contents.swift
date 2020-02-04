@@ -19,7 +19,7 @@ enum PlayingCardValue: Int {
 }
 //: ## Step 2
 //: Once you've defined the enum as described above, take a look at this built-in protocol, [CustomStringConvertible](https://developer.apple.com/documentation/swift/customstringconvertible) and make the enum conform to that protocol. Make the face cards return a string of their name, and for the numbered cards, simply have it return that number as a string.
-extension PlayingCardVaue: CustomStringConvertible {
+extension PlayingCardValue: CustomStringConvertible {
     var description: String {
         var cardValue = ""
         
@@ -58,8 +58,14 @@ struct Card {
 
 //: ## Step 5
 //: Make the card also conform to `CustomStringConvertible`. When turned into a string, a card's value should look something like this, "ace of spades", or "3 of diamonds".
+extension Card: CustomStringConvertible {
+    var description: String {
+        return "\(self.value) of \(self.suit)"
+    }
+}
 
-
+let newCard2 = Card(suit: .clubs, value: .jack)
+print(newCard2.description)
 
 //: ## Step 6
 //: Create a `struct` to model a deck of cards. It should be called `Deck` and have an array of `Card` objects as a constant property. A custom `init` function should be created that initializes the array with a card of each rank and suit. You'll want to iterate over all ranks, and then over all suits (this is an example of _nested `for` loops_). See the next 2 steps before you continue with the nested loops.
