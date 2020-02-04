@@ -2,50 +2,103 @@ import Foundation
 
 //: ## Step 1
 //: Create an enumeration for the value of a playing card. The values are: `ace`, `two`, `three`, `four`, `five`, `six`, `seven`, `eight`, `nine`, `ten`, `jack`, `queen`, and `king`. Set the raw type of the enum to `Int` and assign the ace a value of `1`.
-
-
-
-
-
+enum Rank: Int {
+    case ace = 1
+    case two
+    case three
+    case four
+    case five
+    case six
+    case seven
+    case eight
+    case nine
+    case ten
+    case jack
+    case queen
+    case king
+    
+    static var allRanks: [Rank] {
+        return [ace, two, three, four, five, six, seven, eight, nine, ten, jack, queen, king]
+    }
+}
 //: ## Step 2
 //: Once you've defined the enum as described above, take a look at this built-in protocol, [CustomStringConvertible](https://developer.apple.com/documentation/swift/customstringconvertible) and make the enum conform to that protocol. Make the face cards return a string of their name, and for the numbered cards, simply have it return that number as a string.
+extension Rank: CustomStringConvertible {
+    var description: String {
+        switch self {
+        case .ace, .jack, .queen, .king:
+            return "\(self)"
+        default:
+            return "\(self.rawValue)"
+        }
+    }
+}
+//let card: CardValue = .ace
+//let card2: CardValue = .two
+//let card3: CardValue = .queen
 
-
-
+//print(card.description)
+//print(card2)
+//print(card3)
 
 //: ## Step 3
 //: Create an enum for the suit of a playing card. The values are `hearts`, `diamonds`, `spades`, and `clubs`. Use a raw type of `String` for this enum (this will allow us to get a string version of the enum cases for free, no use of `CustomStringConvertible` required).
-
+enum Suit: String {
+    case hearts = "Hearts"
+    case diamonds = "Diamonds"
+    case spades = "Spades"
+    case clubs = "Clubs"
+    
+    static var allSuits: [Suit] {
+        return [hearts, diamonds, spades, clubs]
+    }
+}
 
 
 
 //: ## Step 4
 //: Using the two enums above, create a `struct` called `Card` to model a single playing card. It should have constant properties for each constituent piece (one for suit and one for rank).
-
-
+struct Card {
+    let suit: Suit
+    let rank: Rank
+}
 
 
 //: ## Step 5
 //: Make the card also conform to `CustomStringConvertible`. When turned into a string, a card's value should look something like this, "ace of spades", or "3 of diamonds".
-
+extension Card: CustomStringConvertible {
+    var description: String {
+        return "\(rank) of \(suit)"
+    }
+}
 
 
 //: ## Step 6
 //: Create a `struct` to model a deck of cards. It should be called `Deck` and have an array of `Card` objects as a constant property. A custom `init` function should be created that initializes the array with a card of each rank and suit. You'll want to iterate over all ranks, and then over all suits (this is an example of _nested `for` loops_). See the next 2 steps before you continue with the nested loops.
-
+struct Deck {
+    var cards: [Card] = []
+    
+    init() {
+        for suit in Suit.allSuits {
+            for rank in Rank.allRanks {
+                cards.append(Card(suit: suit, rank: rank))
+            }
+        }
+    }
+}
 
 
 
 
 //: ## Step 7
 //: In the rank enum, add a static computed property that returns all the ranks in an array. Name this property `allRanks`. This is needed because you can't iterate over all cases from an enum automatically.
-
+// added in initial enum in step 1
 
 
 
 //: ## Step 8
 //: In the suit enum, add a static computed property that returns all the suits in an array. Name this property `allSuits`.
-
+// added in enum declaration in step 3
 
 
 
@@ -56,12 +109,12 @@ import Foundation
 //:
 //:}
 //:```
-
+// done in struct declaration in step 6
 
 
 //: ## Step 10
 //: These loops will allow you to match up every rank with every suit. Make a `Card` object from all these pairings and append each card to the `cards` property of the deck. At the end of the `init` method, the `cards` array should contain a full deck of standard playing card objects.
-
+// done in struct declaration in step 6
 
 
 
@@ -69,7 +122,13 @@ import Foundation
 //: ## Step 11
 //: Add a method to the deck called `drawCard()`. It takes no arguments and it returns a `Card` object. Have it draw a random card from the deck of cards and return it.
 //: - Callout(Hint): There should be `52` cards in the deck. So what if you created a random number within those bounds and then retrieved that card from the deck? Remember that arrays are indexed from `0` and take that into account with your random number picking.
-
+extension Deck {
+    func drawCard() -> Card {
+        let randNum = Int.random(in: 0...cards.count)
+        let newCard: Card = cards[randNum]
+        return newCard
+    }
+}
 
 
 
@@ -78,7 +137,10 @@ import Foundation
 //: Create a protocol for a `CardGame`. It should have two requirements:
 //: * a gettable `deck` property
 //: * a `play()` method
-
+protocol CardGame {
+    var deck: Deck {get}
+    func play()
+}
 
 
 
@@ -86,7 +148,10 @@ import Foundation
 //: Create a protocol for tracking a card game as a delegate called `CardGameDelegate`. It should have two functional requirements:
 //: * a function called `gameDidStart` that takes a `CardGame` as an argument
 //: * a function with the following signature: `game(player1DidDraw card1: Card, player2DidDraw card2: Card)`
-
+protocol CardGameDelegate {
+    func gameDidStart(_ : CardGame)
+    func game(player1DidDraw card1: Card, player2DidDraw card2: Card)
+}
 
 
 
