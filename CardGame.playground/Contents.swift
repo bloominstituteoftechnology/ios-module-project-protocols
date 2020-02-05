@@ -171,6 +171,19 @@ class HighLow: CardGame {
     
     func play() {
         delegate?.gameDidStart(self)
+        
+        let player1 = deck.drawCard()
+        let player2 = deck.drawCard()
+        
+        delegate?.game(player1DidDraw: Card, player2DidDraw: Card)
+        
+        if !(player1 < player2) && player1 != player2 {
+            print("Player 1 wins with \(player1.description)!")
+        } else if player1 == player2 {
+            print("The game ends in a tie with \(player1.description)!")
+        } else {
+            print("Player 2 wins with \(player2.description)")
+        }
     }
 }
 
@@ -223,7 +236,7 @@ extension Card: Comparable {
 //: * Ends in a tie, something like, "Round ends in a tie with 3 of clubs."
 //: * Player 1 wins with a higher card, e.g. "Player 1 wins with 8 of hearts."
 //: * Player 2 wins with a higher card, e.g. "Player 2 wins with king of diamonds."
-
+// done
 
 
 //: ## Step 20
