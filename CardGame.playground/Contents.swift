@@ -156,20 +156,24 @@ protocol CardGameDelegate {
 //: ## Step 14
 //: Create a class called `HighLow` that conforms to the `CardGame` protocol. It should have an initialized `Deck` as a property, as well as an optional delegate property of type `CardGameDelegate`.
 
+class HighLow { // extension below conforms to CardGame (I got errors otherwise)
+    var deck: Deck
+    var delegate: CardGameDelegate?
 
-
+    init() {
+        self.deck = Deck()
+    }
+}
 
 //: ## Step 15
 //: As part of the protocol conformance, implement a method called `play()`. The method should draw 2 cards from the deck, one for player 1 and one for player 2. These cards will then be compared to see which one is higher. The winning player will be printed along with a description of the winning card. Work will need to be done to the `Suit` and `Rank` types above, so see the next couple steps before continuing with this step.
 
-
-
+// Done below
 
 //: ## Step 16
 //: Take a look at the Swift docs for the [Comparable](https://developer.apple.com/documentation/swift/comparable) protocol. In particular, look at the two functions called `<` and `==`.
 
-
-
+// Done
 
 //: ## Step 17
 //: Make the `Rank` type conform to the `Comparable` protocol. Implement the `<` and `==` functions such that they compare the `rawValue` of the `lhs` and `rhs` arguments passed in. This will allow us to compare two rank values with each other and determine whether they are equal, or if not, which one is larger.
@@ -211,7 +215,26 @@ Card(suit: .clubs, rank: .king) == Card(suit: .clubs, rank: .king)
 //: * Player 1 wins with a higher card, e.g. "Player 1 wins with 8 of hearts."
 //: * Player 2 wins with a higher card, e.g. "Player 2 wins with king of diamonds."
 
+// As part of the protocol conformance, implement a method called play(). The method should draw 2 cards from the deck, one for player 1 and one for player 2. These cards will then be compared to see which one is higher. The winning player will be printed along with a description of the winning card.
 
+extension HighLow: CardGame {
+    func play() {
+        let player1Card = deck.drawCard()
+        let player2Card = deck.drawCard()
+        if player1Card == player2Card {
+            print("Round ends in a tie with \(player1Card.rank) of \(player1Card.suit).")
+        }
+        if player1Card > player2Card {
+            print("Player 1 wins with \(player1Card.rank) of \(player1Card.suit).")
+        }
+        if player2Card > player1Card {
+            print("Player 2 wins with \(player2Card.rank) of \(player2Card.suit).")
+        }
+    }
+}
+
+let game = HighLow()
+game.play()
 
 //: ## Step 20
 //: Create a class called `CardGameTracker` that conforms to the `CardGameDelegate` protocol. Implement the two required functions: `gameDidStart` and `game(player1DidDraw:player2DidDraw)`. Model `gameDidStart` after the same method in the guided project from today. As for the other method, have it print a message like the following:
