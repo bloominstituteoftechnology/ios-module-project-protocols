@@ -18,10 +18,6 @@ enum Rank: Int, Comparable {
 }
 
 
-
-
-
-
 //: ## Step 2
 //: Once you've defined the enum as described above, take a look at this built-in protocol, [CustomStringConvertible](https://developer.apple.com/documentation/swift/customstringconvertible) and make the enum conform to that protocol. Make the face cards return a string of their name, and for the numbered cards, simply have it return that number as a string.
 extension Rank: CustomStringConvertible {
@@ -207,7 +203,7 @@ class HighLow: CardGame {
         if player1 == player2 {
             print("Rounds ends in a tie with \(player1)")
         }  else if player1 < player2 {
-            print("Player 2 beat player 2 with \(player2)!")
+            print("Player 2 beat player 1 with \(player2)!")
         } else {
             print("Player 1 beat player 2 with \(player1)!")
         }
@@ -266,9 +262,6 @@ class CardGameTracker: CardGameDelegate {
     func game(player1DidDraw card1: Card, player2DidDraw card2: Card) {
         print("Player 1 drew a \(card1), player 2 drew a \(card2).")
     }
-    
-    
-    
 }
 
 
