@@ -167,7 +167,7 @@ extension Deck {
 //: * a `play()` method
 protocol CardGame {
     var deck: Deck { get }
-    func play()
+    func play(player1Name player1: String, player2Name player2: String)
 }
 
 
@@ -185,6 +185,14 @@ protocol CardGameDelegate {
 
 //: ## Step 14
 //: Create a class called `HighLow` that conforms to the `CardGame` protocol. It should have an initialized `Deck` as a property, as well as an optional delegate property of type `CardGameDelegate`.
+class Player {
+    var name: String
+    
+    init(name: String) {
+        self.name = name
+    }
+}
+
 class HighLow: CardGame{
     var deck: Deck
     var delegate: CardGameDelegate?
@@ -193,17 +201,22 @@ class HighLow: CardGame{
         self.deck = deck
     }
     
-    func play() {
+    func play(player1Name player1: String, player2Name player2: String) {
+        delegate?.gameDidStart(self)
         let player1Card = deck.drawCard()
         let player2Card = deck.drawCard()
-        
-        
-        
-//        print("Player \(playerNumber) won with \(winningCard)")
+        delegate?.game(player1DidDraw: player1Card, player2DidDraw: player2Card)
+    
+        if player1Card.rank.rawValue > player2Card.rank.rawValue {
+            print("\(player1) won with a \(player1Card.description)")
+        } else if player1Card.rank.rawValue < player2Card.rank.rawValue {
+            print("\(player2) won with a \(player2Card.description)")
+        } else if player1Card.rank.rawValue == player2Card.rank.rawValue {
+            print("Round ends in a tie with \(player1Card.description) & \(player2Card.description)")
+        }
+    
     }
 }
-
-
 
 
 //: ## Step 15
@@ -235,7 +248,17 @@ extension Rank: Comparable {
 
 //: Step 18
 //: Make the `Card` type conform to the `Comparable` protocol. Implement the `<` and `==` methods such that they compare the ranks of the `lhs` and `rhs` arguments passed in. For the `==` method, compare **both** the rank and the suit.
-
+extension Card: Comparable {
+    static func < (lhs: Card, rhs: Card) -> Bool {
+        if lhs.rank != rhs.rank {
+            return lhs.rank < rhs.rank
+        } else {
+            return lhs.rank == rhs.rank
+        }
+    }
+    
+    
+}
 
 
 
@@ -251,7 +274,26 @@ extension Rank: Comparable {
 //: ## Step 20
 //: Create a class called `CardGameTracker` that conforms to the `CardGameDelegate` protocol. Implement the two required functions: `gameDidStart` and `game(player1DidDraw:player2DidDraw)`. Model `gameDidStart` after the same method in the guided project from today. As for the other method, have it print a message like the following:
 //: * "Player 1 drew a 6 of hearts, player 2 drew a jack of spades."
+let player1 = Player(name: "Matt")
+let player2 = Player(name: "Jimbo")
 
+class CardGameTracker: CardGameDelegate {
+    
+    var numberOfTurns = 0
+    
+    func gameDidStart(_ game: CardGame) {
+        numberOfTurns = 0
+        if game is HighLow {
+            print("Started new game of High-Low")
+        }
+    }
+    
+    func game(player1DidDraw card1: Card, player2DidDraw card2: Card) {
+        print("\(player1.name) drew a \(card1), \(player2.name) drew a \(card2)")
+    }
+    
+    
+}
 
 
 //: Step 21
@@ -262,5 +304,10 @@ extension Rank: Comparable {
 //: Player 1 drew a 2 of diamonds, player 2 drew a ace of diamonds.
 //: Player 1 wins with 2 of diamonds.
 //: ```
+let gameHighlow = HighLow(deck: newDeck)
+let tracker = CardGameTracker()
+gameHighlow.delegate = tracker
 
+
+gameHighlow.play(player1Name: player1.name, player2Name: player2.name)
 
