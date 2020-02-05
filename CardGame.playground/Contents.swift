@@ -26,7 +26,9 @@ enum Rank: Int {
 extension Rank: CustomStringConvertible {
     var description: String {
         switch self {
-        case .ace, .two, .three, .four, .five, .six, .seven, .eight, .nine, .ten:
+        case .ace:
+            return "Ace"
+        case .two, .three, .four, .five, .six, .seven, .eight, .nine, .ten:
             return "\(self.rawValue)"
         case .jack:
             return "Jack"
