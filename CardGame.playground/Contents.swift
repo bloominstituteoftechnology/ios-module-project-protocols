@@ -82,13 +82,18 @@ struct Deck {
             for rank in PlayingCardValue.allRanks {
                 self.cards.append(Card(suit: suit, value: rank))
             }
-            
         }
+    } //End init
+    
+    func drawCard() -> Card {
+        let randomCard = Int.random(in: 1...cards.count) - 1
+        return (cards[randomCard])
     }
 }
 
 //How do you test this?
 var newDeck = Deck(cards: [])
+print(newDeck.drawCard())
 //: ## Step 7
 //: In the rank enum, add a static computed property that returns all the ranks in an array. Name this property `allRanks`. This is needed because you can't iterate over all cases from an enum automatically.
 //DONE
@@ -104,23 +109,16 @@ var newDeck = Deck(cards: [])
 //:
 //:}
 //:```
-
-
+//DONE
 
 //: ## Step 10
 //: These loops will allow you to match up every rank with every suit. Make a `Card` object from all these pairings and append each card to the `cards` property of the deck. At the end of the `init` method, the `cards` array should contain a full deck of standard playing card objects.
-
-
-
-
+//DONE
 
 //: ## Step 11
 //: Add a method to the deck called `drawCard()`. It takes no arguments and it returns a `Card` object. Have it draw a random card from the deck of cards and return it.
 //: - Callout(Hint): There should be `52` cards in the deck. So what if you created a random number within those bounds and then retrieved that card from the deck? Remember that arrays are indexed from `0` and take that into account with your random number picking.
-
-
-
-
+//DONE
 
 //: ## Step 12
 //: Create a protocol for a `CardGame`. It should have two requirements:
