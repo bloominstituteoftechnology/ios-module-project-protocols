@@ -17,7 +17,6 @@ enum Rank: Int {
     case queen
     case king
 }
-
 //: ## Step 2
 //: Once you've defined the enum as described above, take a look at this built-in protocol, [CustomStringConvertible](https://developer.apple.com/documentation/swift/customstringconvertible) and make the enum conform to that protocol. Make the face cards return a string of their name, and for the numbered cards, simply have it return that number as a string.
 
@@ -91,7 +90,7 @@ extension Card: CustomStringConvertible {
 //: Create a `struct` to model a deck of cards. It should be called `Deck` and have an array of `Card` objects as a constant property. A custom `init` function should be created that initializes the array with a card of each rank and suit. You'll want to iterate over all ranks, and then over all suits (this is an example of _nested `for` loops_). See the next 2 steps before you continue with the nested loops.
 
 struct Deck {
-    let deckInstance: [Card]
+    var deckInstance: [Card]
     
     init() {
         var anotherDeckInstance: [Card] = []
@@ -147,7 +146,8 @@ extension Suit {
 
 extension Deck {
     func drawCard() -> Card {
-        let drawnCard: Card = deckInstance[Int.random(in: 0...51)]
+        let randomNumber = Int.random(in: 0...51)
+        let drawnCard: Card = deckInstance[randomNumber]
         return drawnCard
 
     }
@@ -208,7 +208,7 @@ extension HighLow {
         } else if playerTwoCard < playerOneCard {
             print("Player 1 wins with \(playerOneCard.cardRank) of \(playerOneCard.cardSuit)")
         } else {
-            print("hold on nowm somethin ain't right :|")
+            print("hold on now somethin ain't right :|")
         }
         
     }
@@ -217,9 +217,7 @@ extension HighLow {
 
 //: ## Step 16
 //: Take a look at the Swift docs for the [Comparable](https://developer.apple.com/documentation/swift/comparable) protocol. In particular, look at the two functions called `<` and `==`.
-
-
-
+//i took a look, looks pretty neat :)
 
 //: ## Step 17
 //: Make the `Rank` type conform to the `Comparable` protocol. Implement the `<` and `==` functions such that they compare the `rawValue` of the `lhs` and `rhs` arguments passed in. This will allow us to compare two rank values with each other and determine whether they are equal, or if not, which one is larger.
@@ -264,11 +262,13 @@ extension Card: Comparable {
 //: * "Player 1 drew a 6 of hearts, player 2 drew a jack of spades."
 class CardGameTracker: CardGameDelegate {
     func gameDidStart(game: CardGame) {
-        <#code#>
+        if game is HighLow {
+            print("HighLow Game has started!")
+        }
     }
     
     func game(player1DidDraw card1: Card, player2DidDraw card2: Card) {
-        print("Player 1 drew a \(card1.cardRank) of \(card1.cardSuit), player 2 drew a \(card2.cardRank) of \(card2.cardSuit).")
+        print("Player 1 drew a \(card1), player 2 drew a \(card2).")
     }
     
     
