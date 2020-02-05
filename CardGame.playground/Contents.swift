@@ -74,15 +74,17 @@ print(newCard2.description)
 //: ## Step 6
 //: Create a `struct` to model a deck of cards. It should be called `Deck` and have an array of `Card` objects as a constant property. A custom `init` function should be created that initializes the array with a card of each rank and suit. You'll want to iterate over all ranks, and then over all suits (this is an example of _nested `for` loops_). See the next 2 steps before you continue with the nested loops.
 struct Deck {
-    var cards: [Card]
+    let cards: [Card]
     
-    init(cards: [Card]) {
-        self.cards = cards
+    init() {
+        var newCards: [Card] = []
+  
         for suit in Suit.allSuits {
             for rank in PlayingCardValue.allRanks {
-                self.cards.append(Card(suit: suit, value: rank))
+                newCards.append(Card(suit: suit, value: rank))
             }
         }
+        self.cards = newCards
     } //End init
     
     func drawCard() -> Card {
@@ -92,7 +94,7 @@ struct Deck {
 }
 
 //How do you test this?
-var newDeck = Deck(cards: [])
+var newDeck = Deck()
 print(newDeck.drawCard())
 //: ## Step 7
 //: In the rank enum, add a static computed property that returns all the ranks in an array. Name this property `allRanks`. This is needed because you can't iterate over all cases from an enum automatically.
@@ -140,9 +142,19 @@ protocol CardGameDelegate {
 
 //: ## Step 14
 //: Create a class called `HighLow` that conforms to the `CardGame` protocol. It should have an initialized `Deck` as a property, as well as an optional delegate property of type `CardGameDelegate`.
-
-
-
+class HighLow: CardGame {
+    var deck: Deck = Deck()
+    
+    var delegate: CardGameDelegate?
+    
+    
+    func play() {
+        var player1Draw = Deck.drawCard(self.deck)
+        var player2Draw = Deck.drawCard(self.deck)
+    }
+    
+    
+}
 
 //: ## Step 15
 //: As part of the protocol conformance, implement a method called `play()`. The method should draw 2 cards from the deck, one for player 1 and one for player 2. These cards will then be compared to see which one is higher. The winning player will be printed along with a description of the winning card. Work will need to be done to the `Suit` and `Rank` types above, so see the next couple steps before continuing with this step.
