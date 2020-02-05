@@ -62,9 +62,17 @@ enum Suit: String {
 
 //: ## Step 4
 //: Using the two enums above, create a `struct` called `Card` to model a single playing card. It should have constant properties for each constituent piece (one for suit and one for rank).
-struct Card {
+struct Card: Comparable {
     let suit: Suit
     let value: PlayingCardValue
+    
+    //Step 18 Make the Card type conform to the Comparable protocol. Implement the < and == methods such that they compare the ranks of the lhs and rhs arguments passed in. For the == method, compare both the rank and the suit.
+    static func < (lhs: Card, rhs: Card) -> Bool {
+        return lhs.value < rhs.value
+    }
+    static func == (lhs: Card, rhs: Card) -> Bool {
+        return lhs.value == rhs.value && lhs.suit == rhs.suit
+    }
 }
 
 //: ## Step 5
@@ -156,18 +164,24 @@ class HighLow: CardGame {
     
     
     func play() {
-        var player1Draw = Deck.drawCard(self.deck)
-        var player2Draw = Deck.drawCard(self.deck)
+        let player1Draw = deck.drawCard()
+        let player2Draw = deck.drawCard()
+        
+        if player1Draw  == player2Draw {
+            print("Round ends in a tie with \(player1Draw)")
+        } else if player1Draw < player2Draw {
+            print ("Player 2 wins with \(player2Draw)")
+        } else {
+            print("Player 1 wins with \(player1Draw)")
+        }
     }
-    
-    
 }
 
+var newGame = HighLow()
+newGame.play()
 //: ## Step 15
 //: As part of the protocol conformance, implement a method called `play()`. The method should draw 2 cards from the deck, one for player 1 and one for player 2. These cards will then be compared to see which one is higher. The winning player will be printed along with a description of the winning card. Work will need to be done to the `Suit` and `Rank` types above, so see the next couple steps before continuing with this step.
-
-
-
+//Done
 
 //: ## Step 16
 //: Take a look at the Swift docs for the [Comparable](https://developer.apple.com/documentation/swift/comparable) protocol. In particular, look at the two functions called `<` and `==`.
@@ -179,18 +193,14 @@ class HighLow: CardGame {
 
 //: Step 18
 //: Make the `Card` type conform to the `Comparable` protocol. Implement the `<` and `==` methods such that they compare the ranks of the `lhs` and `rhs` arguments passed in. For the `==` method, compare **both** the rank and the suit.
-
-
-
-
+//DONE
 
 //: ## Step 19
 //: Back to the `play()` method. With the above types now conforming to `Comparable`, you can write logic to compare the drawn cards and print out 1 of 3 possible message types:
 //: * Ends in a tie, something like, "Round ends in a tie with 3 of clubs."
 //: * Player 1 wins with a higher card, e.g. "Player 1 wins with 8 of hearts."
 //: * Player 2 wins with a higher card, e.g. "Player 2 wins with king of diamonds."
-
-
+//DONE
 
 //: ## Step 20
 //: Create a class called `CardGameTracker` that conforms to the `CardGameDelegate` protocol. Implement the two required functions: `gameDidStart` and `game(player1DidDraw:player2DidDraw)`. Model `gameDidStart` after the same method in the guided project from today. As for the other method, have it print a message like the following:
