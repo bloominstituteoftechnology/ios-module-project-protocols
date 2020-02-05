@@ -23,8 +23,8 @@ enum CardSuit: String {
 //: ## Step 4
 //: Using the two enums above, create a `struct` called `Card` to model a single playing card. It should have constant properties for each constituent piece (one for suit and one for rank).
 struct Card {
-    let suit: String
-    let rank: String
+    let suit: CardSuit
+    let rank: CardValue
 }
 
 
