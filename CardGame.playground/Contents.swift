@@ -2,7 +2,7 @@ import Foundation
 
 //: ## Step 1
 //: Create an enumeration for the value of a playing card. The values are: `ace`, `two`, `three`, `four`, `five`, `six`, `seven`, `eight`, `nine`, `ten`, `jack`, `queen`, and `king`. Set the raw type of the enum to `Int` and assign the ace a value of `1`.
-enum PlayingCardValue: Int {
+enum PlayingCardValue: Int, Comparable {
     case ace = 1
     case two
     case three
@@ -18,6 +18,13 @@ enum PlayingCardValue: Int {
     case king
     
     static var allRanks: [PlayingCardValue] = [.ace, .two, .three, .four, .five, .six, .seven, .eigth, .nine, .ten, .jack, .queen, .king]
+    
+    static func < (lhs: PlayingCardValue, rhs: PlayingCardValue) -> Bool {
+        return lhs.rawValue < rhs.rawValue
+    }
+    static func == (lhs: PlayingCardValue, rhs: PlayingCardValue) -> Bool {
+        return lhs.rawValue == rhs.rawValue
+    }
 }
 //: ## Step 2
 //: Once you've defined the enum as described above, take a look at this built-in protocol, [CustomStringConvertible](https://developer.apple.com/documentation/swift/customstringconvertible) and make the enum conform to that protocol. Make the face cards return a string of their name, and for the numbered cards, simply have it return that number as a string.
@@ -164,16 +171,11 @@ class HighLow: CardGame {
 
 //: ## Step 16
 //: Take a look at the Swift docs for the [Comparable](https://developer.apple.com/documentation/swift/comparable) protocol. In particular, look at the two functions called `<` and `==`.
-
-
-
+//DONE
 
 //: ## Step 17
 //: Make the `Rank` type conform to the `Comparable` protocol. Implement the `<` and `==` functions such that they compare the `rawValue` of the `lhs` and `rhs` arguments passed in. This will allow us to compare two rank values with each other and determine whether they are equal, or if not, which one is larger.
-
-
-
-
+//DONE
 
 //: Step 18
 //: Make the `Card` type conform to the `Comparable` protocol. Implement the `<` and `==` methods such that they compare the ranks of the `lhs` and `rhs` arguments passed in. For the `==` method, compare **both** the rank and the suit.
