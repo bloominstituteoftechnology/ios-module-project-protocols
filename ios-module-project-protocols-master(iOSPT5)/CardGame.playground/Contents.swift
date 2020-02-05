@@ -11,10 +11,10 @@ enum Rank: Int, Comparable {
     static func < (lhs: Rank, rhs: Rank) -> Bool {
         return lhs.rawValue < rhs.rawValue
     }
+    
     static func == (lhs: Rank, rhs: Rank) -> Bool {
         return lhs.rawValue == rhs.rawValue
     }
-    
 }
 
 
@@ -24,9 +24,8 @@ extension Rank: CustomStringConvertible {
     static var allRanks: [Rank] {
         return [Rank.ace, Rank.two, Rank.three, Rank.four, Rank.five, Rank.six, Rank.seven, Rank.eight, Rank.nine, Rank.ten, Rank.jack, Rank.queen, Rank.king]
     }
-    
+
     var description: String {
-        
         switch self {
         case Rank.ace:
             return "Ace"
@@ -59,9 +58,11 @@ extension Rank: CustomStringConvertible {
 }
 
 
+
 //: ## Step 3
 //: Create an enum for the suit of a playing card. The values are `hearts`, `diamonds`, `spades`, and `clubs`. Use a raw type of `String` for this enum (this will allow us to get a string version of the enum cases for free, no use of `CustomStringConvertible` required).
 enum Suit: String {
+    
     static var allSuits: [Suit] {
         return [Suit.hearts, Suit.diamonds, Suit.spades, Suit.clubs]
     }
@@ -76,52 +77,50 @@ enum Suit: String {
 
 //: ## Step 4
 //: Using the two enums above, create a `struct` called `Card` to model a single playing card. It should have constant properties for each constituent piece (one for suit and one for rank).
-struct Card {
-    
+struct Card: CustomStringConvertible {
     let rank: Rank
     let suit: Suit
-    
     
     static func < (lhs: Card, rhs: Card) -> Bool {
         return lhs.rank < rhs.rank
     }
-    static func > (lhs: Card, rhs: Card) -> Bool {
-        return lhs.rank > rhs.rank
-    }
+   
     static func == (lhs: Card, rhs: Card) -> Bool {
         return lhs.suit == rhs.suit && lhs.rank == rhs.rank
     }
+    
+    var description: String {
+        return String(rank.description) + " of " + suit.rawValue
+    }
+    
 }
+
+
+
 //: ## Step 5
 //: Make the card also conform to `CustomStringConvertible`. When turned into a string, a card's value should look something like this, "ace of spades", or "3 of diamonds".
-extension Card: CustomStringConvertible {
-    var description: String {
-        return String(self.rank.description) + " of " + self.suit.rawValue
-    }
-}
+
 
 
 //: ## Step 6
 //: Create a `struct` to model a deck of cards. It should be called `Deck` and have an array of `Card` objects as a constant property. A custom `init` function should be created that initializes the array with a card of each rank and suit. You'll want to iterate over all ranks, and then over all suits (this is an example of _nested `for` loops_). See the next 2 steps before you continue with the nested loops.
+
 struct Deck {
-    let deckOfCards: [Card]
+    let deckOfCards : [Card]
     init() {
         var deck: [Card] = []
-        for rank in Rank.allRanks{
-            for suit in Suit.allSuits {
-                deck.append(Card(rank: rank, suit: suit))
+        for rank in Suit.allSuits {
+            for suit in Rank.allRanks {
+                deck.append(Card(rank: suit, suit: rank))
             }
         }
         deckOfCards = deck
     }
     
     func drawCard() -> Card {
-        return deckOfCards [Int.random(in: 0...deckOfCards.count) ]
+        return deckOfCards[Int.random(in: 0...deckOfCards.count)]
     }
 }
-
-
-
 
 
 //: ## Step 7
@@ -166,7 +165,6 @@ struct Deck {
 //: * a gettable `deck` property
 //: * a `play()` method
 protocol CardGame {
-    
     var deck: Deck { get }
     func play()
 }
@@ -178,7 +176,6 @@ protocol CardGame {
 //: * a function called `gameDidStart` that takes a `CardGame` as an argument
 //: * a function with the following signature: `game(player1DidDraw card1: Card, player2DidDraw card2: Card)`
 protocol CardGameDelegate {
-    
     func gameDidStart(game: CardGame)
     func game(player1DidDraw card1: Card, player2DidDraw card2: Card)
 }
@@ -194,23 +191,26 @@ class HighLow: CardGame {
     func play() {
         
         delegate?.gameDidStart(game: self)
-                
-        let player1 = deck.drawCard()
         
+        let player1 = deck.drawCard()
         let player2 = deck.drawCard()
+       // var player2 = deck.drawCard()
+        
+//        if player2 == player1 {
+//            player2 = deck.drawCard()
+//        }
+        
         delegate?.game(player1DidDraw: player1, player2DidDraw: player2)
         
         if player1 == player2 {
-            print("Rounds ends in a tie with \(player1)")
-        }  else if player1 < player2 {
-            print("Player 2 beat player 1 with \(player2)!")
+            print("The round impossibly ends in a tie with a deck of 52 cards with the \(player1)")
+        } else if player1 < player2 {
+            print("Player 2 beat out player 1 with \(player2)")
         } else {
-            print("Player 1 beat player 2 with \(player1)!")
+            print("Player 1 beat out player 2 with \(player1)")
         }
     }
 }
-    
-    
 
 
 
@@ -228,7 +228,16 @@ class HighLow: CardGame {
 
 //: ## Step 17
 //: Make the `Rank` type conform to the `Comparable` protocol. Implement the `<` and `==` functions such that they compare the `rawValue` of the `lhs` and `rhs` arguments passed in. This will allow us to compare two rank values with each other and determine whether they are equal, or if not, which one is larger.
-
+//extension Rank: Comparable {
+//
+//       static func < (lhs: Rank, rhs: Rank) -> Bool {
+//           return lhs.rawValue < rhs.rawValue
+//       }
+//
+//       static func == (lhs: Rank, rhs: Rank) -> Bool {
+//           return lhs.rawValue == rhs.rawValue
+//       }
+//}
 
 
 
@@ -255,12 +264,12 @@ class CardGameTracker: CardGameDelegate {
     
     func gameDidStart(game: CardGame) {
         if game is HighLow {
-            print("Started a new game of High Low")
+            print("Started a new game of High Low!!")
         }
     }
     
     func game(player1DidDraw card1: Card, player2DidDraw card2: Card) {
-        print("Player 1 drew a \(card1), player 2 drew a \(card2).")
+        print("Player 1 drew the \(card1) and Player 2 drew the \(card2).")
     }
 }
 
