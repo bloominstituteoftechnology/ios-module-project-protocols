@@ -26,14 +26,20 @@ enum Rank: Int {
 extension Rank: CustomStringConvertible {
     var description: String {
         switch self {
-        case .ace, .jack, .queen, .king:
-            return "\(self)"
+        case .ace:
+            return "Ace"
+        case .jack:
+            return "Jack"
+        case .queen:
+            return "Queen"
+        case .king:
+            return "King"
         default:
             return "\(self.rawValue)"
         }
     }
 }
-//let card: CardValue = .ace
+//let card: Rank = .ace
 //let card2: CardValue = .two
 //let card3: CardValue = .queen
 
@@ -187,7 +193,6 @@ class HighLow: CardGame {
 // done within class definition in step 14
 
 
-
 //: ## Step 16
 //: Take a look at the Swift docs for the [Comparable](https://developer.apple.com/documentation/swift/comparable) protocol. In particular, look at the two functions called `<` and `==`.
 // read them
@@ -276,8 +281,8 @@ extension Card: Comparable {
 //: Create a class called `CardGameTracker` that conforms to the `CardGameDelegate` protocol. Implement the two required functions: `gameDidStart` and `game(player1DidDraw:player2DidDraw)`. Model `gameDidStart` after the same method in the guided project from today. As for the other method, have it print a message like the following:
 //: * "Player 1 drew a 6 of hearts, player 2 drew a jack of spades."
 class CardGameTracker: CardGameDelegate {
-    func gameDidStart(_: CardGame) {
-        if game is CardGame {
+    func gameDidStart(_ game: CardGame) {
+        if game is HighLow {
             print("Started a new game of High Low")
         }
     }
