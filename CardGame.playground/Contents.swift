@@ -174,16 +174,36 @@ protocol CardGameDelegate {
 //: ## Step 17
 //: Make the `Rank` type conform to the `Comparable` protocol. Implement the `<` and `==` functions such that they compare the `rawValue` of the `lhs` and `rhs` arguments passed in. This will allow us to compare two rank values with each other and determine whether they are equal, or if not, which one is larger.
 
+extension Rank: Comparable {
+    static func < (lhs: Rank, rhs: Rank) -> Bool {
+        lhs.rawValue < rhs.rawValue
+    }
 
+    static func == (lhs: Rank, rhs: Rank) -> Bool {
+        lhs.rawValue == rhs.rawValue
+    }
+}
 
-
+Card(suit: .clubs, rank: .three).rank < Card(suit: .clubs, rank: .seven).rank
+Card(suit: .clubs, rank: .three).rank == Card(suit: .clubs, rank: .seven).rank
+Card(suit: .clubs, rank: .king).rank == Card(suit: .clubs, rank: .king).rank
 
 //: Step 18
 //: Make the `Card` type conform to the `Comparable` protocol. Implement the `<` and `==` methods such that they compare the ranks of the `lhs` and `rhs` arguments passed in. For the `==` method, compare **both** the rank and the suit.
 
+extension Card: Comparable {
+    static func < (lhs: Card, rhs: Card) -> Bool {
+        lhs.rank < rhs.rank
+    }
 
+    static func == (lhs: Card, rhs: Card) -> Bool {
+        lhs.rank == rhs.rank && lhs.suit == rhs.suit
+    }
+}
 
-
+Card(suit: .clubs, rank: .three) < Card(suit: .clubs, rank: .seven)
+Card(suit: .clubs, rank: .three) == Card(suit: .clubs, rank: .seven)
+Card(suit: .clubs, rank: .king) == Card(suit: .clubs, rank: .king)
 
 //: ## Step 19
 //: Back to the `play()` method. With the above types now conforming to `Comparable`, you can write logic to compare the drawn cards and print out 1 of 3 possible message types:
