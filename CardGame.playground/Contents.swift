@@ -206,11 +206,14 @@ extension CardRank: Comparable {
 
 //: Step 18
 //: Make the `Card` type conform to the `Comparable` protocol. Implement the `<` and `==` methods such that they compare the ranks of the `lhs` and `rhs` arguments passed in. For the `==` method, compare **both** the rank and the suit.
-//extension Card: Comparable {
-//    static func < (lhs: Card, rhs: Card) -> Bool {
-//        return 
-//    }
-//}
+extension Card: Comparable {
+    static func < (lhs: Card, rhs: Card) -> Bool {
+        return lhs.rank < rhs.rank
+    }
+    static func == (lhs: Card, rhs: Card) -> Bool {
+        return (lhs.rank == rhs.rank && lhs.suit.rawValue == rhs.suit.rawValue)
+    }
+}
 
 
 
