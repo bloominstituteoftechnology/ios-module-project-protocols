@@ -77,18 +77,33 @@ print(aceOfSpades)
 //: ## Step 6
 //: Create a `struct` to model a deck of cards. It should be called `Deck` and have an array of `Card` objects as a constant property. A custom `init` function should be created that initializes the array with a card of each rank and suit. You'll want to iterate over all ranks, and then over all suits (this is an example of _nested `for` loops_). See the next 2 steps before you continue with the nested loops.
 
+struct Deck {
+    let cards: [Card]
 
+    init() {
+        var cards: [Card] = []
+        for suit in Suit.allCases {
+            for rank in Rank.allCases {
+                let card = Card(suit: suit, rank: rank)
+                cards.append(card)
+            }
+        }
+        self.cards = cards
+    }
+}
+
+let deck = Deck()
+print(deck.cards.count)
 
 //: ## Step 7
 //: In the rank enum, add a static computed property that returns all the ranks in an array. Name this property `allRanks`. This is needed because you can't iterate over all cases from an enum automatically.
 
-
+// Not needed in Swift 5. If enum conforms to CaseIterable, enum.allCases contains all cases.
 
 //: ## Step 8
 //: In the suit enum, add a static computed property that returns all the suits in an array. Name this property `allSuits`.
 
-
-
+// Not needed in Swift 5. If enum conforms to CaseIterable, enum.allCases contains all cases.
 
 //: ## Step 9
 //: Back to the `Deck` and the nested loops. Now that you have a way to get arrays of all rank values and all suit values, create 2 `for` loops in the `init` method, one nested inside the other, where you iterate over each value of rank, and then iterate over each value of suit. See an example below to get an idea of how this will work. Imagine an enum that contains the 4 cardinal directions, and imagine that enum has a property `allDirections` that returns an array of them.
