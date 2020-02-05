@@ -20,7 +20,9 @@ enum Rank: Int {
 }
 //: ## Step 2
 //: Once you've defined the enum as described above, take a look at this built-in protocol, [CustomStringConvertible](https://developer.apple.com/documentation/swift/customstringconvertible) and make the enum conform to that protocol. Make the face cards return a string of their name, and for the numbered cards, simply have it return that number as a string.
-extension Rank: CustomStringConvertible {
+extension Rank: CustomStringConvertible{
+
+    
     var description: String {
         switch self {
         case .ace:
@@ -163,7 +165,10 @@ extension Deck {
 //: Create a protocol for a `CardGame`. It should have two requirements:
 //: * a gettable `deck` property
 //: * a `play()` method
-
+protocol CardGame {
+    var deck: Deck { get }
+    func play()
+}
 
 
 
@@ -171,12 +176,32 @@ extension Deck {
 //: Create a protocol for tracking a card game as a delegate called `CardGameDelegate`. It should have two functional requirements:
 //: * a function called `gameDidStart` that takes a `CardGame` as an argument
 //: * a function with the following signature: `game(player1DidDraw card1: Card, player2DidDraw card2: Card)`
-
+protocol CardGameDelegate {
+    func gameDidStart(_ game: CardGame)
+    func game(player1DidDraw card1: Card, player2DidDraw card2: Card)
+}
 
 
 
 //: ## Step 14
 //: Create a class called `HighLow` that conforms to the `CardGame` protocol. It should have an initialized `Deck` as a property, as well as an optional delegate property of type `CardGameDelegate`.
+class HighLow: CardGame{
+    var deck: Deck
+    var delegate: CardGameDelegate?
+    
+    init(deck: Deck) {
+        self.deck = deck
+    }
+    
+    func play() {
+        let player1Card = deck.drawCard()
+        let player2Card = deck.drawCard()
+        
+        
+        
+//        print("Player \(playerNumber) won with \(winningCard)")
+    }
+}
 
 
 
@@ -195,7 +220,15 @@ extension Deck {
 
 //: ## Step 17
 //: Make the `Rank` type conform to the `Comparable` protocol. Implement the `<` and `==` functions such that they compare the `rawValue` of the `lhs` and `rhs` arguments passed in. This will allow us to compare two rank values with each other and determine whether they are equal, or if not, which one is larger.
-
+extension Rank: Comparable {
+    static func < (lhs: Rank, rhs: Rank) -> Bool {
+        if lhs.rawValue != rhs.rawValue {
+            return lhs.rawValue < rhs.rawValue
+        } else {
+            return lhs.rawValue == rhs.rawValue
+        }
+    }
+}
 
 
 
