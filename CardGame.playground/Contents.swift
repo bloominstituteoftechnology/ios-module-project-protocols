@@ -12,9 +12,6 @@ extension CardValue: CustomStringConvertible {
         return ("\(CardValue.allCases)")
     }
 }
-
-
-
 //: ## Step 3
 //: Create an enum for the suit of a playing card. The values are `hearts`, `diamonds`, `spades`, and `clubs`. Use a raw type of `String` for this enum (this will allow us to get a string version of the enum cases for free, no use of `CustomStringConvertible` required).
 enum CardSuit: String {
@@ -26,14 +23,11 @@ struct Card {
     let suit: CardSuit
     let rank: CardValue
 }
-
-
-
 //: ## Step 5
 //: Make the card also conform to `CustomStringConvertible`. When turned into a string, a card's value should look something like this, "ace of spades", or "3 of diamonds".
 extension Card: CustomStringConvertible {
     var description: String {
-        <#code#>
+        return Card.init(suit: <#T##CardSuit#>, rank: <#T##CardValue#>)
     }
     
     
