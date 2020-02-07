@@ -139,15 +139,19 @@ protocol CardGameDelegate {
 //: Create a class called `HighLow` that conforms to the `CardGame` protocol. It should have an initialized `Deck` as a property, as well as an optional delegate property of type `CardGameDelegate`.
 class HighLow: CardGame {
     let deck: Deck = Deck()
-    var cardGameDelegate = CardGameDelegate?.self
+    var cardGameDelegate: CardGameDelegate?
 }
 //: ## Step 15
 //: As part of the protocol conformance, implement a method called `play()`. The method should draw 2 cards from the deck, one for player 1 and one for player 2. These cards will then be compared to see which one is higher. The winning player will be printed along with a description of the winning card. Work will need to be done to the `Suit` and `Rank` types above, so see the next couple steps before continuing with this step.
 extension HighLow {
     func play() {
         
+        cardGameDelegate?.gameDidStart(cardGame: self)
+        
         let player1Card = deck.drawCard()
         let player2Card = deck.drawCard()
+        
+        cardGameDelegate?.game(player1DidDraw: player1Card, player2DidDraw: player2Card)
         
         if player1Card > player2Card {
             print("Player 1 wins with \(player1Card)!")
@@ -212,6 +216,7 @@ class CardGameTracker: CardGameDelegate {
 //: Player 1 wins with 2 of diamonds.
 //: ```
 let aGameOfHighLow = HighLow()
+aGameOfHighLow.cardGameDelegate = CardGameTracker()
 aGameOfHighLow.play()
 
 // What about tracker
