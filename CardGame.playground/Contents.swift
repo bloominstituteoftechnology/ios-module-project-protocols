@@ -219,8 +219,10 @@ Card(suit: .clubs, rank: .king) == Card(suit: .clubs, rank: .king)
 
 extension HighLow: CardGame {
     func play() {
+        delegate?.gameDidStart(self)
         let player1Card = deck.drawCard()
         let player2Card = deck.drawCard()
+        delegate?.game(player1DidDraw: player1Card, player2DidDraw: player2Card)
         if player1Card == player2Card {
             print("Round ends in a tie with \(player1Card.rank) of \(player1Card.suit).")
         }
@@ -240,7 +242,18 @@ game.play()
 //: Create a class called `CardGameTracker` that conforms to the `CardGameDelegate` protocol. Implement the two required functions: `gameDidStart` and `game(player1DidDraw:player2DidDraw)`. Model `gameDidStart` after the same method in the guided project from today. As for the other method, have it print a message like the following:
 //: * "Player 1 drew a 6 of hearts, player 2 drew a jack of spades."
 
+class CardGameTracker: CardGameDelegate {
+    func gameDidStart(_ game: CardGame) {
+        if game is HighLow {
+            print("Started a new game of High Low")
+        }
+    }
 
+    func game(player1DidDraw card1: Card, player2DidDraw card2: Card) {
+
+        print("Player 1 drew a \(card1.rank) of \(card1.suit), player 2 drew a \(card2.rank) of \(card2.suit).")
+    }
+}
 
 //: Step 21
 //: Time to test all the types you've created. Create an instance of the `HighLow` class. Set the `delegate` property of that object to an instance of `CardGameTracker`. Lastly, call the `play()` method on the game object. It should print out to the console something that looks similar to the following:
@@ -251,4 +264,7 @@ game.play()
 //: Player 1 wins with 2 of diamonds.
 //: ```
 
+let game2 = HighLow()
+game2.delegate = CardGameTracker()
+game2.play()
 
