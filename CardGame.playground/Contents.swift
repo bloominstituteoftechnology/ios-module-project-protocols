@@ -86,22 +86,28 @@ struct Deck {
     
     init() {
         var cards: [Card] = []
-        
+        //looping through all ranks
         for rank in Rank.allRanks {
+            //looping thorugh all suits
             for suit in SuitOfCards.allSuits {
+                //creating a card with suit and rank values
                 let singleCard = Card(suit: suit, rank: rank)
+                //adding card to the array
                 cards.append(singleCard)
             }
         }
         self.cards = cards
     }
     func drawCard() -> Card {
-        return cards[Int.random(in: 1...51)]
+        return cards[Int.random(in: 1...cards.count) - 1]
     }
 
 }
-let myDeck = Deck()
-myDeck.drawCard()
+
+
+
+//runs drawcard func creating a random card
+//myDeck.drawCard()
 
 
 //: ## Step 7
@@ -129,10 +135,6 @@ myDeck.drawCard()
 //: ## Step 10
 //: These loops will allow you to match up every rank with every suit. Make a `Card` object from all these pairings and append each card to the `cards` property of the deck. At the end of the `init` method, the `cards` array should contain a full deck of standard playing card objects.
 
-let deck = Deck()
-for card in deck.cards  {
-    print("\(card.rank) of \(card.suit)")
-}
 
 
 
@@ -152,7 +154,6 @@ for card in deck.cards  {
 
 protocol CardGame {
     var deck: Deck { get }
-    
     func play()
 }
 
@@ -172,6 +173,34 @@ protocol CardGameDelegate {
 //: ## Step 14
 //: Create a class called `HighLow` that conforms to the `CardGame` protocol. It should have an initialized `Deck` as a property, as well as an optional delegate property of type `CardGameDelegate`.
 
+class HighLow: CardGame{
+    var deck: Deck = Deck()
+    var delegate: CardGameDelegate?
+    
+    func play() {
+        delegate?.gameDidStart(cardGame: self)
+        let player1 = myDeck.drawCard()
+        let player2 = myDeck.drawCard()
+        
+        print("\(player1)")
+        
+        var reachedGameEnd = false
+        while !reachedGameEnd{
+            if player1.rank.rawValue == player2.rank.rawValue{
+                print("Tie! Play again")
+                reachedGameEnd = true
+            } else if player1.rank.rawValue > player2.rank.rawValue {
+                print("Player 1 won! With a \(player1.rank) of \(player1.suit) vs Player 2's \(player2.rank) of \(player2.suit)")
+                reachedGameEnd = true
+            } else if player1.rank.rawValue < player2.rank.rawValue {
+                print("Player 2 won! With a \(player2.rank) of \(player2.suit) vs Player 2's \(player1.rank) of \(player1.suit)")
+                reachedGameEnd = true
+            } else{
+                reachedGameEnd = true
+            }
+        }
+    }
+}
 
 
 
@@ -179,7 +208,7 @@ protocol CardGameDelegate {
 //: As part of the protocol conformance, implement a method called `play()`. The method should draw 2 cards from the deck, one for player 1 and one for player 2. These cards will then be compared to see which one is higher. The winning player will be printed along with a description of the winning card. Work will need to be done to the `Suit` and `Rank` types above, so see the next couple steps before continuing with this step.
 
 
-
+//DONE ^
 
 //: ## Step 16
 //: Take a look at the Swift docs for the [Comparable](https://developer.apple.com/documentation/swift/comparable) protocol. In particular, look at the two functions called `<` and `==`.
@@ -192,7 +221,7 @@ protocol CardGameDelegate {
 
 
 
-
+//Done^
 
 //: Step 18
 //: Make the `Card` type conform to the `Comparable` protocol. Implement the `<` and `==` methods such that they compare the ranks of the `lhs` and `rhs` arguments passed in. For the `==` method, compare **both** the rank and the suit.
@@ -212,6 +241,20 @@ protocol CardGameDelegate {
 //: ## Step 20
 //: Create a class called `CardGameTracker` that conforms to the `CardGameDelegate` protocol. Implement the two required functions: `gameDidStart` and `game(player1DidDraw:player2DidDraw)`. Model `gameDidStart` after the same method in the guided project from today. As for the other method, have it print a message like the following:
 //: * "Player 1 drew a 6 of hearts, player 2 drew a jack of spades."
+class CardGameTracker: CardGameDelegate {
+    var numberOfTurns = 0
+    func gameDidStart(cardGame: CardGame) {
+            numberOfTurns = 0
+            if cardGame is HighLow {
+                print("Started a new game of High Low")
+            } else {
+                print("The game is using a \(myDeck.cards.count) card size deck.")
+        }
+    }
+    func game(player1DidDraw card1: Card, player2DidDraw card2: Card) {
+        numberOfTurns += 1
+    }
+}
 
 //: Step 21
 //: Time to test all the types you've created. Create an instance of the `HighLow` class. Set the `delegate` property of that object to an instance of `CardGameTracker`. Lastly, call the `play()` method on the game object. It should print out to the console something that looks similar to the following:
@@ -221,5 +264,8 @@ protocol CardGameDelegate {
 //: Player 1 drew a 2 of diamonds, player 2 drew a ace of diamonds.
 //: Player 1 wins with 2 of diamonds.
 //: ```
+let myDeck = Deck()
+let game = HighLow()
+game.play()
 
 
