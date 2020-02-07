@@ -40,7 +40,11 @@ extension Rank: CustomStringConvertible {
     }
 }
 
-[Rank.ace, Rank.seven, Rank.jack, Rank.king].forEach { print($0) }
+
+Rank.ace
+Rank.seven
+Rank.jack
+Rank.king
 
 //: ## Step 3
 //: Create an enum for the suit of a playing card. The values are `hearts`, `diamonds`, `spades`, and `clubs`. Use a raw type of `String` for this enum (this will allow us to get a string version of the enum cases for free, no use of `CustomStringConvertible` required).
@@ -52,7 +56,8 @@ enum Suit: String, CaseIterable {
     case clubs
 }
 
-[Suit.diamonds, Suit.clubs].forEach { print($0) }
+Suit.diamonds
+Suit.clubs
 
 //: ## Step 4
 //: Using the two enums above, create a `struct` called `Card` to model a single playing card. It should have constant properties for each constituent piece (one for suit and one for rank).
@@ -71,8 +76,7 @@ extension Card: CustomStringConvertible {
     }
 }
 
-let aceOfSpades = Card(suit: .spades, rank: .ace)
-print(aceOfSpades)
+Card(suit: .spades, rank: .ace)
 
 //: ## Step 6
 //: Create a `struct` to model a deck of cards. It should be called `Deck` and have an array of `Card` objects as a constant property. A custom `init` function should be created that initializes the array with a card of each rank and suit. You'll want to iterate over all ranks, and then over all suits (this is an example of _nested `for` loops_). See the next 2 steps before you continue with the nested loops.
@@ -92,8 +96,7 @@ struct Deck {
     }
 }
 
-let deck = Deck()
-print(deck.cards.count)
+Deck().cards.count
 
 //: ## Step 7
 //: In the rank enum, add a static computed property that returns all the ranks in an array. Name this property `allRanks`. This is needed because you can't iterate over all cases from an enum automatically.
@@ -131,7 +134,7 @@ extension Deck {
     }
 }
 
-deck.drawCard()
+Deck().drawCard()
 
 //: ## Step 12
 //: Create a protocol for a `CardGame`. It should have two requirements:
@@ -264,7 +267,8 @@ class CardGameTracker: CardGameDelegate {
 //: Player 1 wins with 2 of diamonds.
 //: ```
 
+print("======")
+
 let game2 = HighLow()
 game2.delegate = CardGameTracker()
 game2.play()
-
