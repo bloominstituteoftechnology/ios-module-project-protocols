@@ -4,7 +4,7 @@ import Foundation
 //: Create an enumeration for the value of a playing card. The values are: `ace`, `two`, `three`, `four`, `five`, `six`, `seven`, `eight`, `nine`, `ten`, `jack`, `queen`, and `king`. Set the raw type of the enum to `Int` and assign the ace a value of `1`.
 enum Rank: Int {
     
-    case ace
+    case ace = 1
     case two
     case three
     case four
@@ -27,30 +27,14 @@ extension Rank: CustomStringConvertible{
         switch self {
         case .ace:
             return "ace"
-        case .two:
-            return "2"
-        case .three:
-            return "3"
-        case .four:
-            return "4"
-        case .five:
-            return "5"
-        case .six:
-            return "6"
-        case .seven:
-            return "7"
-        case .eight:
-            return "8"
-        case .nine:
-            return "9"
-        case .ten:
-            return "10"
         case .jack:
             return "jack"
         case .queen:
             return "queen"
         case .king:
             return "king"
+        default:
+            return String(self.rawValue)
         }
     }
     
@@ -256,8 +240,6 @@ extension Card: Comparable {
             return lhs.rank == rhs.rank
         }
     }
-    
-    
 }
 
 
