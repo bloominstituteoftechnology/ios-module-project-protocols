@@ -131,7 +131,7 @@ protocol CardGame {
 //: Create a protocol for tracking a card game as a delegate called `CardGameDelegate`. It should have two functional requirements:
 //: * a function called `gameDidStart` that takes a `CardGame` as an argument
 //: * a function with the following signature: `game(player1DidDraw card1: Card, player2DidDraw card2: Card)`
-protocol CardGameDelegate {
+protocol CardGameDelegate: AnyObject {
     func gameDidStart(_ game: CardGame)
     func game(player1DidDraw card1: Card, player2DidDraw card2: Card)
 }
@@ -162,7 +162,7 @@ extension Card: Comparable {
 
 class HighLow: CardGame {
     var deck = Deck()
-    var delegate: CardGameDelegate?
+    weak var delegate: CardGameDelegate?
     
     func play() {
         delegate?.gameDidStart(self)
@@ -231,13 +231,12 @@ class CardGameTracker: CardGameDelegate {
     }
 }
 
-//: Step 21
-//: Time to test all the types you've created. Create an instance of the `HighLow` class. Set the `delegate` property of that object to an instance of `CardGameTracker`. Lastly, call the `play()` method on the game object. It should print out to the console something that looks similar to the following:
-//:
-//: ```
-//: Started a new game of High Low
-//: Player 1 drew a 2 of diamonds, player 2 drew a ace of diamonds.
-//: Player 1 wins with 2 of diamonds.
-//: ```
+
+let tracker = CardGameTracker()
+let game = HighLow()
+game.delegate = tracker
+
+game.play()
+
 
 
