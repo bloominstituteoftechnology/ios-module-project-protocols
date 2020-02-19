@@ -22,7 +22,8 @@ enum Step1Rank: Int {
 //: ## Step 2
 //: Once you've defined the enum as described above, take a look at this built-in protocol, [CustomStringConvertible](https://developer.apple.com/documentation/swift/customstringconvertible) and make the enum conform to that protocol. Make the face cards return a string of their name, and for the numbered cards, simply have it return that number as a string.
 
-enum Rank: Int, CustomStringConvertible {
+enum Rank: Int, CustomStringConvertible, Comparable {
+    
     case ace    = 1
     case two    = 2
     case three  = 3
@@ -41,6 +42,14 @@ enum Rank: Int, CustomStringConvertible {
         return [.ace, .two, .three, .four, .five, .six, .seven, .eight, .nine, .ten, jack, .queen, .king]
     }
 
+    static func < (lhs: Rank, rhs: Rank) -> Bool {
+        return lhs.rawValue < rhs.rawValue
+    }
+    
+    static func == (lhs: Rank, rhs: Rank) -> Bool {
+        return lhs.rawValue == rhs.rawValue
+    }
+    
     var description: String {
         let desc: String
 
@@ -193,17 +202,17 @@ class HighLow: CardGame {
 //: ## Step 14
 //: As part of the protocol conformance, implement a method called `play()`. The method should draw 2 cards from the deck, one for player 1 and one for player 2. These cards will then be compared to see which one is higher. The winning player will be printed along with a description of the winning card. Work will need to be done to the `Suit` and `Rank` types above, so see the next couple steps before continuing with this step.
 
-// Set step 13.
+// See Step 13.
 
 //: ## Step 15
 //: Take a look at the Swift docs for the [Comparable](https://developer.apple.com/documentation/swift/comparable) protocol. In particular, look at the two functions called `<` and `==`.
 
-
+// Read documenation.
 
 //: ## Step 16
 //: Make the `Rank` type conform to the `Comparable` protocol. Implement the `<` and `==` functions such that they compare the `rawValue` of the `lhs` and `rhs` arguments passed in. This will allow us to compare two rank values with each other and determine whether they are equal, or if not, which one is larger.
 
-
+// See Step 2.
 
 //: Step 17
 //: Make the `Card` type conform to the `Comparable` protocol. Implement the `<` and `==` methods such that they compare the ranks of the `lhs` and `rhs` arguments passed in. For the `==` method, compare **both** the rank and the suit.
