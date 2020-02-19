@@ -157,6 +157,8 @@ protocol CardGame {
 class HighLow: CardGame {
     var deck: Deck = Deck()
     
+    //var delegate: CardGameDelegate?
+
     func play() {
         let card1 = deck.drawCard()
         let card2 = deck.drawCard()
@@ -164,6 +166,9 @@ class HighLow: CardGame {
         print("Started a new game of High Low")
         print("Player 1 drew a \(card1.description)")
         print("Player 2 drew a \(card2.description)")
+        
+        //delegate?.gameDidStart(game: cardGame)
+        //delegate?.game(player1DidDraw: card1, player2DidDraw: card2)
         
         if card1.rank == card2.rank {
             print("Round ends in a tie with \(card1.description)")
@@ -219,7 +224,7 @@ extension Card: Comparable {
     
     // compare left hand side and right hand side
     static func ==(lhs: Card, rhs: Card) -> Bool {
-        return lhs.rank == rhs.rank
+        return lhs.rank == rhs.rank && lhs.suit == rhs.suit
     }
     
     static func <(lhs: Card, rhs: Card) -> Bool {
@@ -241,7 +246,37 @@ extension Card: Comparable {
 //: * Player 1 wins with a higher card, e.g. "Player 1 wins with 8 of hearts."
 //: * Player 2 wins with a higher card, e.g. "Player 2 wins with king of diamonds."
 
+
+
+
+
+
+
+
+
+// STRETCH GOALS
+
+protocol CardGameDelegate {
+    func gameDidStart(game: CardGame)
+    func game(player1DidDraw card1: Card, player2DidDraw card2: Card)
+}
+
+
+class CardGameTracker: CardGameDelegate {
+    func gameDidStart(game: CardGame) {
+        print("Started a new game of High Low")
+    }
+    
+    func game(player1DidDraw card1: Card, player2DidDraw card2: Card) {
+        print("Player 1 drew a \(card1.description)")
+        print("Player 2 drew a \(card2.description)")
+    }
+
+}
+
+
+
+//let newGame = HighLow(delegate: CardGameTracker())
+
 let newGame = HighLow()
 newGame.play()
-
-
