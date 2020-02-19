@@ -55,7 +55,7 @@ enum Rank: Int, CustomStringConvertible, Comparable {
 
         switch self {
         case .ace:
-            desc = "Ace"
+            desc = "ace"
         case .two:
             desc = "2"
         case .three:
@@ -75,11 +75,11 @@ enum Rank: Int, CustomStringConvertible, Comparable {
         case .ten:
             desc = "10"
         case .jack:
-            desc = "Jack"
+            desc = "jack"
         case .queen:
-            desc = "Queen"
+            desc = "queen"
         case .king:
-            desc = "King"
+            desc = "king"
         }
         
         return desc
@@ -89,10 +89,10 @@ enum Rank: Int, CustomStringConvertible, Comparable {
 //: ## Step 3
 //: Create an enum for the suit of a playing card. The values are `hearts`, `diamonds`, `spades`, and `clubs`. Use a raw type of `String` for this enum (this will allow us to get a string version of the enum cases for free, no use of `CustomStringConvertible` required).
 enum Suits: String {
-    case hearts = "Hearts"
-    case diamonds = "Diamonds"
-    case spades = "Spades"
-    case clubs = "Clubs"
+    case hearts = "hearts"
+    case diamonds = "diamonds"
+    case spades = "spades"
+    case clubs = "clubs"
 
     static var allSuits: [Suits] {
         return [.hearts, .diamonds, .spades, .clubs]
@@ -120,7 +120,7 @@ struct Card: CustomStringConvertible, Comparable {
     }
     
     var description: String {
-        return "\(suit) of \(rank)"
+        return "\(rank) of \(suit.rawValue)"
     }
     
     let suit: Suits
@@ -202,11 +202,11 @@ class HighLow: CardGame {
         let playerTwo = deck.drawCard()
         
         if playerOne == playerTwo {
-            print("Round ends in a tie with \(playerOne.description) of \(playerOne.description).")
+            print("Round ends in a tie with \(playerOne.description).")
         } else if playerTwo < playerOne {
-            print("Player 1 wins with \(playerOne.description) of \(playerOne.description).")
+            print("Player 1 wins with \(playerOne.description).")
         } else {
-            print("Player 2 wins with \(playerTwo.description) of \(playerTwo.description).")
+            print("Player 2 wins with \(playerTwo.description).")
         }
     }
     
@@ -246,7 +246,10 @@ class HighLow: CardGame {
 //: ## Step 19
 //: Time to test all the types you've created. Create an instance of the `HighLow` class. Lastly, call the `play()` method on the game object.
 
-
+let theGame = HighLow()
+theGame.play()
+theGame.play()
+theGame.play()
 
 //: ## Stretch Goals (Optional):
 
