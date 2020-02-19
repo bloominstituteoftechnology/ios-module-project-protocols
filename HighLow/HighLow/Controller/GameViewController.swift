@@ -39,12 +39,16 @@ class GameViewController: UIViewController {
         switch sender {
         case playerOneLowButton:
             game.playerOne(placedBet: .low)
+            disableButtons([playerOneHighButton])
         case playerOneHighButton:
             game.playerOne(placedBet: .high)
+            disableButtons([playerOneLowButton])
         case playerTwoLowButton:
             game.playerTwo(placedBet: .low)
+            disableButtons([playerTwoHighButton])
         case playerTwoHighButton:
             game.playerTwo(placedBet: .high)
+            disableButtons([playerTwoLowButton])
         default:
             break
         }
@@ -54,19 +58,18 @@ class GameViewController: UIViewController {
     
     func imageFor(playingCard card: PlayingCard) -> UIImage? {
         let imageName = "\(card.rank)_\(card.suit)"
-        print(imageName)
         return UIImage(named: imageName)
     }
     
-    func disableButtons() {
-        betButtons.forEach {
+    func disableButtons(_ buttons: [UIButton]) {
+        buttons.forEach {
             $0.isEnabled = false
             $0.layer.opacity = 0.5
         }
     }
     
-    func enableButtons() {
-        betButtons.forEach {
+    func enableButtons(_ buttons: [UIButton]) {
+        buttons.forEach {
             $0.isEnabled = true
             $0.layer.opacity = 1
         }
@@ -77,7 +80,7 @@ class GameViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = UIColor(patternImage: UIImage(named: "green_felt")!)
-        disableButtons()
+        disableButtons(betButtons)
         game.delegate = self
     }
 }
@@ -89,7 +92,7 @@ extension GameViewController: HighLowBlitzDelegate {
     
     func gameDidFlipFirstCard(_ card: PlayingCard) {
         cardImageView.image = imageFor(playingCard: card)
-        enableButtons()
+        enableButtons(betButtons)
     }
     
     func gameDidFlipSecondCard(_ card: PlayingCard) {
@@ -98,7 +101,7 @@ extension GameViewController: HighLowBlitzDelegate {
         // Wait some time then reset
         Timer.scheduledTimer(withTimeInterval: 4.0, repeats: false) { _ in
             self.cardImageView.image = nil
-            self.disableButtons()
+            self.disableButtons(self.betButtons)
             self.readyButton.isHidden = false
         }
     }
