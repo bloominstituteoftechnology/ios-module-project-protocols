@@ -59,7 +59,9 @@ enum CardsRanks: Int, CustomStringConvertible, Comparable {
     }
 }
 
-enum CardsSuit: String {
+enum CardsSuit: String, Comparable {
+    
+    
     case hearts
     case diamonds
     case spades
@@ -67,6 +69,23 @@ enum CardsSuit: String {
     
     static var allSuits: [CardsSuit] {
         return [.hearts,.diamonds,.spades,.clubs]
+    }
+    
+    var asInt: Int {
+        switch self {
+        case .hearts:
+            return 2
+        case .diamonds:
+            return 1
+        case .spades:
+            return 3
+        case .clubs:
+            return 0
+        }
+    }
+    
+    static func < (lhs: CardsSuit, rhs: CardsSuit) -> Bool {
+        return lhs.asInt < rhs.asInt
     }
 
 }
@@ -129,13 +148,13 @@ class HighLow: CardGame {
     var delegate: CardGameDelegate?
     
     func play() {
-        guard let delegate = delegate else { return }
+//        guard let delegate = delegate else { return }
         
         let card1 = deck.drawCard()
         let card2 = deck.drawCard()
         
-        delegate.gameDidStart(self)
-        delegate.game(player1DidDraw: card1, player2DidDraw: card2)
+        delegate?.gameDidStart(self)
+        delegate?.game(player1DidDraw: card1, player2DidDraw: card2)
         
         if card1 == card2 {
             print("Round ends in a tie with \(card1)")
