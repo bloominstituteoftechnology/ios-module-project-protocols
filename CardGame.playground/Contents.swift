@@ -102,30 +102,51 @@ struct Deck {
   }
 }
 
-protocol CardGame {
+protocol CardGame: CustomStringConvertible {
 
   var deck: Deck { get }
 
   func play()
 }
 
+protocol CardGameDelegate {
+
+  func gameDidStart(game: CardGame)
+
+  func game(player1DidDraw card1: Card, player2DidDraw card2: Card)
+}
+
 class HighLow: CardGame {
   let deck = Deck()
+  var delegate: CardGameDelegate?
+
+  let description = "High Low"
 
   func play() {
-    let player1Card = deck.drawCard()
-    let player2Card = deck.drawCard()
+    delegate?.gameDidStart(game: self)
+    delegate?.game(player1DidDraw: deck.drawCard(), player2DidDraw: deck.drawCard())
+  }
+}
 
-    if player1Card == player2Card {
-      print("Round ended in a tie with \(player1Card)")
-    } else if player1Card > player2Card {
-      print("Player 1 wins with \(player1Card)")
+class CardGameTracker: CardGameDelegate {
+
+  func gameDidStart(game: CardGame) {
+    print("Started a new game of \(game)")
+  }
+
+  func game(player1DidDraw card1: Card, player2DidDraw card2: Card) {
+    print("Player 1 drew a \(card1), player 2 drew a \(card2)")
+    if card1 == card2 {
+      print("Round ends in a tie")
+    } else if card1 > card2 {
+      print("Player 1 wins with \(card1)")
     } else {
-      print("Player 2 wins with \(player2Card)")
+      print("Player 2 wins with \(card2)")
     }
   }
 }
 
 let highLowGame = HighLow()
+highLowGame.delegate = CardGameTracker()
 highLowGame.play()
 
