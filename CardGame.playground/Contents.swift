@@ -175,46 +175,31 @@ protocol CardGame {
 }
 
 //: ## Step 13
-//: Create a protocol for tracking a card game as a delegate called `CardGameDelegate`. It should have two functional requirements:
-//: * a function called `gameDidStart` that takes a `CardGame` as an argument
-//: * a function with the following signature: `game(player1DidDraw card1: Card, player2DidDraw card2: Card)`
-
-
-
-
-//: ## Step 14
 //: Create a class called `HighLow` that conforms to the `CardGame` protocol. It should have an initialized `Deck` as a property, as well as an optional delegate property of type `CardGameDelegate`.
 
 
 
-
-//: ## Step 15
+//: ## Step 14
 //: As part of the protocol conformance, implement a method called `play()`. The method should draw 2 cards from the deck, one for player 1 and one for player 2. These cards will then be compared to see which one is higher. The winning player will be printed along with a description of the winning card. Work will need to be done to the `Suit` and `Rank` types above, so see the next couple steps before continuing with this step.
 
 
 
-
-//: ## Step 16
+//: ## Step 15
 //: Take a look at the Swift docs for the [Comparable](https://developer.apple.com/documentation/swift/comparable) protocol. In particular, look at the two functions called `<` and `==`.
 
 
 
-
-//: ## Step 17
+//: ## Step 16
 //: Make the `Rank` type conform to the `Comparable` protocol. Implement the `<` and `==` functions such that they compare the `rawValue` of the `lhs` and `rhs` arguments passed in. This will allow us to compare two rank values with each other and determine whether they are equal, or if not, which one is larger.
 
 
 
-
-
-//: Step 18
+//: Step 17
 //: Make the `Card` type conform to the `Comparable` protocol. Implement the `<` and `==` methods such that they compare the ranks of the `lhs` and `rhs` arguments passed in. For the `==` method, compare **both** the rank and the suit.
 
 
 
-
-
-//: ## Step 19
+//: ## Step 18
 //: Back to the `play()` method. With the above types now conforming to `Comparable`, you can write logic to compare the drawn cards and print out 1 of 3 possible message types:
 //: * Ends in a tie, something like, "Round ends in a tie with 3 of clubs."
 //: * Player 1 wins with a higher card, e.g. "Player 1 wins with 8 of hearts."
@@ -222,9 +207,13 @@ protocol CardGame {
 
 
 
-//: ## Step 20
+//: ## Step 19
 //: Create a class called `CardGameTracker` that conforms to the `CardGameDelegate` protocol. Implement the two required functions: `gameDidStart` and `game(player1DidDraw:player2DidDraw)`. Model `gameDidStart` after the same method in the guided project from today. As for the other method, have it print a message like the following:
 //: * "Player 1 drew a 6 of hearts, player 2 drew a jack of spades."
+
+
+
+//: ## Stretch Goals (Optional):
 
 
 
@@ -238,3 +227,7 @@ protocol CardGame {
 //: ```
 
 
+//: ## Step 13
+//: Create a protocol for tracking a card game as a delegate called `CardGameDelegate`. It should have two functional requirements:
+//: * a function called `gameDidStart` that takes a `CardGame` as an argument
+//: * a function with the following signature: `game(player1DidDraw card1: Card, player2DidDraw card2: Card)`
