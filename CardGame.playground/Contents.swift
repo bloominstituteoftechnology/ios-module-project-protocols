@@ -3,7 +3,7 @@ import Foundation
 //: ## Step 1
 //: Create an enumeration for the value of a playing card. The values are: `ace`, `two`, `three`, `four`, `five`, `six`, `seven`, `eight`, `nine`, `ten`, `jack`, `queen`, and `king`. Set the raw type of the enum to `Int` and assign the ace a value of `1`.
 
-enum cards: Int {
+enum step1Cards: Int {
     case ace   = 1
     case two   = 2
     case three = 3
@@ -22,8 +22,56 @@ enum cards: Int {
 //: ## Step 2
 //: Once you've defined the enum as described above, take a look at this built-in protocol, [CustomStringConvertible](https://developer.apple.com/documentation/swift/customstringconvertible) and make the enum conform to that protocol. Make the face cards return a string of their name, and for the numbered cards, simply have it return that number as a string.
 
+enum cards: CustomStringConvertible {
+    case ace
+    case two
+    case three
+    case four
+    case five
+    case six
+    case seven
+    case eight
+    case nine
+    case ten
+    case jack
+    case queen
+    case king
+    
+    var description: String {
+        let desc: String
 
-
+        switch self {
+        case .ace:
+            desc = "Ace"
+        case .two:
+            desc = "2"
+        case .three:
+            desc = "3"
+        case .four:
+            desc = "4"
+        case .five:
+            desc = "5"
+        case .six:
+            desc = "6"
+        case .seven:
+            desc = "7"
+        case .eight:
+            desc = "8"
+        case .nine:
+            desc = "9"
+        case .ten:
+            desc = "10"
+        case .jack:
+            desc = "Jack"
+        case .queen:
+            desc = "Queen"
+        case .king:
+            desc = "King"
+        }
+        
+        return desc
+    }
+}
 
 //: ## Step 3
 //: Create an enum for the suit of a playing card. The values are `hearts`, `diamonds`, `spades`, and `clubs`. Use a raw type of `String` for this enum (this will allow us to get a string version of the enum cases for free, no use of `CustomStringConvertible` required).
