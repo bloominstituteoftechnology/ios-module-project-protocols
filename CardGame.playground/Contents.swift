@@ -18,11 +18,10 @@ enum Rank: Int {
     case queen
     case king
     
-    static var allRanks: [String] {
+    static var allRanks: [Card] {
         return []
     }
 }
-
 
 //: ## Step 2
 //: Once you've defined the enum as described above, take a look at this built-in protocol, [CustomStringConvertible](https://developer.apple.com/documentation/swift/customstringconvertible) and make the enum conform to that protocol. Make the face cards return a string of their name, and for the numbered cards, simply have it return that number as a string.
@@ -34,16 +33,18 @@ extension Rank: CustomStringConvertible {
         switch self {
         case .two, .three, .four, .five, .six, .seven, .eight, .nine, .ten:
             rankString = "\(self.rawValue)"
-            return rankString
-        case .ace, .jack, .queen, .king:
-            rankString = "\(self.description)"
-            return rankString
+        case .ace:
+            rankString = "ace"
+        case .jack:
+            rankString = "jack"
+        case .queen:
+            rankString = "queen"
+            case .king:
+                rankString = "king"
        }
+        return rankString
     }
   }
-
-//print(Rank.ten)
-//print(Rank.queen)
 
 //: ## Step 3
 //: Create an enum for the suit of a playing card. The values are `hearts`, `diamonds`, `spades`, and `clubs`. Use a raw type of `String` for this enum (this will allow us to get a string version of the enum cases for free, no use of `CustomStringConvertible` required).
@@ -53,6 +54,10 @@ enum Suit: String {
     case diamonds
     case spades
     case clubs
+    
+    static var allSuits: [Card] {
+        return []
+    }
 }
 
 
@@ -84,13 +89,20 @@ print(playingCard)
 //: ## Step 6
 //: Create a `struct` to model a deck of cards. It should be called `Deck` and have an array of `Card` objects as a constant property. A custom `init` function should be created that initializes the array with a card of each rank and suit. You'll want to iterate over all ranks, and then over all suits (this is an example of _nested `for` loops_). See the next 2 steps before you continue with the nested loops.
 struct Deck {
-    let cards: [Card]
+    var cards: [Card]
     
     init(cards: [Card]) {
         self.cards = cards
+        
+        for cardRank in Rank.allRanks {
+            self.cards.append(cardRank)
+            
+            for cardSuit in Suit.allSuits {
+                self.cards.append(cardSuit)
+            }
+        }
     }
 }
-
 
 
 
