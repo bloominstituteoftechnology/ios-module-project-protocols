@@ -61,29 +61,32 @@ extension Card: CustomStringConvertible {
 }
 //: ## Step 6
 //: Create a `struct` to model a deck of cards. It should be called `Deck` and have an array of `Card` objects as a constant property. A custom `init` function should be created that initializes the array with a card of each rank and suit. You'll want to iterate over all ranks, and then over all suits (this is an example of _nested `for` loops_). See the next 2 steps before you continue with the nested loops.
-//struct Deck {
-//    var cardArray: [Card]
-//    
-//    init(<#parameters#>) {
-//        <#statements#>
-//    }
-//}
-
-
-
-
+struct Deck {
+    var cardArray: [Card]
+    
+    init() {
+        self.cardArray = []
+        for rank in Rank.allRanks() {
+            for suit in CardSuit.allSuits() {
+                cardArray.append(Card(rank: rank, suit: suit))
+            }
+        }
+    }
+}
 //: ## Step 7
 //: In the rank enum, add a static computed property that returns all the ranks in an array. Name this property `allRanks`. This is needed because you can't iterate over all cases from an enum automatically.
-
-
-
-
+extension Rank {
+    static func allRanks() -> [Rank] {
+        return [.ace, .two, .three, .four, .five, .six, .seven, .eight, .nine, .ten, .jack, .queen, .king]
+    }
+}
 //: ## Step 8
 //: In the suit enum, add a static computed property that returns all the suits in an array. Name this property `allSuits`.
-
-
-
-
+extension CardSuit {
+    static func allSuits() -> [CardSuit] {
+        return [.hearts, .diamonds, .spades, .clubs]
+    }
+}
 //: ## Step 9
 //: Back to the `Deck` and the nested loops. Now that you have a way to get arrays of all rank values and all suit values, create 2 `for` loops in the `init` method, one nested inside the other, where you iterate over each value of rank, and then iterate over each value of suit. See an example below to get an idea of how this will work. Imagine an enum that contains the 4 cardinal directions, and imagine that enum has a property `allDirections` that returns an array of them.
 //: ```
