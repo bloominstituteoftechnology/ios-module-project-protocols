@@ -139,8 +139,26 @@ class HighLow: CardGame {
         
         if card1 == card2 {
             print("Round ends in a tie with \(card1)")
-        } else if card1.rank == card2.rank{
-            
+        } else if card1.rank == card2.rank && card1.suit != card2.suit{
+            switch card1.suit {
+            case .clubs:
+                print("Player 2 wins with \(card2) against \(card1)")
+            case .diamonds:
+                if card2.suit == .clubs {
+                    print("Player 1 wins with \(card1) against \(card2)")
+                } else {
+                    print("Player 2 wins with \(card2) against \(card1)")
+                }
+            case .hearts:
+                if card2.suit == .spades {
+                    print("Player 2 wins with \(card2) against \(card1)")
+                } else {
+                    print("Player 1 wins with \(card1) against \(card2)")
+                }
+            case .spades:
+                print("Player 1 wins with \(card1) against \(card2)")
+                
+            }
 //            if card1.suit > card2.suit {
 //                print("Player 1 wins with \(card1) against \(card2)")
 //            } else {
