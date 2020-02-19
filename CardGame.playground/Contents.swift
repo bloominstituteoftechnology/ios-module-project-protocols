@@ -102,6 +102,15 @@ struct Deck {
             }
         }
     }
+    
+    var randomCard: [Card] = []
+    
+    func drawCard() -> Card {
+        func random() -> Int {
+            return Int.random(in: 0...51)
+        }
+        return randomCard[random()]
+    }
 }
 
 
@@ -147,7 +156,13 @@ struct Deck {
 //: Create a protocol for a `CardGame`. It should have two requirements:
 //: * a gettable `deck` property
 //: * a `play()` method
-
+protocol CardGame {
+    var deck
+    
+    func play() {
+    
+    }
+}
 
 
 
