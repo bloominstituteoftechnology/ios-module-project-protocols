@@ -6,11 +6,13 @@ import Foundation
 enum Rank: Int, CustomStringConvertible {
     var description: String {
         switch self {
-        case .ace:
+        case .ace, .two, .three, .four, .five, .six, .seven, .eight, .nine, .ten:
             return "\(self.rawValue)"
-        case .two:
+        case .jack:
             return "\(self.rawValue)"
-        default:
+        case .queen:
+            return "\(self.rawValue)"
+        case .king:
             return "\(self.rawValue)"
         }
         
@@ -29,9 +31,9 @@ enum Rank: Int, CustomStringConvertible {
     case queen
     case king
     
-    var allRanks: [Rank] {
+    static var allRanks: [Rank] {
         get {
-            return [Rank.ace, Rank.two, Rank.three, Rank.four, Rank.five, Rank.six, Rank.seven, Rank.eight, Rank.nine, Rank.ten, Rank.jack, Rank.queen, Rank.king]
+            return [ace, two]
         }
     }
 }
@@ -91,13 +93,18 @@ struct Deck {
     
     
     init() {
+        var cards: [Card] = []
         for suit in Suit.allSuits {
-            print(suit)
+            for rank in Rank.allRanks {
+                let newCard = Card(suit: suit, rank: rank)
+                cards.append(newCard)
+            }
         }
-
-
-
-        //self.cards.append(contentsOf: )
+        self.cards = cards
+    }
+    func drawCard() -> Card {
+        let card = cards[Int.random(in: 0...51)]
+        return card
     }
 }
 
@@ -143,20 +150,25 @@ struct Deck {
 //: * a gettable `deck` property
 //: * a `play()` method
 
-
-
-
-//: ## Step 13
-//: Create a protocol for tracking a card game as a delegate called `CardGameDelegate`. It should have two functional requirements:
-//: * a function called `gameDidStart` that takes a `CardGame` as an argument
-//: * a function with the following signature: `game(player1DidDraw card1: Card, player2DidDraw card2: Card)`
-
+protocol CardGame {
+    var deck: Deck { get }
+    func play()
+}
 
 
 
 //: ## Step 14
 //: Create a class called `HighLow` that conforms to the `CardGame` protocol. It should have an initialized `Deck` as a property, as well as an optional delegate property of type `CardGameDelegate`.
-
+class HighLow: CardGame {
+    var deck: Deck = Deck()
+    
+    func play() {
+        let card1 = deck.drawCard()
+        let card2 = deck.drawCard()
+    }
+    
+    
+}
 
 
 
