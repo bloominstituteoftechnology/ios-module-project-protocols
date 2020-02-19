@@ -199,7 +199,15 @@ class HighLow: CardGame {
     
     func play() {
         let playerOne = deck.drawCard()
-        let playerTwp = deck.drawCard()
+        let playerTwo = deck.drawCard()
+        
+        if playerOne == playerTwo {
+            print("Round ends in a tie with \(playerOne.description) of \(playerOne.description).")
+        } else if playerTwo < playerOne {
+            print("Player 1 wins with \(playerOne.description) of \(playerOne.description).")
+        } else {
+            print("Player 2 wins with \(playerTwo.description) of \(playerTwo.description).")
+        }
     }
     
     init() {
@@ -233,11 +241,10 @@ class HighLow: CardGame {
 //: * Player 1 wins with a higher card, e.g. "Player 1 wins with 8 of hearts."
 //: * Player 2 wins with a higher card, e.g. "Player 2 wins with king of diamonds."
 
-
+// See Step 13.
 
 //: ## Step 19
-//: Create a class called `CardGameTracker` that conforms to the `CardGameDelegate` protocol. Implement the two required functions: `gameDidStart` and `game(player1DidDraw:player2DidDraw)`. Model `gameDidStart` after the same method in the guided project from today. As for the other method, have it print a message like the following:
-//: * "Player 1 drew a 6 of hearts, player 2 drew a jack of spades."
+//: Time to test all the types you've created. Create an instance of the `HighLow` class. Lastly, call the `play()` method on the game object.
 
 
 
@@ -261,3 +268,7 @@ class HighLow: CardGame {
 //: * a function with the following signature: `game(player1DidDraw card1: Card, player2DidDraw card2: Card)`
 
 //: as well as an optional delegate property of type `CardGameDelegate`.
+
+//: ## Step 19
+//: Create a class called `CardGameTracker` that conforms to the `CardGameDelegate` protocol. Implement the two required functions: `gameDidStart` and `game(player1DidDraw:player2DidDraw)`. Model `gameDidStart` after the same method in the guided project from today. As for the other method, have it print a message like the following:
+//: * "Player 1 drew a 6 of hearts, player 2 drew a jack of spades."
