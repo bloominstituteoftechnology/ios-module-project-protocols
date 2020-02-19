@@ -95,7 +95,7 @@ enum Suits: String {
 
 struct Step4Card {
     let suit: Suits
-    let rank: Cards
+    let rank: Rank
 }
 
 
@@ -114,7 +114,7 @@ struct Card: CustomStringConvertible {
 //: Create a `struct` to model a deck of cards. It should be called `Deck` and have an array of `Card` objects as a constant property. A custom `init` function should be created that initializes the array with a card of each rank and suit. You'll want to iterate over all ranks, and then over all suits (this is an example of _nested `for` loops_). See the next 2 steps before you continue with the nested loops.
 
 struct Deck {
-    let cards = [Card]()
+    var cards = [Card]()
     
     init() {
         for suit in Suits.allSuits {
@@ -169,15 +169,25 @@ extension Deck {
 //: * a `play()` method
 
 protocol CardGame {
-    var deck: [Deck] { get }
+    var deck: Deck { get }
     
     func play()
 }
 
 //: ## Step 13
-//: Create a class called `HighLow` that conforms to the `CardGame` protocol. It should have an initialized `Deck` as a property, as well as an optional delegate property of type `CardGameDelegate`.
+//: Create a class called `HighLow` that conforms to the `CardGame` protocol. It should have an initialized `Deck` as a property.
 
-
+class HighLow: CardGame {
+    var deck: Deck
+    
+    func play() {
+        //
+    }
+    
+    init() {
+        deck = Deck()
+    }
+}
 
 //: ## Step 14
 //: As part of the protocol conformance, implement a method called `play()`. The method should draw 2 cards from the deck, one for player 1 and one for player 2. These cards will then be compared to see which one is higher. The winning player will be printed along with a description of the winning card. Work will need to be done to the `Suit` and `Rank` types above, so see the next couple steps before continuing with this step.
@@ -231,3 +241,5 @@ protocol CardGame {
 //: Create a protocol for tracking a card game as a delegate called `CardGameDelegate`. It should have two functional requirements:
 //: * a function called `gameDidStart` that takes a `CardGame` as an argument
 //: * a function with the following signature: `game(player1DidDraw card1: Card, player2DidDraw card2: Card)`
+
+//: as well as an optional delegate property of type `CardGameDelegate`.
