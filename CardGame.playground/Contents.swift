@@ -9,11 +9,11 @@ enum Rank: Int, CustomStringConvertible {
         case .ace, .two, .three, .four, .five, .six, .seven, .eight, .nine, .ten:
             return "\(self.rawValue)"
         case .jack:
-            return "\(self.rawValue)"
+            return "11"
         case .queen:
-            return "\(self.rawValue)"
+            return "12"
         case .king:
-            return "\(self.rawValue)"
+            return "13"
         }
         
     }
@@ -38,15 +38,10 @@ enum Rank: Int, CustomStringConvertible {
     }
 }
 
-
 //: ## Step 2
 //: Once you've defined the enum as described above, take a look at this built-in protocol, [CustomStringConvertible](https://developer.apple.com/documentation/swift/customstringconvertible) and make the enum conform to that protocol. Make the face cards return a string of their name, and for the numbered cards, simply have it return that number as a string.
-//extension Rank: CustomStringConvertible {
-//    var description: String {
-//        return "\(self.rawValue)"
-//    }
-//}
 
+// Done
 
 
 //: ## Step 3
@@ -112,12 +107,12 @@ struct Deck {
 //: ## Step 7
 //: In the rank enum, add a static computed property that returns all the ranks in an array. Name this property `allRanks`. This is needed because you can't iterate over all cases from an enum automatically.
 
-
+// Done
 
 //: ## Step 8
 //: In the suit enum, add a static computed property that returns all the suits in an array. Name this property `allSuits`.
 
-
+// Done
 
 
 //: ## Step 9
@@ -128,20 +123,20 @@ struct Deck {
 //:}
 //:```
 
-
+// Done
 
 //: ## Step 10
 //: These loops will allow you to match up every rank with every suit. Make a `Card` object from all these pairings and append each card to the `cards` property of the deck. At the end of the `init` method, the `cards` array should contain a full deck of standard playing card objects.
 
 
-
+// Done
 
 
 //: ## Step 11
 //: Add a method to the deck called `drawCard()`. It takes no arguments and it returns a `Card` object. Have it draw a random card from the deck of cards and return it.
 //: - Callout(Hint): There should be `52` cards in the deck. So what if you created a random number within those bounds and then retrieved that card from the deck? Remember that arrays are indexed from `0` and take that into account with your random number picking.
 
-
+// Done
 
 
 
@@ -166,6 +161,10 @@ class HighLow: CardGame {
         let card1 = deck.drawCard()
         let card2 = deck.drawCard()
         
+        print("Started a new game of High Low")
+        print("Player 1 drew a \(card1.description)")
+        print("Player 2 drew a \(card2.description)")
+        
         if card1.rank == card2.rank {
             print("Round ends in a tie with \(card1.description)")
         } else if card1.rank < card2.rank {
@@ -174,8 +173,6 @@ class HighLow: CardGame {
             print("Player 1 wins with \(card1.description)")
         }
     }
-    
-    
 }
 
 
@@ -183,13 +180,13 @@ class HighLow: CardGame {
 //: ## Step 15
 //: As part of the protocol conformance, implement a method called `play()`. The method should draw 2 cards from the deck, one for player 1 and one for player 2. These cards will then be compared to see which one is higher. The winning player will be printed along with a description of the winning card. Work will need to be done to the `Suit` and `Rank` types above, so see the next couple steps before continuing with this step.
 
-
+// Done
 
 
 //: ## Step 16
 //: Take a look at the Swift docs for the [Comparable](https://developer.apple.com/documentation/swift/comparable) protocol. In particular, look at the two functions called `<` and `==`.
 
-
+// Done
 
 
 //: ## Step 17
@@ -244,22 +241,7 @@ extension Card: Comparable {
 //: * Player 1 wins with a higher card, e.g. "Player 1 wins with 8 of hearts."
 //: * Player 2 wins with a higher card, e.g. "Player 2 wins with king of diamonds."
 
-let test = HighLow()
-test.play()
-
-//: ## Step 20
-//: Create a class called `CardGameTracker` that conforms to the `CardGameDelegate` protocol. Implement the two required functions: `gameDidStart` and `game(player1DidDraw:player2DidDraw)`. Model `gameDidStart` after the same method in the guided project from today. As for the other method, have it print a message like the following:
-//: * "Player 1 drew a 6 of hearts, player 2 drew a jack of spades."
-
-
-
-//: Step 21
-//: Time to test all the types you've created. Create an instance of the `HighLow` class. Set the `delegate` property of that object to an instance of `CardGameTracker`. Lastly, call the `play()` method on the game object. It should print out to the console something that looks similar to the following:
-//:
-//: ```
-//: Started a new game of High Low
-//: Player 1 drew a 2 of diamonds, player 2 drew a ace of diamonds.
-//: Player 1 wins with 2 of diamonds.
-//: ```
+let newGame = HighLow()
+newGame.play()
 
 
