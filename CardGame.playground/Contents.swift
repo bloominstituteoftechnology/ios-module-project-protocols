@@ -129,12 +129,24 @@ class HighLow: CardGame {
     var delegate: CardGameDelegate?
     
     func play() {
+        guard let delegate = delegate else { return }
+        
         let card1 = deck.drawCard()
         let card2 = deck.drawCard()
         
+        delegate.gameDidStart(self)
+        delegate.game(player1DidDraw: card1, player2DidDraw: card2)
+        
         if card1 == card2 {
             print("Round ends in a tie with \(card1)")
-        } else if card1 > card2 {
+        } else if card1.rank == card2.rank{
+            
+//            if card1.suit > card2.suit {
+//                print("Player 1 wins with \(card1) against \(card2)")
+//            } else {
+//                print("Player 2 wins with \(card2) against \(card1)")
+//            }
+        }else if card1 > card2 {
             print("Player 1 wins with \(card1) against \(card2)")
         } else {
             print("Player 2 wins with \(card2) against \(card1)")
@@ -149,20 +161,30 @@ class HighLow: CardGame {
 }
 
 class CardGameTracker: CardGameDelegate {
+    var numberOfTurns: Int = 0
     func gameDidStart(_ game: CardGame) {
-        <#code#>
+        numberOfTurns = 0
+        if game is HighLow {
+            print("Started a new game of High Low!")
+        }
     }
     
     func game(player1DidDraw card1: Card, player2DidDraw card2: Card) {
-        <#code#>
+        print("Player 1 drew a \(card1) and Player 2 drew a \(card2)")
     }
     
+    init () {
+        
+    }
     
 }
 
 let newDeck = Deck()
 //print(newDeck.cards)
 let highLow: HighLow = HighLow(deck: newDeck)
+
+let highLowDelegator: CardGameTracker = CardGameTracker()
+highLow.delegate = highLowDelegator
 
 highLow.play()
 
