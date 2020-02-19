@@ -168,8 +168,11 @@ extension Deck {
 //: * a gettable `deck` property
 //: * a `play()` method
 
-
-
+protocol CardGame {
+    var deck: [Deck] { get }
+    
+    func play()
+}
 
 //: ## Step 13
 //: Create a protocol for tracking a card game as a delegate called `CardGameDelegate`. It should have two functional requirements:
