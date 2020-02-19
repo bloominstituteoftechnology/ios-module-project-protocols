@@ -33,7 +33,7 @@ enum Rank: Int, CustomStringConvertible {
     
     static var allRanks: [Rank] {
         get {
-            return [ace, two]
+            return [ace, two, three, four, five, six, seven, eight, nine, ten, jack, queen, king]
         }
     }
 }
@@ -165,6 +165,14 @@ class HighLow: CardGame {
     func play() {
         let card1 = deck.drawCard()
         let card2 = deck.drawCard()
+        
+        if card1.rank == card2.rank {
+            print("Round ends in a tie with \(card1.description)")
+        } else if card1.rank < card2.rank {
+            print("Player 2 wins with \(card2.description)")
+        } else {
+            print("Player 1 wins with \(card1.description)")
+        }
     }
     
     
@@ -188,13 +196,45 @@ class HighLow: CardGame {
 //: Make the `Rank` type conform to the `Comparable` protocol. Implement the `<` and `==` functions such that they compare the `rawValue` of the `lhs` and `rhs` arguments passed in. This will allow us to compare two rank values with each other and determine whether they are equal, or if not, which one is larger.
 
 
-
+extension Rank: Comparable {
+    
+    // compare left hand side and right hand side
+    static func ==(lhs: Rank, rhs: Rank) -> Bool {
+        return lhs.rawValue == rhs.rawValue
+    }
+    
+    static func <(lhs: Rank, rhs: Rank) -> Bool {
+        if lhs.rawValue != rhs.rawValue {
+            return lhs.rawValue < rhs.rawValue
+        } else if lhs.rawValue != rhs.rawValue {
+            return lhs.rawValue < rhs.rawValue
+        } else {
+            return lhs.rawValue < rhs.rawValue
+        }
+    }
+}
 
 
 //: Step 18
 //: Make the `Card` type conform to the `Comparable` protocol. Implement the `<` and `==` methods such that they compare the ranks of the `lhs` and `rhs` arguments passed in. For the `==` method, compare **both** the rank and the suit.
 
-
+extension Card: Comparable {
+    
+    // compare left hand side and right hand side
+    static func ==(lhs: Card, rhs: Card) -> Bool {
+        return lhs.rank == rhs.rank
+    }
+    
+    static func <(lhs: Card, rhs: Card) -> Bool {
+        if lhs.rank != rhs.rank {
+            return lhs.rank < rhs.rank
+        } else if lhs.rank != rhs.rank {
+            return lhs.rank < rhs.rank
+        } else {
+            return lhs.rank < rhs.rank
+        }
+    }
+}
 
 
 
@@ -204,7 +244,8 @@ class HighLow: CardGame {
 //: * Player 1 wins with a higher card, e.g. "Player 1 wins with 8 of hearts."
 //: * Player 2 wins with a higher card, e.g. "Player 2 wins with king of diamonds."
 
-
+let test = HighLow()
+test.play()
 
 //: ## Step 20
 //: Create a class called `CardGameTracker` that conforms to the `CardGameDelegate` protocol. Implement the two required functions: `gameDidStart` and `game(player1DidDraw:player2DidDraw)`. Model `gameDidStart` after the same method in the guided project from today. As for the other method, have it print a message like the following:
