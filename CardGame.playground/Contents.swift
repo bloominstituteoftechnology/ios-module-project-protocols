@@ -5,15 +5,15 @@ import Foundation
 enum PlayingCard: Int {
     
     case ace = 1
-    case two
-    case three
-    case four
-    case five
-    case six
-    case seven
-    case eight
-    case nine
-    case ten
+    case two = 2
+    case three = 3
+    case four = 4
+    case five = 5
+    case six = 6
+    case seven = 7
+    case eight = 8
+    case nine = 9
+    case ten = 10
     case jack
     case queen
     case king
@@ -23,13 +23,20 @@ enum PlayingCard: Int {
 //: ## Step 2
 //: Once you've defined the enum as described above, take a look at this built-in protocol, [CustomStringConvertible](https://developer.apple.com/documentation/swift/customstringconvertible) and make the enum conform to that protocol. Make the face cards return a string of their name, and for the numbered cards, simply have it return that number as a string.
 extension PlayingCard: CustomStringConvertible {
+    
     var description: String {
-        for card in PlayingCard {
-            return ""
-        }
+        let cardString = ""
+        
+        switch self {
+        case .two, .three, .four, .five, .six, .seven, .eight, .nine, .ten:
+            cardString = "\(.rawValue)"
+       
+       }
+        
     }
+  }
 }
-
+print(PlayingCard.self.five)
 
 
 //: ## Step 3
