@@ -9,6 +9,9 @@
 import UIKit
 
 class GameViewController: UIViewController {
+    
+    //MARK: - IB Outlets
+    
     @IBOutlet weak var cardImageView: UIImageView!
     
     @IBOutlet weak var readyButton: UIButton!
@@ -23,6 +26,9 @@ class GameViewController: UIViewController {
     lazy var betButtons: [UIButton] = [playerOneLowButton, playerOneHighButton, playerTwoLowButton, playerTwoHighButton]
     
     let game = HighLowBlitz()
+    
+    
+    //MARK: - IB Actions
     
     @IBAction func readyButtonTapped(_ sender: UIButton) {
         game.playersAreReady()
@@ -44,6 +50,8 @@ class GameViewController: UIViewController {
         }
     }
     
+    //MARK: - Helper Functions
+    
     func imageFor(playingCard card: PlayingCard) -> UIImage? {
         let imageName = "\(card.rank)_\(card.suit)"
         print(imageName)
@@ -64,6 +72,8 @@ class GameViewController: UIViewController {
         }
     }
     
+    //MARK: - View Lifecycle
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = UIColor(patternImage: UIImage(named: "green_felt")!)
@@ -71,6 +81,9 @@ class GameViewController: UIViewController {
         game.delegate = self
     }
 }
+
+
+//MARK: - HighLowBlitzDelegate
 
 extension GameViewController: HighLowBlitzDelegate {
     

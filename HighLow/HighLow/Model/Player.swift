@@ -11,7 +11,7 @@ import Foundation
 class Player {
     let name: String
     var score = 0
-    var bet: HighLowBlitz.Bet?
+    var bet: Bet?
     
     init(name: String) {
         self.name = name

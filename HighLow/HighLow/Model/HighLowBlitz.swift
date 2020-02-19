@@ -8,20 +8,15 @@
 
 import Foundation
 
-protocol HighLowBlitzDelegate: AnyObject {
-    func gameDidFlipFirstCard(_ card: PlayingCard)
-    func gameDidFlipSecondCard(_ card: PlayingCard)
-    func gameDidUpdateScore(playerOneScore: Int, playerTwoScore: Int)
-}
-
 class HighLowBlitz {
+    weak var delegate: HighLowBlitzDelegate?
     
-    enum Bet {
-        case high, low
-    }
-    
-    func newGame() {
-        
+    func playersAreReady() {
+        // After random time, flip card
+        let randomTime = Double.random(in: 1...2.5)
+        Timer.scheduledTimer(withTimeInterval: randomTime, repeats: false) { _ in
+            self.flipFirstCard()
+        }
     }
     
     func playerOne(placedBet bet: Bet) {
@@ -47,16 +42,6 @@ class HighLowBlitz {
             }
         }
     }
-    
-    func playersAreReady() {
-        // After random time, flip card
-        let randomTime = Double.random(in: 1...2.5)
-        Timer.scheduledTimer(withTimeInterval: randomTime, repeats: false) { _ in
-            self.flipFirstCard()
-        }
-    }
-    
-    weak var delegate: HighLowBlitzDelegate?
     
     private var deck = Deck()
     

@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		0443A18423FDE34A00B14126 /* HighLowBlitzDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0443A18323FDE34A00B14126 /* HighLowBlitzDelegate.swift */; };
+		0443A18623FDE3B200B14126 /* Bet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0443A18523FDE3B200B14126 /* Bet.swift */; };
 		04CF337C23FC8EB10063F2C7 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04CF337B23FC8EB10063F2C7 /* AppDelegate.swift */; };
 		04CF337E23FC8EB10063F2C7 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04CF337D23FC8EB10063F2C7 /* SceneDelegate.swift */; };
 		04CF338023FC8EB10063F2C7 /* GameViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04CF337F23FC8EB10063F2C7 /* GameViewController.swift */; };
@@ -21,6 +23,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		0443A18323FDE34A00B14126 /* HighLowBlitzDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HighLowBlitzDelegate.swift; sourceTree = "<group>"; };
+		0443A18523FDE3B200B14126 /* Bet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Bet.swift; sourceTree = "<group>"; };
 		04CF337823FC8EB10063F2C7 /* HighLow.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = HighLow.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		04CF337B23FC8EB10063F2C7 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		04CF337D23FC8EB10063F2C7 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -47,6 +51,46 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		0443A18723FDE3C700B14126 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				04CF339323FD762C0063F2C7 /* HighLowBlitz.swift */,
+				0443A18323FDE34A00B14126 /* HighLowBlitzDelegate.swift */,
+				04CF338F23FD741F0063F2C7 /* PlayingCard.swift */,
+				04CF339123FD74830063F2C7 /* DeckOfCards.swift */,
+				04CF339723FDD6000063F2C7 /* Player.swift */,
+				0443A18523FDE3B200B14126 /* Bet.swift */,
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
+		0443A18823FDE3FD00B14126 /* View */ = {
+			isa = PBXGroup;
+			children = (
+				04CF338123FC8EB10063F2C7 /* Main.storyboard */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+		0443A18A23FDE41000B14126 /* Controller */ = {
+			isa = PBXGroup;
+			children = (
+				04CF337F23FC8EB10063F2C7 /* GameViewController.swift */,
+			);
+			path = Controller;
+			sourceTree = "<group>";
+		};
+		044ADC9E23FDE4720061DC6E /* Misc */ = {
+			isa = PBXGroup;
+			children = (
+				04CF337B23FC8EB10063F2C7 /* AppDelegate.swift */,
+				04CF337D23FC8EB10063F2C7 /* SceneDelegate.swift */,
+				04CF338623FC8EB30063F2C7 /* LaunchScreen.storyboard */,
+				04CF339523FD76A50063F2C7 /* LaunchScreenViewController.swift */,
+			);
+			path = Misc;
+			sourceTree = "<group>";
+		};
 		04CF336F23FC8EB10063F2C7 = {
 			isa = PBXGroup;
 			children = (
@@ -66,17 +110,11 @@
 		04CF337A23FC8EB10063F2C7 /* HighLow */ = {
 			isa = PBXGroup;
 			children = (
-				04CF337B23FC8EB10063F2C7 /* AppDelegate.swift */,
-				04CF337D23FC8EB10063F2C7 /* SceneDelegate.swift */,
-				04CF337F23FC8EB10063F2C7 /* GameViewController.swift */,
-				04CF338123FC8EB10063F2C7 /* Main.storyboard */,
-				04CF338F23FD741F0063F2C7 /* PlayingCard.swift */,
-				04CF339123FD74830063F2C7 /* DeckOfCards.swift */,
-				04CF339323FD762C0063F2C7 /* HighLowBlitz.swift */,
-				04CF339723FDD6000063F2C7 /* Player.swift */,
+				044ADC9E23FDE4720061DC6E /* Misc */,
+				0443A18723FDE3C700B14126 /* Model */,
+				0443A18823FDE3FD00B14126 /* View */,
+				0443A18A23FDE41000B14126 /* Controller */,
 				04CF338423FC8EB30063F2C7 /* Assets.xcassets */,
-				04CF338623FC8EB30063F2C7 /* LaunchScreen.storyboard */,
-				04CF339523FD76A50063F2C7 /* LaunchScreenViewController.swift */,
 				04CF338923FC8EB30063F2C7 /* Info.plist */,
 			);
 			path = HighLow;
@@ -155,8 +193,10 @@
 			files = (
 				04CF339223FD74830063F2C7 /* DeckOfCards.swift in Sources */,
 				04CF338023FC8EB10063F2C7 /* GameViewController.swift in Sources */,
+				0443A18423FDE34A00B14126 /* HighLowBlitzDelegate.swift in Sources */,
 				04CF337C23FC8EB10063F2C7 /* AppDelegate.swift in Sources */,
 				04CF339023FD741F0063F2C7 /* PlayingCard.swift in Sources */,
+				0443A18623FDE3B200B14126 /* Bet.swift in Sources */,
 				04CF339823FDD6000063F2C7 /* Player.swift in Sources */,
 				04CF339423FD762C0063F2C7 /* HighLowBlitz.swift in Sources */,
 				04CF337E23FC8EB10063F2C7 /* SceneDelegate.swift in Sources */,
