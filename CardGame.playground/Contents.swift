@@ -1,6 +1,6 @@
 import Foundation
 
-enum Rank: Int {
+enum Rank: Int, CustomStringConvertible, CaseIterable, Comparable {
   case ace = 1
   case two
   case three
@@ -14,9 +14,7 @@ enum Rank: Int {
   case jack
   case queen
   case king
-}
 
-extension Rank: CustomStringConvertible, CaseIterable {
   var description: String {
     switch self {
     case .ace:
@@ -47,6 +45,14 @@ extension Rank: CustomStringConvertible, CaseIterable {
       return "King"
     }
   }
+
+  static func <(lhs: Rank, rhs: Rank) -> Bool {
+    return lhs.rawValue < rhs.rawValue
+  }
+
+  static func ==(lhs: Rank, rhs: Rank) -> Bool {
+    return lhs.rawValue == rhs.rawValue
+  }
 }
 
 enum Suit: String, CaseIterable {
@@ -56,14 +62,20 @@ enum Suit: String, CaseIterable {
   case clubs
 }
 
-struct Card {
+struct Card: CustomStringConvertible, Comparable {
   let rank: Rank
   let suit: Suit
-}
 
-extension Card: CustomStringConvertible {
   var description: String {
     return "\(rank.description) of \(suit)"
+  }
+
+  static func <(lhs: Card, rhs: Card) -> Bool {
+    return lhs.rank < rhs.rank
+  }
+
+  static func ==(lhs: Card, rhs: Card) -> Bool {
+    return lhs.rank == rhs.rank && lhs.suit == rhs.suit
   }
 }
 
@@ -97,7 +109,14 @@ protocol CardGame {
   func play()
 }
 
+class HighLow: CardGame {
+  let deck = Deck()
 
+  func play() {
+    let player1Card = deck.drawCard()
+    let player2Card = deck.drawCard()
+  }
+}
 
 //: ## Step 14
 //: Create a class called `HighLow` that conforms to the `CardGame` protocol. It should have an initialized `Deck` as a property, as well as an optional delegate property of type `CardGameDelegate`.
