@@ -102,10 +102,10 @@ struct Card: Comparable, CustomStringConvertible {
     let rank: CardsRanks
     
     static func < (lhs: Card, rhs: Card) -> Bool {
-        return lhs.rank < rhs.rank
+        return lhs.rank < rhs.rank && lhs.suit < rhs.suit
     }
     static func == (lhs: Card, rhs: Card) -> Bool {
-        return lhs.rank == rhs.rank && lhs.rank == rhs.rank
+        return lhs.rank == rhs.rank && lhs.suit == rhs.suit
     }
     var description: String {
         return "\(rank) of \(suit.rawValue)"
