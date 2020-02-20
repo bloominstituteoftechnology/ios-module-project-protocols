@@ -151,10 +151,13 @@ class HighLow: CardGame {
     var delegate: CardGameDelegate?
     
     func play() {
-//        guard let delegate = delegate else { return }
         
-        let card1 = Card(suit: .clubs, rank: .eight)//deck.drawCard()
-        let card2 = Card(suit: .spades, rank: .eight)//deck.drawCard()
+        // Hardcoded test case to check how program behaves when ranks are the same.
+//        let card1 = Card(suit: .clubs, rank: .eight)
+//        let card2 = Card(suit: .spades, rank: .eight)
+        
+        let card1 = deck.drawCard()
+        let card2 = deck.drawCard()
         
         delegate?.gameDidStart(self)
         delegate?.game(player1DidDraw: card1, player2DidDraw: card2)
