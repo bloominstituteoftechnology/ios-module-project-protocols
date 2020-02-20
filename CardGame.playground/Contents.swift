@@ -64,16 +64,16 @@ extension Rank: CustomStringConvertible {
 
 //: ## Step 3
 //: Create an enum for the suit of a playing card. The values are `hearts`, `diamonds`, `spades`, and `clubs`. Use a raw type of `String` for this enum (this will allow us to get a string version of the enum cases for free, no use of `CustomStringConvertible` required).
-//enum Suit: String {
-//    case hearts = "Hearts"
-//    case diamonds = "Diamonds"
-//    case spades = "Spades"
-//    case clubs = "Clubs"
-//    
-//    static var allSuits: [Suit] = [.hearts, .diamonds, .spades, .clubs]
-//}
-//
-//
+enum Suit: String {
+    case hearts = "Hearts"
+    case diamonds = "Diamonds"
+    case spades = "Spades"
+    case clubs = "Clubs"
+
+    static var allSuits: [Suit] = [.hearts, .diamonds, .spades, .clubs]
+}
+
+
 
 
 //: ## Step 4
@@ -89,12 +89,12 @@ extension Rank: CustomStringConvertible {
 //: ## Step 5
 //: Make the card also conform to `CustomStringConvertible`. When turned into a string, a card's value should look something like this, "ace of spades", or "3 of diamonds".
 //extension Card: CustomStringConvertible {
-//    
+//
 //    var description: String {
 //        return "\(rank) of \(suit)"
 //    }
-//    
-//    
+//
+//
 //}
 
 
@@ -102,14 +102,14 @@ extension Rank: CustomStringConvertible {
 //: Create a `struct` to model a deck of cards. It should be called `Deck` and have an array of `Card` objects as a constant property. A custom `init` function should be created that initializes the array with a card of each rank and suit. You'll want to iterate over all ranks, and then over all suits (this is an example of _nested `for` loops_). See the next 2 steps before you continue with the nested loops.
 //struct Deck {
 //    let arrayOfCards: [Card]
-//    
+//
 //    init() {
 //        var arrayOfCards = [Card]()
 //        for rank in Rank.allRanks {
 //            for suit in Suit.allSuits {
 //            arrayOfCards.append(Card(rank: rank, suit: suit ))
 //            }
-//        
+//
 //
 //        }
 //       self.arrayOfCards = arrayOfCards
@@ -119,9 +119,9 @@ extension Rank: CustomStringConvertible {
 //        let randomCard = Int.random(in: 1...52)
 //        return arrayOfCards[randomCard]
 //    }
-//    
+//
 //}
-// 
+//
 
 
 
@@ -168,10 +168,10 @@ extension Rank: CustomStringConvertible {
 //: * a `play()` method
 //protocol CardGame {
 //    var getDeck: Deck { get }
-//    
+//
 //    func play()
-//    
-//    
+//
+//
 //}
 
 
