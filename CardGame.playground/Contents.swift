@@ -2,8 +2,8 @@ import Foundation
 
 //: ## Step 1
 //: Create an enumeration for the value of a playing card. The values are: `ace`, `two`, `three`, `four`, `five`, `six`, `seven`, `eight`, `nine`, `ten`, `jack`, `queen`, and `king`. Set the raw type of the enum to `Int` and assign the ace a value of `1`.
-enum Rank: Int {
-    
+enum Rank: Int, Comparable {
+   
     case ace = 1
     case two = 2
     case three = 3
@@ -20,6 +20,16 @@ enum Rank: Int {
     
     static var allRanks: [Card] {
         return []
+    }
+    
+    static func < (lhs: Rank, rhs: Rank) -> Bool {
+        if lhs.rawValue == rhs.rawValue {
+            return lhs.rawValue == rhs.rawValue
+        } else if lhs.rawValue < rhs.rawValue {
+            return lhs.rawValue < rhs.rawValue
+        } else {
+            return rhs.rawValue < lhs.rawValue
+        }
     }
 }
 
@@ -74,13 +84,33 @@ struct Card {
 
 //: ## Step 5
 //: Make the card also conform to `CustomStringConvertible`. When turned into a string, a card's value should look something like this, "ace of spades", or "3 of diamonds".
-extension Card: CustomStringConvertible {
+extension Card: CustomStringConvertible, Comparable {
+    
     var description: String {
         let cardString = "\(self.rank) of \(self.suit)"
         
           return cardString
     }
+    
+    static func < (lhs: Card, rhs: Card) -> Bool {
+        if lhs.rank.rawValue == rhs.rank.rawValue {
+            return lhs.rank.rawValue == rhs.rank.rawValue
+        }
+        else if lhs.rank.rawValue < rhs.rank.rawValue {
+            return lhs.rank.rawValue < rhs.rank.rawValue
+        } else if rhs.rank.rawValue < lhs.rank.rawValue {
+            return rhs.rank.rawValue < lhs.rank.rawValue
+        } else if lhs.suit.rawValue == rhs.suit.rawValue {
+            return lhs.suit.rawValue == rhs.suit.rawValue
+        } else if lhs.suit.rawValue < rhs.suit.rawValue {
+            return lhs.suit.rawValue < rhs.suit.rawValue
+        } else {
+            return rhs.suit.rawValue < lhs.suit.rawValue
+        }
+    }
 }
+
+
 
 let playingCard = Card(suit: .clubs, rank: .queen)
 print(playingCard)
@@ -112,20 +142,11 @@ struct Deck {
         return randomCard[random()]
     }
 }
-
-
-
 //: ## Step 7
 //: In the rank enum, add a static computed property that returns all the ranks in an array. Name this property `allRanks`. This is needed because you can't iterate over all cases from an enum automatically.
 
-
-
-
 //: ## Step 8
 //: In the suit enum, add a static computed property that returns all the suits in an array. Name this property `allSuits`.
-
-
-
 
 //: ## Step 9
 //: Back to the `Deck` and the nested loops. Now that you have a way to get arrays of all rank values and all suit values, create 2 `for` loops in the `init` method, one nested inside the other, where you iterate over each value of rank, and then iterate over each value of suit. See an example below to get an idea of how this will work. Imagine an enum that contains the 4 cardinal directions, and imagine that enum has a property `allDirections` that returns an array of them.
@@ -135,22 +156,12 @@ struct Deck {
 //:}
 //:```
 
-
-
 //: ## Step 10
 //: These loops will allow you to match up every rank with every suit. Make a `Card` object from all these pairings and append each card to the `cards` property of the deck. At the end of the `init` method, the `cards` array should contain a full deck of standard playing card objects.
-
-
-
-
 
 //: ## Step 11
 //: Add a method to the deck called `drawCard()`. It takes no arguments and it returns a `Card` object. Have it draw a random card from the deck of cards and return it.
 //: - Callout(Hint): There should be `52` cards in the deck. So what if you created a random number within those bounds and then retrieved that card from the deck? Remember that arrays are indexed from `0` and take that into account with your random number picking.
-
-
-
-
 
 //: ## Step 12
 //: Create a protocol for a `CardGame`. It should have two requirements:
@@ -189,12 +200,21 @@ class HighLow: CardGame {
         self.delegate = delegate
     }
     
+    
     func play() {
+        var drawnCard = [Card]()
+
+       func drawCard() -> Card {
+              func random() -> Int {
+                  return Int.random(in: 0...51)
+              }
+              return drawnCard[random()]
+          }
         
+        
+        
+        if 
     }
-    
-    
-    
 }
 
 
