@@ -43,8 +43,8 @@ enum CardsRanks: Int, CustomStringConvertible, Comparable {
             return "Queen"
         case .king:
             return "King"
-        default:
-            return ""
+        case .ace:
+            return "1" // So I added "1" here because when I got an ace it would print an empty string.
         }
     }
     
@@ -86,6 +86,9 @@ enum CardsSuit: String, Comparable {
     
     static func < (lhs: CardsSuit, rhs: CardsSuit) -> Bool {
         return lhs.asInt < rhs.asInt
+    }
+    static func == (lhs: CardsSuit, rhs: CardsSuit) -> Bool {
+        return lhs.asInt == rhs.asInt
     }
 
 }
@@ -150,8 +153,8 @@ class HighLow: CardGame {
     func play() {
 //        guard let delegate = delegate else { return }
         
-        let card1 = deck.drawCard()
-        let card2 = deck.drawCard()
+        let card1 = Card(suit: .clubs, rank: .eight)//deck.drawCard()
+        let card2 = Card(suit: .spades, rank: .eight)//deck.drawCard()
         
         delegate?.gameDidStart(self)
         delegate?.game(player1DidDraw: card1, player2DidDraw: card2)
@@ -159,23 +162,10 @@ class HighLow: CardGame {
         if card1 == card2 {
             print("Round ends in a tie with \(card1)")
         } else if card1.rank == card2.rank && card1.suit != card2.suit{
-            switch card1.suit {
-            case .clubs:
-                print("Player 2 wins with \(card2) against \(card1)")
-            case .diamonds:
-                if card2.suit == .clubs {
-                    print("Player 1 wins with \(card1) against \(card2)")
-                } else {
-                    print("Player 2 wins with \(card2) against \(card1)")
-                }
-            case .hearts:
-                if card2.suit == .spades {
-                    print("Player 2 wins with \(card2) against \(card1)")
-                } else {
-                    print("Player 1 wins with \(card1) against \(card2)")
-                }
-            case .spades:
+            if card1.suit > card2.suit {
                 print("Player 1 wins with \(card1) against \(card2)")
+            } else {
+                print("Player 2 wins with \(card2) against \(card1)")
             }
         }else if card1 > card2 {
             print("Player 1 wins with \(card1) against \(card2)")
