@@ -24,7 +24,15 @@ print(Rank.two.rawValue)
 //: ## Step 2
 //: Once you've defined the enum as described above, take a look at this built-in protocol, [CustomStringConvertible](https://developer.apple.com/documentation/swift/customstringconvertible) and make the enum conform to that protocol. Make the face cards return a string of their name, and for the numbered cards, simply have it return that number as a string.
 
-extension Rank: CustomStringConvertible {
+extension Rank: CustomStringConvertible, Comparable {
+    static func < (lhs: Rank, rhs: Rank) -> Bool {
+        return lhs.rawValue < rhs.rawValue
+    }
+    
+    static func == (lhs: Rank, rhs: Rank) -> Bool {
+           return lhs.rawValue == rhs.rawValue
+    }
+    
     var description: String {
         get {
             switch(self) {
@@ -62,7 +70,11 @@ enum Suit: String, CaseIterable {
 //: ## Step 4
 //: Using the two enums above, create a `struct` called `Card` to model a single playing card. It should have constant properties for each constituent piece (one for suit and one for rank).
 
-struct Card {
+struct Card: Comparable {
+    static func < (lhs: Card, rhs: Card) -> Bool {
+        return lhs.rank < rhs.rank
+    }
+    
     let rank: Rank
     let suit: Suit
 }
@@ -165,16 +177,8 @@ class HighLow: CardGame {
     var cardGameDelegate: CardGameDelegate?
     
     func play() {
-        let player1 = deck.drawCard()
-        let player2 = deck.drawCard()
-        
-        if player1.rank == player2.rank {
-            print("It was a tie you both had \(player1.description) to \(player2.description)")
-        } else if (player1.rank < player2.rank) {
-            print("Player 1 Won! \(player1.description) to \(player2.description)")
-        } else {
-            print("Player 2 Won! \(player2.description) to \(player1.description)")
-        }
+        cardGameDelegate?.gameDidStart()
+        cardGameDelegate?.game(player1DidDraw: deck.drawCard(), player2DidDraw: deck.drawCard())
     }
     
     init() {
@@ -198,11 +202,7 @@ class HighLow: CardGame {
 
 //: ## Step 17
 //: Make the `Rank` type conform to the `Comparable` protocol. Implement the `<` and `==` functions such that they compare the `rawValue` of the `lhs` and `rhs` arguments passed in. This will allow us to compare two rank values with each other and determine whether they are equal, or if not, which one is larger.
-extension Rank: Comparable {
-    static func < (lhs: Rank, rhs: Rank) -> Bool {
-        return true
-    }
-}
+
 
 
 
@@ -210,17 +210,6 @@ extension Rank: Comparable {
 //: Step 18
 //: Make the `Card` type conform to the `Comparable` protocol. Implement the `<` and `==` methods such that they compare the ranks of the `lhs` and `rhs` arguments passed in. For the `==` method, compare **both** the rank and the suit.
 
-/*
- extension Card: Comparable {
-    static func < (lhs: Card, rhs: Card) -> Bool {
-        return true
-    }
-    
-    static func == (lhs: Card, rhs: Card) -> Bool {
-        return false
-    }
-}
- */
 
 
 
@@ -238,7 +227,22 @@ myGame.play()
 //: ## Step 20
 //: Create a class called `CardGameTracker` that conforms to the `CardGameDelegate` protocol. Implement the two required functions: `gameDidStart` and `game(player1DidDraw:player2DidDraw)`. Model `gameDidStart` after the same method in the guided project from today. As for the other method, have it print a message like the following:
 //: * "Player 1 drew a 6 of hearts, player 2 drew a jack of spades."
-
+class CardGameTracker: CardGameDelegate {
+    
+    func gameDidStart() {
+        //Nothing
+    }
+    
+    func game(player1DidDraw card1: Card, player2DidDraw card2: Card) {
+        if card1.rank == card2.rank {
+            print("It was a tie you both had \(card1.description) to \(card2.description)")
+        } else if (card1.rank > card2.rank) {
+            print("Player 1 Won! \(card1.description) to \(card2.description)")
+        } else {
+            print("Player 2 Won! \(card2.description) to \(card1.description)")
+        }
+    }
+}
 
 
 //: Step 21
@@ -249,5 +253,8 @@ myGame.play()
 //: Player 1 drew a 2 of diamonds, player 2 drew a ace of diamonds.
 //: Player 1 wins with 2 of diamonds.
 //: ```
-
+var myGame2 = HighLow()
+myGame2.cardGameDelegate = CardGameTracker()
+myGame2.play()
+myGame2.play()
 
