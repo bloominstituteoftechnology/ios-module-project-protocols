@@ -91,7 +91,6 @@ struct Deck {
     
     init() {
         for i in Suit.allCases {
-            print(i)
             for l in Rank.allCases {
                 deckOfCards.append(Card(rank: l, suit: i))
             }
@@ -161,14 +160,21 @@ protocol CardGameDelegate {
 }
 
 
-
-//: ## Step 14
-//: Create a class called `HighLow` that conforms to the `CardGame` protocol. It should have an initialized `Deck` as a property, as well as an optional delegate property of type `CardGameDelegate`.
 class HighLow: CardGame {
     var deck: Deck
+    var cardGameDelegate: CardGameDelegate?
     
     func play() {
-        <#code#>
+        let player1 = deck.drawCard()
+        let player2 = deck.drawCard()
+        
+        if player1.rank == player2.rank {
+            print("It was a tie you both had \(player1.description) to \(player2.description)")
+        } else if (player1.rank < player2.rank) {
+            print("Player 1 Won! \(player1.description) to \(player2.description)")
+        } else {
+            print("Player 2 Won! \(player2.description) to \(player1.description)")
+        }
     }
     
     init() {
@@ -184,7 +190,6 @@ class HighLow: CardGame {
 
 
 
-
 //: ## Step 16
 //: Take a look at the Swift docs for the [Comparable](https://developer.apple.com/documentation/swift/comparable) protocol. In particular, look at the two functions called `<` and `==`.
 
@@ -193,7 +198,11 @@ class HighLow: CardGame {
 
 //: ## Step 17
 //: Make the `Rank` type conform to the `Comparable` protocol. Implement the `<` and `==` functions such that they compare the `rawValue` of the `lhs` and `rhs` arguments passed in. This will allow us to compare two rank values with each other and determine whether they are equal, or if not, which one is larger.
-
+extension Rank: Comparable {
+    static func < (lhs: Rank, rhs: Rank) -> Bool {
+        return true
+    }
+}
 
 
 
@@ -201,7 +210,17 @@ class HighLow: CardGame {
 //: Step 18
 //: Make the `Card` type conform to the `Comparable` protocol. Implement the `<` and `==` methods such that they compare the ranks of the `lhs` and `rhs` arguments passed in. For the `==` method, compare **both** the rank and the suit.
 
-
+/*
+ extension Card: Comparable {
+    static func < (lhs: Card, rhs: Card) -> Bool {
+        return true
+    }
+    
+    static func == (lhs: Card, rhs: Card) -> Bool {
+        return false
+    }
+}
+ */
 
 
 
@@ -211,6 +230,9 @@ class HighLow: CardGame {
 //: * Player 1 wins with a higher card, e.g. "Player 1 wins with 8 of hearts."
 //: * Player 2 wins with a higher card, e.g. "Player 2 wins with king of diamonds."
 
+
+var myGame = HighLow()
+myGame.play()
 
 
 //: ## Step 20
