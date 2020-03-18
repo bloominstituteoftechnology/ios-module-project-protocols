@@ -101,6 +101,12 @@ struct Deck  {
         }
         self.cards = cards
     }
+    
+    func drawCard() -> Card {
+        
+        let indexOfCards = Int.random(in: 0..<cards.count)
+        return cards[indexOfCards]
+    }
 }
 
 
@@ -128,9 +134,9 @@ struct Deck  {
 
 
 
+
 //: ## Step 10
 //: These loops will allow you to match up every rank with every suit. Make a `Card` object from all these pairings and append each card to the `cards` property of the deck. At the end of the `init` method, the `cards` array should contain a full deck of standard playing card objects.
-
 
 
 
