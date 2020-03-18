@@ -2,25 +2,73 @@ import Foundation
 
 //: ## Step 1
 //: Create an enumeration for the value of a playing card. The values are: `ace`, `two`, `three`, `four`, `five`, `six`, `seven`, `eight`, `nine`, `ten`, `jack`, `queen`, and `king`. Set the raw type of the enum to `Int` and assign the ace a value of `1`.
-
+//enum Rank: Int {
+//
+//    case ace = 1
+//    case two
+//    case three
+//    case four
+//    case five
+//    case six
+//    case seven
+//    case eight
+//    case nine
+//    case ten
+//    case jack
+//    case queen
+//    case king
+//}
 
 
 
 
 //: ## Step 2
 //: Once you've defined the enum as described above, take a look at this built-in protocol, [CustomStringConvertible](https://developer.apple.com/documentation/swift/customstringconvertible) and make the enum conform to that protocol. Make the face cards return a string of their name, and for the numbered cards, simply have it return that number as a string.
+enum Rank: Int, CustomStringConvertible, CaseIterable {
+    case ace = 1
+    case two, three, four, five, six, seven, eight, nine, ten
+    case jack, queen, king
+    var description: String {
+        switch self {
+        case .ace:
+            return "Ace"
+        case .jack:
+            return "Jack"
+        case .queen:
+            return "Queen"
+        case .king:
+            return "King"
+        default:
+            return String(self.rawValue)
+        }
+    }
+}
+    
 
-
+       
 
 
 //: ## Step 3
 //: Create an enum for the suit of a playing card. The values are `hearts`, `diamonds`, `spades`, and `clubs`. Use a raw type of `String` for this enum (this will allow us to get a string version of the enum cases for free, no use of `CustomStringConvertible` required).
-
+enum Suit: String, CaseIterable  {
+    case hearts = "Hearts"
+    case diamonds = "Diamonds"
+    case spades = "Spades"
+    case clubs = "Clubs"
+}
 
 
 
 //: ## Step 4
 //: Using the two enums above, create a `struct` called `Card` to model a single playing card. It should have constant properties for each constituent piece (one for suit and one for rank).
+struct Card: CustomStringConvertible {
+    let rank: Rank
+    let suit: Suit
+    
+    var description: String {
+        return "\(rank.description) of \(suit.rawValue)"
+    }
+}
 
 
 
@@ -32,19 +80,63 @@ import Foundation
 
 //: ## Step 6
 //: Create a `struct` to model a deck of cards. It should be called `Deck` and have an array of `Card` objects as a constant property. A custom `init` function should be created that initializes the array with a card of each rank and suit. You'll want to iterate over all ranks, and then over all suits (this is an example of _nested `for` loops_). See the next 2 steps before you continue with the nested loops.
-
+struct Deck {
+    var cards = [Card]()
+    
+        init() {
+        
+            var deck: [Card] = []
+        
+        for x in Rank.ace.rawValue...Rank.king.rawValue {
+            for suit in [Suit.spades, Suit.hearts, Suit.clubs, Suit.diamonds] {
+                let card = Card(rank: Rank(rawValue: x)!, suit: suit)
+                deck.append(card)
+            }
+        }
+        self.cards = deck
+    }
+}
 
 
 
 
 //: ## Step 7
 //: In the rank enum, add a static computed property that returns all the ranks in an array. Name this property `allRanks`. This is needed because you can't iterate over all cases from an enum automatically.
+extension Rank {
+    
+    static var allRanks: [Rank] {
+        var ranks: [Rank] = []
+        var index = 1
+        
+        while let element = self.init(rawValue: index) {
+            ranks.append(element)
+            index += 1
+        }
+        return ranks
+    }
+}
+print(Rank.allRanks)
+
 
 
 
 
 //: ## Step 8
 //: In the suit enum, add a static computed property that returns all the suits in an array. Name this property `allSuits`.
+extension Suit {
+    
+    static var allSuits: [Suit] {
+        var suits: [Suit] = []
+        var index = 1
+        while let suitElement = self.init(rawValue: String(index)) {
+            suits.append(suitElement)
+            index += 1
+        }
+        return suits
+    }
+}
+let suitArray = Suit.allCases
+print(suitArray)
 
 
 
@@ -61,8 +153,19 @@ import Foundation
 
 //: ## Step 10
 //: These loops will allow you to match up every rank with every suit. Make a `Card` object from all these pairings and append each card to the `cards` property of the deck. At the end of the `init` method, the `cards` array should contain a full deck of standard playing card objects.
+func createDeck() -> [Card] {
+    let ranks = [Rank.ace, Rank.two, Rank.three, Rank.four, Rank.five, Rank.six, Rank.seven, Rank.eight, Rank.nine, Rank.ten, Rank.jack, Rank.queen, Rank.king]
+    let suits = [Suit.spades, Suit.hearts, Suit.diamonds, Suit.clubs]
+    var deck = [Card]()
+    for suit in suits {
+        for rank in ranks {
+            deck.append(Card(rank: rank, suit: suit))
+        }
+    }
+    return deck
+}
 
-
+print(createDeck())
 
 
 
@@ -70,6 +173,7 @@ import Foundation
 //: Add a method to the deck called `drawCard()`. It takes no arguments and it returns a `Card` object. Have it draw a random card from the deck of cards and return it.
 //: - Callout(Hint): There should be `52` cards in the deck. So what if you created a random number within those bounds and then retrieved that card from the deck? Remember that arrays are indexed from `0` and take that into account with your random number picking.
 
+    
 
 
 
@@ -78,6 +182,13 @@ import Foundation
 //: Create a protocol for a `CardGame`. It should have two requirements:
 //: * a gettable `deck` property
 //: * a `play()` method
+protocol CardGame {
+    
+    var deck: Deck { get }
+    
+    func play()
+}
+
 
 
 
@@ -86,13 +197,35 @@ import Foundation
 //: Create a protocol for tracking a card game as a delegate called `CardGameDelegate`. It should have two functional requirements:
 //: * a function called `gameDidStart` that takes a `CardGame` as an argument
 //: * a function with the following signature: `game(player1DidDraw card1: Card, player2DidDraw card2: Card)`
+protocol CardGameDelegate {
+    
+    func gameDidStart(with: CardGame)
+    
+    func game(player1DidDraw card1: Card, player2DidDraw card2: Card)
+    
+    
+}
 
 
 
 
 //: ## Step 14
 //: Create a class called `HighLow` that conforms to the `CardGame` protocol. It should have an initialized `Deck` as a property, as well as an optional delegate property of type `CardGameDelegate`.
+class HighLow: CardGame {
+    func play() {
+        
+    }
+    
 
+    var deck: Deck
+    var delegate: CardGameDelegate?
+    
+    init(deck: Deck, delegate: CardGameDelegate?) {
+        self.deck = deck
+        self.delegate = delegate
+    }
+    
+}
 
 
 
