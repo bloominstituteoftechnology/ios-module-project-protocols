@@ -29,26 +29,16 @@ extension Rank : CustomStringConvertible {
     var description: String {
         
         switch self {
-        case .jack, .queen, .king, .ace :
+        case .jack :
+            return "jack"
+        case .queen :
+            return "queen"
+        case .king :
+            return "king"
+        case .ace :
+            return "ace"
+        default:
             return "\(rawValue)"
-        case .two :
-            return "2"
-        case .three :
-            return "3"
-        case .four :
-            return "4"
-        case .five:
-            return "5"
-        case .six :
-            return "6"
-        case .seven :
-            return "7"
-        case .eight :
-            return "8"
-        case .nine :
-            return "9"
-        case .ten:
-            return "10"
 
         }
     }
@@ -79,7 +69,13 @@ struct Card {
 
 //: ## Step 5
 //: Make the card also conform to `CustomStringConvertible`. When turned into a string, a card's value should look something like this, "ace of spades", or "3 of diamonds".
-
+extension Card : CustomStringConvertible {
+    
+    var description: String{
+        
+        return "\(rank) of \(suit)"
+    }
+}
 
 
 //: ## Step 6
