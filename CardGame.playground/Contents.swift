@@ -105,17 +105,25 @@ struct Deck {
         }
     cards = deckOfCards
     }
+    func drawCard() -> Card {
+        let card = cards[Int.random(in: 0...51)]
+        return card
+    }
 }
+let solitaire = Deck().cards
+let trick = Deck.init().drawCard()
+print(trick)
 
+print(solitaire)
 //: ## Step 7
 //: In the rank enum, add a static computed property that returns all the ranks in an array. Name this property `allRanks`. This is needed because you can't iterate over all cases from an enum automatically.
-
+//  completed within step 1
 
 
 
 //: ## Step 8
 //: In the suit enum, add a static computed property that returns all the suits in an array. Name this property `allSuits`.
-
+//  completed within step 3
 
 
 
@@ -131,7 +139,7 @@ struct Deck {
 
 //: ## Step 10
 //: These loops will allow you to match up every rank with every suit. Make a `Card` object from all these pairings and append each card to the `cards` property of the deck. At the end of the `init` method, the `cards` array should contain a full deck of standard playing card objects.
-
+//  cool, prints to console
 
 
 
