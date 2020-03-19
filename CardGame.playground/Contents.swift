@@ -19,8 +19,9 @@ enum Rank: Int {
     case jack = 11
     case queen = 12
     case king = 13
-    
-    static func allRanks() -> [Rank] {
+        
+    // change to static var
+    static var allRanks: [Rank] {
         return [.ace, .two, .three, .four, .five, .six, .seven, .eight, .nine, .ten, .jack, .queen, .king]
     }
 }
@@ -55,7 +56,7 @@ enum Suit: String {
     case spades = "Spades"
     case clubs = "Clubs"
     
-    static func allSuits() -> [Suit] {
+    static var allSuits: [Suit] {
         return [.hearts, .diamonds, .spades, .clubs]
     }
 }
