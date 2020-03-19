@@ -98,7 +98,7 @@ struct Deck {
         var deckOfCards: [Card] = []
         
         for rank in PlayingCard.allCards {
-            for suit in Suits {
+            for suit in Suit.allSuits {
                 let card = Card(suit: suit, rank: rank)
                 deckOfCards.append(card)
             }
@@ -106,9 +106,6 @@ struct Deck {
     cards = deckOfCards
     }
 }
-
-
-
 
 //: ## Step 7
 //: In the rank enum, add a static computed property that returns all the ranks in an array. Name this property `allRanks`. This is needed because you can't iterate over all cases from an enum automatically.
