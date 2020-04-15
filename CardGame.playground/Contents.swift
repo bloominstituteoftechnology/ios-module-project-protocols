@@ -56,11 +56,11 @@ extension Rank: CustomStringConvertible {
         case .ten:
             return "10"
         case .jack:
-            return "10"
+            return "Jack"
         case .queen:
-            return "10"
+            return "Queen"
         case .king:
-            return "10"
+            return "King"
         }
     }
 }
@@ -108,7 +108,7 @@ struct Deck {
         var deckOfCards: [Card] = []
         for currentRank in Rank.allRanks {
             for currentSuit in Suit.allSuits {
-                let newCard: Card = Card(rank: currentRank.rawValue, suit: currentSuit.rawValue)
+                let newCard: Card = Card(rank: Rank(rawValue: currentRank.rawValue)!.rawValue, suit: Suit(rawValue: currentSuit.rawValue)!.rawValue)
                 deckOfCards.append(newCard)
             }
         }
