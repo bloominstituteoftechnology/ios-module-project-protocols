@@ -55,10 +55,14 @@ extension PlayingCard: CustomStringConvertible {
 }
 
 
-
 //: ## Step 3
 //: Create an enum for the suit of a playing card. The values are `hearts`, `diamonds`, `spades`, and `clubs`. Use a raw type of `String` for this enum (this will allow us to get a string version of the enum cases for free, no use of `CustomStringConvertible` required).
-
+enum Suit: String {
+    case hearts
+    case diamonds
+    case spades
+    case clubs 
+}
 
 
 
