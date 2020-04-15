@@ -101,7 +101,25 @@ struct Card: CustomStringConvertible, Comparable {
 //: ## Step 6
 //: Create a `struct` to model a deck of cards. It should be called `Deck` and have an array of `Card` objects as a constant property. A custom `init` function should be created that initializes the array with a card of each rank and suit. You'll want to iterate over all ranks, and then over all suits (this is an example of _nested `for` loops_). See the next 2 steps before you continue with the nested loops.
 
-
+struct Deck {
+    let deckOfCards: [Card]
+    
+    init() {
+        var deckOfCards: [Card] = []
+        for currentRank in Rank.allRanks {
+            for currentSuit in Suit.allSuits {
+                let newCard: Card = Card(rank: Rank(rawValue: currentRank.rawValue)!.rawValue, suit: Suit(rawValue: currentSuit.rawValue)!.rawValue)
+                deckOfCards.append(newCard)
+            }
+        }
+        self.deckOfCards = deckOfCards
+    }
+    
+    func drawCard() -> Card {
+        let randomNum = Int.random(in: 0...deckOfCards.count-1)
+        return deckOfCards[randomNum]
+    }
+}
 
 
 //: ## Step 7
