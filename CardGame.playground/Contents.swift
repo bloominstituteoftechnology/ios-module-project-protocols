@@ -31,6 +31,42 @@ enum Rank: Int, Comparable {
 
 //: ## Step 2
 //: Once you've defined the enum as described above, take a look at this built-in protocol, [CustomStringConvertible](https://developer.apple.com/documentation/swift/customstringconvertible) and make the enum conform to that protocol. Make the face cards return a string of their name, and for the numbered cards, simply have it return that number as a string.
+extension Rank: CustomStringConvertible {
+    var description: String {
+        switch self {
+        case .ace:
+            return "1"
+        case .two:
+            return "2"
+        case .three:
+            return "3"
+        case .four:
+            return "4"
+        case .five:
+            return "5"
+        case .six:
+            return "6"
+        case .seven:
+            return "7"
+        case .eight:
+            return "8"
+        case .nine:
+            return "9"
+        case .ten:
+            return "10"
+        case .jack:
+            return "Jack"
+        case .queen:
+            return "Queen"
+        case .king:
+            return "King"
+        }
+    }
+}
+
+//: ## Step 3
+//: Create an enum for the suit of a playing card. The values are `hearts`, `diamonds`, `spades`, and `clubs`. Use a raw type of `String` for this enum (this will allow us to get a string version of the enum cases for free, no use of `CustomStringConvertible` required).
+
 enum Suit: String {
     case hearts = "Hearts"
     case diamonds = "Diamonds"
@@ -42,14 +78,21 @@ enum Suit: String {
     }
 }
 
-
-//: ## Step 3
-//: Create an enum for the suit of a playing card. The values are `hearts`, `diamonds`, `spades`, and `clubs`. Use a raw type of `String` for this enum (this will allow us to get a string version of the enum cases for free, no use of `CustomStringConvertible` required).
-
-
 //: ## Step 4
 //: Using the two enums above, create a `struct` called `Card` to model a single playing card. It should have constant properties for each constituent piece (one for suit and one for rank).
-
+struct Card: CustomStringConvertible, Comparable {
+    static func < (lhs: Card, rhs: Card) -> Bool {
+        return lhs.rank > rhs.rank
+    }
+    static func == (lhs: Card, rhs: Card) -> Bool {
+          return lhs.rank == rhs.rank
+    }
+    let rank: Rank.RawValue
+    let suit: Suit.RawValue
+    var description: String {
+        return ("\(rank) of \(suit)")
+    }
+}
 //: ## Step 5
 //: Make the card also conform to `CustomStringConvertible`. When turned into a string, a card's value should look something like this, "ace of spades", or "3 of diamonds".
 
