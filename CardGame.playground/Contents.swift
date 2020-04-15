@@ -182,7 +182,16 @@ class HighLow: CardGame {
     var deck: [Card]
     
     func play() {
-        <#code#>
+        let playerOneCard = Deck(deckOfCards: deck).drawCard()
+        let playerTwoCard = Deck(deckOfCards: deck).drawCard()
+        
+        if playerOneCard < playerTwoCard {
+            print("Player 2 Wins")
+        } else if playerTwoCard < playerOneCard {
+            print("Player 1 Wins")
+        } else {
+            print("It's a tie")
+        }
     }
     
     init(deck: [Card]) {
