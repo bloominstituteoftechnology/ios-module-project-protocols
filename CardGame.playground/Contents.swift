@@ -98,8 +98,6 @@ extension Deck {
 //: ## Step 10
 //: These loops will allow you to match up every rank with every suit. Make a `Card` object from all these pairings and append each card to the `cards` property of the deck. At the end of the `init` method, the `cards` array should contain a full deck of standard playing card objects.
 let myCards = Deck()
-print(myCards)
-
 //: ## Step 11
 //: Add a method to the deck called `drawCard()`. It takes no arguments and it returns a `Card` object. Have it draw a random card from the deck of cards and return it.
 //: - Callout(Hint): There should be `52` cards in the deck. So what if you created a random number within those bounds and then retrieved that card from the deck? Remember that arrays are indexed from `0` and take that into account with your random number picking.
@@ -114,38 +112,60 @@ extension Deck {
 //: * a gettable `deck` property
 //: * a `play()` method
 
-
+protocol CardGame {
+    var myDeck: Deck { get }
+    func play()
+}
 
 
 //: ## Step 13
 //: Create a protocol for tracking a card game as a delegate called `CardGameDelegate`. It should have two functional requirements:
 //: * a function called `gameDidStart` that takes a `CardGame` as an argument
 //: * a function with the following signature: `game(player1DidDraw card1: Card, player2DidDraw card2: Card)`
-
-
+protocol CardGameDelegate {
+    func gameDidStart (_ game: CardGame)
+    func game(player1DidDraw card1: Card, player2DidDraw card2: Card)
+}
 
 
 //: ## Step 14
 //: Create a class called `HighLow` that conforms to the `CardGame` protocol. It should have an initialized `Deck` as a property, as well as an optional delegate property of type `CardGameDelegate`.
 
-
+class HighLow: CardGame{
+    var myDeck: Deck
+    
+    init(myDeck: Deck) {
+        self.myDeck = myDeck
+    }
+    
+    var delegate: CardGameDelegate?
+}
 
 
 //: ## Step 15
 //: As part of the protocol conformance, implement a method called `play()`. The method should draw 2 cards from the deck, one for player 1 and one for player 2. These cards will then be compared to see which one is higher. The winning player will be printed along with a description of the winning card. Work will need to be done to the `Suit` and `Rank` types above, so see the next couple steps before continuing with this step.
-
-
-
+extension HighLow{
+    func play() {
+        let player1Card = myDeck.drawCard()
+        let player2Card = myDeck.drawCard()
+        print("Player 1 drew a \(player1Card) and Player 2 drew a \(player2Card)")
+    }
+}
 
 //: ## Step 16
 //: Take a look at the Swift docs for the [Comparable](https://developer.apple.com/documentation/swift/comparable) protocol. In particular, look at the two functions called `<` and `==`.
 
-
-
-
 //: ## Step 17
 //: Make the `Rank` type conform to the `Comparable` protocol. Implement the `<` and `==` functions such that they compare the `rawValue` of the `lhs` and `rhs` arguments passed in. This will allow us to compare two rank values with each other and determine whether they are equal, or if not, which one is larger.
-
+extension Rank: Comparable{
+    static func < (lhs: Rank, rhs: Rank) -> Bool {
+        if lhs.rawValue < rhs.rawValue{
+            
+        }
+    }
+    
+    
+}
 
 
 
