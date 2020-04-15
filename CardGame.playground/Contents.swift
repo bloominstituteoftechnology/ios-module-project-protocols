@@ -31,7 +31,16 @@ enum Rank: Int, Comparable {
 
 //: ## Step 2
 //: Once you've defined the enum as described above, take a look at this built-in protocol, [CustomStringConvertible](https://developer.apple.com/documentation/swift/customstringconvertible) and make the enum conform to that protocol. Make the face cards return a string of their name, and for the numbered cards, simply have it return that number as a string.
-
+enum Suit: String {
+    case hearts = "Hearts"
+    case diamonds = "Diamonds"
+    case spades = "Spades"
+    case clubs = "Clubs"
+    
+    static var allSuits: [Suit] {
+        return [.hearts, .diamonds, .spades, .clubs]
+    }
+}
 
 
 //: ## Step 3
