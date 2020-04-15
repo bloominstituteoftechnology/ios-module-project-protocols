@@ -107,10 +107,17 @@ struct Deck {
         }
     cards = deckOfCards
     }
+    
+    func drawCard() -> Card {
+        let card = cards[Int.random(in: 0...51)]
+        return card
+    }
 }
 
-
-
+let solitaire = Deck().cards
+let trick = Deck.init().drawCard()
+print(solitaire)
+print(trick)
 //: ## Step 7
 //: In the rank enum, add a static computed property that returns all the ranks in an array. Name this property `allRanks`. This is needed because you can't iterate over all cases from an enum automatically.
 //  completed within step 1
@@ -145,7 +152,7 @@ struct Deck {
 //: - Callout(Hint): There should be `52` cards in the deck. So what if you created a random number within those bounds and then retrieved that card from the deck? Remember that arrays are indexed from `0` and take that into account with your random number picking.
 
 
-
+//  completed within step 6; working beautifully
 
 
 //: ## Step 12
