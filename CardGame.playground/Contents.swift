@@ -172,9 +172,11 @@ class HighLow: CardGame {
     var cardGameDelegate: CardGameDelegate?
     
     func play() {
+        cardGameDelegate?.gameDidStart()
         let p1Card = deck.drawCard()
         let p2Card = deck.drawCard()
         
+        cardGameDelegate?.game(player1DidDraw: p1Card, player2DidDraw: p2Card)
         if p1Card.rank == p2Card.rank {
             print("Round ends in a draw with \(p1Card.rank)!")
         } else if p1Card.rank > p2Card.rank {
@@ -222,7 +224,7 @@ class CardGameTracker: CardGameDelegate {
     }
     
     func game(player1DidDraw card1: Card, player2DidDraw card2: Card) {
-        print("Player 1 drew a \(card2) and player 2 drew a \(card2).")
+        print("Player 1 drew a \(card1) and player 2 drew a \(card2).")
     }
 }
 
@@ -235,4 +237,6 @@ class CardGameTracker: CardGameDelegate {
 //: Player 1 wins with 2 of diamonds.
 //: ```
 let newGame = HighLow()
+let newTracker = CardGameTracker()
+newGame.cardGameDelegate = newTracker
 newGame.play()
