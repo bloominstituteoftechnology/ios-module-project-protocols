@@ -73,7 +73,6 @@ extension Suit {
         return [.clubs, .diamonds, .hearts, .spades]
     }
 }
-
 //: ## Step 9
 //: Back to the `Deck` and the nested loops. Now that you have a way to get arrays of all rank values and all suit values, create 2 `for` loops in the `init` method, one nested inside the other, where you iterate over each value of rank, and then iterate over each value of suit. See an example below to get an idea of how this will work. Imagine an enum that contains the 4 cardinal directions, and imagine that enum has a property `allDirections` that returns an array of them.
 //: ```
@@ -93,8 +92,6 @@ extension Deck {
         self.deckOfCards = deckOfCards
     }
 }
-
-
 //: ## Step 10
 //: These loops will allow you to match up every rank with every suit. Make a `Card` object from all these pairings and append each card to the `cards` property of the deck. At the end of the `init` method, the `cards` array should contain a full deck of standard playing card objects.
 let myCards = Deck()
@@ -116,8 +113,6 @@ protocol CardGame {
     var myDeck: Deck { get }
     func play()
 }
-
-
 //: ## Step 13
 //: Create a protocol for tracking a card game as a delegate called `CardGameDelegate`. It should have two functional requirements:
 //: * a function called `gameDidStart` that takes a `CardGame` as an argument
@@ -126,8 +121,6 @@ protocol CardGameDelegate {
     func gameDidStart (_ game: CardGame)
     func game(player1DidDraw card1: Card, player2DidDraw card2: Card)
 }
-
-
 //: ## Step 14
 //: Create a class called `HighLow` that conforms to the `CardGame` protocol. It should have an initialized `Deck` as a property, as well as an optional delegate property of type `CardGameDelegate`.
 
@@ -140,8 +133,6 @@ class HighLow: CardGame{
     
     var delegate: CardGameDelegate?
 }
-
-
 //: ## Step 15
 //: As part of the protocol conformance, implement a method called `play()`. The method should draw 2 cards from the deck, one for player 1 and one for player 2. These cards will then be compared to see which one is higher. The winning player will be printed along with a description of the winning card. Work will need to be done to the `Suit` and `Rank` types above, so see the next couple steps before continuing with this step.
 extension HighLow{
@@ -161,7 +152,6 @@ extension HighLow{
         }
     }
 }
-
 //: ## Step 16
 //: Take a look at the Swift docs for the [Comparable](https://developer.apple.com/documentation/swift/comparable) protocol. In particular, look at the two functions called `<` and `==`.
 
@@ -176,10 +166,6 @@ extension Rank: Comparable{
         return lhs.rawValue == rhs.rawValue
     }
 }
-
-
-
-
 //: Step 18
 //: Make the `Card` type conform to the `Comparable` protocol. Implement the `<` and `==` methods such that they compare the ranks of the `lhs` and `rhs` arguments passed in. For the `==` method, compare **both** the rank and the suit.
 extension Card: Comparable{
