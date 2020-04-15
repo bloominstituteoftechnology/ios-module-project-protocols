@@ -162,7 +162,7 @@ extension CardSuit {
 //: Create a protocol for a `CardGame`. It should have two requirements:
 //: * a gettable `deck` property
 //: * a `play()` method
-protocol CardGame {
+protocol CardGame  {
     var deck: Deck { get }
     
     func play()
@@ -199,12 +199,13 @@ class HighLow: CardGame {
         
         delegate?.gameDidStart(game: self)
         var counter: Int = 1
-   
+        var player1Count = 0
+        var player2Count = 0
         
         while counter <= 7 {
         let player1Draw = deck.drawCard()
         let player2Draw = deck.drawCard()
-    
+       
     
         delegate?.game(player1DidDraw: player1Draw, player2DidDraw: player2Draw)
 
@@ -216,13 +217,22 @@ class HighLow: CardGame {
         
         if player1Draw < player2Draw {
             print ("Player 2 wins with the \(player2Draw).\n")
-       
+            player2Count += 1
         } else if player1Draw > player2Draw {
             print ("Player 1 wins with the \(player1Draw).\n")
-      
+            player1Count += 1
         } else { print ("Round ends in a draw with the \(player1Draw).\n")
        }
       }
+        
+        if player1Count > player2Count {
+            print("Player 1 Wins the match")
+        } else if player1Count < player2Count {
+            print("Player 2 Wins the match")
+        } else { print("The match, remarkably, is a total draw)")
+        }
+        
+        
      }
    }
 //: ## Step 15
@@ -317,3 +327,4 @@ class CardGameTracker: CardGameDelegate {
     let gameOn = HighLow()
     gameOn.delegate = CardGameTracker()
    gameOn.play()
+
