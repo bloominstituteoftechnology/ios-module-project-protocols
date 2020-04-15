@@ -140,13 +140,13 @@ extension HighLow{
         delegate?.gameDidStart(self)
         let player1Card = myDeck.drawCard()
         let player2Card = myDeck.drawCard()
-        
+        delegate?.game(player1DidDraw: player1Card, player2DidDraw: player2Card)
         if player1Card.rank == player2Card.rank{
             print("We have a draw! Player 1's card \(player1Card.description) and Player 2's card \(player2Card.description) are equal ranks!")
         } else if player2Card.rank > player1Card.rank{
-            print("We have a winner! Player 2 wins with a \(player2Card.description) against Player 1's \(player1Card.description)")
+            print("We have a winner! Player 2 wins with a \(player2Card.description)!")
         } else if player1Card.rank > player2Card.rank{
-            print("We have a winner! Player 1 wins with a \(player1Card.description) against Player 2's \(player2Card.description)")
+            print("We have a winner! Player 1 wins with a \(player1Card.description)!")
         } else{
             print("Folks! We have an issue")
         }
