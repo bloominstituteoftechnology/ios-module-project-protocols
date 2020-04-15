@@ -2,7 +2,7 @@ import Foundation
 
 //: ## Step 1
 //: Create an enumeration for the value of a playing card. The values are: `ace`, `two`, `three`, `four`, `five`, `six`, `seven`, `eight`, `nine`, `ten`, `jack`, `queen`, and `king`. Set the raw type of the enum to `Int` and assign the ace a value of `1`.
-enum CardValue: Int{
+enum Rank: Int{
     case ace = 1
     case two
     case three
@@ -19,7 +19,7 @@ enum CardValue: Int{
 }
 //: ## Step 2
 //: Once you've defined the enum as described above, take a look at this built-in protocol, [CustomStringConvertible](https://developer.apple.com/documentation/swift/customstringconvertible) and make the enum conform to that protocol. Make the face cards return a string of their name, and for the numbered cards, simply have it return that number as a string.
-extension CardValue: CustomStringConvertible{
+extension Rank: CustomStringConvertible{
     var description: String {
         switch self {
         case .ace, .two, .three, .four, .five, .six, .seven, .eight, .nine, .ten:
@@ -41,13 +41,10 @@ enum Suit: String{
     case spades = "Spades"
     case clubs = "Clubs"
 }
-
-
-
 //: ## Step 4
 //: Using the two enums above, create a `struct` called `Card` to model a single playing card. It should have constant properties for each constituent piece (one for suit and one for rank).
 struct Card{
-    var rank: CardValue
+    var rank: Rank
     var suit: Suit
 }
 //: ## Step 5
@@ -60,31 +57,22 @@ extension Card: CustomStringConvertible{
 //: ## Step 6
 //: Create a `struct` to model a deck of cards. It should be called `Deck` and have an array of `Card` objects as a constant property. A custom `init` function should be created that initializes the array with a card of each rank and suit. You'll want to iterate over all ranks, and then over all suits (this is an example of _nested `for` loops_). See the next 2 steps before you continue with the nested loops.
 struct Deck{
-    let deckOfCards: [Card] = []
-    
-    init(deckofCards: [Card]){
-        for card in CardValue.RawValue{
-                    
-        }
-        
-        
-    }
+    let deckOfCards: [Card]
 }
-
-
-
-
 //: ## Step 7
 //: In the rank enum, add a static computed property that returns all the ranks in an array. Name this property `allRanks`. This is needed because you can't iterate over all cases from an enum automatically.
-
-
-
-
+extension Rank {
+   static var allRanks: [Rank]{
+          return [.ace, .two, .three, .four, .five, .six, .seven, .eight, .nine, .ten, .jack, .queen, .king]
+      }
+}
 //: ## Step 8
 //: In the suit enum, add a static computed property that returns all the suits in an array. Name this property `allSuits`.
-
-
-
+extension Suit {
+    static var allSuits: [Suit]{
+        return [.clubs, .diamonds, .hearts, .spades]
+    }
+}
 
 //: ## Step 9
 //: Back to the `Deck` and the nested loops. Now that you have a way to get arrays of all rank values and all suit values, create 2 `for` loops in the `init` method, one nested inside the other, where you iterate over each value of rank, and then iterate over each value of suit. See an example below to get an idea of how this will work. Imagine an enum that contains the 4 cardinal directions, and imagine that enum has a property `allDirections` that returns an array of them.
@@ -93,24 +81,34 @@ struct Deck{
 //:
 //:}
 //:```
-
+extension Deck {
+    init(){
+        var deckOfCards: [Card] = []
+        for aRank in Rank.allRanks{
+            for aSuit in Suit.allSuits{
+                let newCard = Card(rank: Rank(rawValue: aRank.rawValue)!, suit: Suit(rawValue: aSuit.rawValue)!)
+                deckOfCards.append(newCard)
+            }
+        }
+        self.deckOfCards = deckOfCards
+    }
+}
 
 
 //: ## Step 10
 //: These loops will allow you to match up every rank with every suit. Make a `Card` object from all these pairings and append each card to the `cards` property of the deck. At the end of the `init` method, the `cards` array should contain a full deck of standard playing card objects.
-
-
-
-
+let myCards = Deck()
+print(myCards)
 
 //: ## Step 11
 //: Add a method to the deck called `drawCard()`. It takes no arguments and it returns a `Card` object. Have it draw a random card from the deck of cards and return it.
 //: - Callout(Hint): There should be `52` cards in the deck. So what if you created a random number within those bounds and then retrieved that card from the deck? Remember that arrays are indexed from `0` and take that into account with your random number picking.
-
-
-
-
-
+extension Deck {
+    func drawCard() -> Card{
+        let randomCard = Int.random(in: 0...deckOfCards.count-1)
+        return deckOfCards[randomCard]
+    }
+}
 //: ## Step 12
 //: Create a protocol for a `CardGame`. It should have two requirements:
 //: * a gettable `deck` property
