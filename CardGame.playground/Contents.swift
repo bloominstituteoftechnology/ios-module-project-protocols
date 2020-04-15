@@ -11,7 +11,7 @@ extension Rank: CustomStringConvertible {
     var description: String {
         switch self {
         case .ace:
-            return "Ace"
+            return "ace"
         case .two:
             return "2"
         case .three:
@@ -31,11 +31,11 @@ extension Rank: CustomStringConvertible {
         case .ten:
             return "10"
         case .jack:
-            return "Jack"
+            return "jack"
         case .queen:
-            return "Queen"
+            return "queen"
         case.king:
-            return "King"
+            return "king"
         }
     }
 }
@@ -159,7 +159,10 @@ protocol CardGame {
 //: * a function with the following signature: `game(player1DidDraw card1: Card, player2DidDraw card2: Card)`
 protocol CardGameDelegate {
     func gameDidStart(_ cardGame: CardGame)
-    func game(_ player1DidDraw_card1: Card, _ player2DidDraw_card2: Card)
+    func game(_ player1DidDraw: Card, _ player2DidDraw: Card)
+    func player1Win()
+    func player2Win()
+    func gameDidEnd()
 }
 //: ## Step 14
 //: Create a class called `HighLow` that conforms to the `CardGame` protocol. It should have an initialized `Deck` as a property, as well as an optional delegate property of type `CardGameDelegate`.
@@ -167,22 +170,34 @@ class HighLow: CardGame {
     var deck: Deck = Deck()
     var delegate: CardGameDelegate?
     
-    
-    func play() {
-        let playerCard = deck.drawCard()
-        let opponentCard = deck.drawCard()
+    func play(_ numberOfRounds: Int) {
+        delegate?.gameDidStart(self)
         
-        print("Player 1 drew a \(playerCard.description), player 2 drew a \(opponentCard.description).")
-        
-        if playerCard == opponentCard {
-            print("Round ends in a tie with \(playerCard).")
-        } else if playerCard < opponentCard {
-            print("Player 2 wins with \(opponentCard).")
-        } else {
-            print("Player 1 wins with \(playerCard).")
+        for _ in 1...numberOfRounds {
+            let playerCard = deck.drawCard()
+            let opponentCard = deck.drawCard()
+            delegate?.game(playerCard, opponentCard)
+            
+            //print("Player 1 drew a \(playerCard.description), player 2 drew a \(opponentCard.description).")
+            
+            if playerCard == opponentCard {
+                print("Round ends in a tie with \(playerCard).")
+            } else if playerCard < opponentCard {
+                print("Player 2 wins with \(opponentCard).")
+                delegate?.player2Win()
+            } else {
+                print("Player 1 wins with \(playerCard).")
+                delegate?.player1Win()
+            }
         }
+        
+        delegate?.gameDidEnd()
+        
     }
     
+    func play() {
+        play(1)
+    }
 }
 //: ## Step 15
 //: As part of the protocol conformance, implement a method called `play()`. The method should draw 2 cards from the deck, one for player 1 and one for player 2. These cards will then be compared to see which one is higher. The winning player will be printed along with a description of the winning card. Work will need to be done to the `Suit` and `Rank` types above, so see the next couple steps before continuing with this step.
@@ -262,12 +277,34 @@ extension Card: Comparable {
 //: Create a class called `CardGameTracker` that conforms to the `CardGameDelegate` protocol. Implement the two required functions: `gameDidStart` and `game(player1DidDraw:player2DidDraw)`. Model `gameDidStart` after the same method in the guided project from today. As for the other method, have it print a message like the following:
 //: * "Player 1 drew a 6 of hearts, player 2 drew a jack of spades."
 class CardGameTracker: CardGameDelegate {
+    var rounds: Int = 0
+    var player1Wins: Int = 0
+    var player2Wins: Int = 0
+    
     func gameDidStart(_ cardGame: CardGame) {
-        <#code#>
+        if cardGame is HighLow {
+            print("Started a new game of High Low")
+        }
     }
     
-    func game(_ player1DidDraw_card1: Card, _ player2DidDraw_card2: Card) {
-        <#code#>
+    func game(_ player1DidDraw: Card, _ player2DidDraw: Card) {
+        rounds += 1
+        print("Player 1 drew a \(player1DidDraw.description), player 2 drew a \(player2DidDraw.description).")
+    }
+    
+    func player1Win() {
+        player1Wins += 1
+    }
+    
+    func player2Win() {
+        player2Wins += 1
+    }
+    
+    func gameDidEnd() {
+        print("Game has ended after \(rounds) rounds")
+        if rounds > 1 {
+            print("Player 1 won \(player1Wins) rounds. Player 2 won \(player2Wins) rounds.")
+        }
     }
 }
 //: Step 21
@@ -278,5 +315,7 @@ class CardGameTracker: CardGameDelegate {
 //: Player 1 drew a 2 of diamonds, player 2 drew a ace of diamonds.
 //: Player 1 wins with 2 of diamonds.
 //: ```
+var testGame = HighLow()
+testGame.delegate = CardGameTracker()
 
-
+testGame.play(10)
