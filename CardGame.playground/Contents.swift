@@ -39,7 +39,8 @@ extension CardValue: CustomStringConvertible {
             return "Queen"
         case .king:
             return "King"
-        
+        case .ace:
+            return "Ace"
         default:
             return "\(rawValue)"
         }
@@ -74,22 +75,33 @@ struct Card {
 //: Make the card also conform to `CustomStringConvertible`. When turned into a string, a card's value should look something like this, "ace of spades", or "3 of diamonds".
 extension Card: CustomStringConvertible {
     var description: String {
-        return "You drew the \(value.description) of \(suit)."
+        return "\(value.description) of \(suit)."
     }
 }
 
 
 //: ## Step 6
 //: Create a `struct` to model a deck of cards. It should be called `Deck` and have an array of `Card` objects as a constant property. A custom `init` function should be created that initializes the array with a card of each rank and suit. You'll want to iterate over all ranks, and then over all suits (this is an example of _nested `for` loops_). See the next 2 steps before you continue with the nested loops.
-struct Deck {_
+struct Deck {
+    
     let cardDeck: [Card]
     
     init() {
-        for
-        
-            for
+        var cards: [Card] = []
+       
+        // insert nested for loops here
+        for value in CardValue.allRanks() {
+            for suit in CardSuit.allSuits() {
+               cards.append(Card(suit: suit, value: value))
+            }
+        }
+        self.cardDeck = cards
+            
     }
     
+    func drawCard() -> Card {
+        return cardDeck[Int.random(in: 0...51)]
+        }
     
 }
 
@@ -128,13 +140,13 @@ extension CardSuit {
 //:
 //:}
 //:```
-
+// for loops added in step 6
 
 
 //: ## Step 10
 //: These loops will allow you to match up every rank with every suit. Make a `Card` object from all these pairings and append each card to the `cards` property of the deck. At the end of the `init` method, the `cards` array should contain a full deck of standard playing card objects.
 
-
+// card deck created
 
 
 
@@ -143,14 +155,18 @@ extension CardSuit {
 //: - Callout(Hint): There should be `52` cards in the deck. So what if you created a random number within those bounds and then retrieved that card from the deck? Remember that arrays are indexed from `0` and take that into account with your random number picking.
 
 
-
+// function created to return a random selected card from cardDeck
 
 
 //: ## Step 12
 //: Create a protocol for a `CardGame`. It should have two requirements:
 //: * a gettable `deck` property
 //: * a `play()` method
-
+protocol CardGame {
+    var deck: Deck { get }
+    
+    func play()
+}
 
 
 
@@ -158,16 +174,54 @@ extension CardSuit {
 //: Create a protocol for tracking a card game as a delegate called `CardGameDelegate`. It should have two functional requirements:
 //: * a function called `gameDidStart` that takes a `CardGame` as an argument
 //: * a function with the following signature: `game(player1DidDraw card1: Card, player2DidDraw card2: Card)`
-
+protocol CardGameDelegate {
+    func gameDidStart(game: CardGame)
+    func game(player1DidDraw card1: Card, player2DidDraw card2: Card)
+}
 
 
 
 //: ## Step 14
 //: Create a class called `HighLow` that conforms to the `CardGame` protocol. It should have an initialized `Deck` as a property, as well as an optional delegate property of type `CardGameDelegate`.
 
+class HighLow: CardGame {
+    
+    // initialized deck
+    var deck = Deck()
+    
+    // delegate optional
+    var delegate: CardGameDelegate?
+    
+    
+    
+    // step 15
+    func play() {
+        
+        delegate?.gameDidStart(game: self)
+        
+        let player1Draw = deck.drawCard()
+        let player2Draw = deck.drawCard()
+    
+    
+        delegate?.game(player1DidDraw: player1Draw, player2DidDraw: player2Draw)
 
+    
 
+      
+        
+    
+    
+        if player1Draw < player2Draw {
+         print ("Player 2 wins with the \(player2Draw)")
+        
+        } else if player1Draw > player2Draw {
+            print ("Player 1 wins with the \(player1Draw)")
+       
+        } else { print ("Round ends in a draw with the \(player1Draw)")
+        }
+    }
 
+}
 //: ## Step 15
 //: As part of the protocol conformance, implement a method called `play()`. The method should draw 2 cards from the deck, one for player 1 and one for player 2. These cards will then be compared to see which one is higher. The winning player will be printed along with a description of the winning card. Work will need to be done to the `Suit` and `Rank` types above, so see the next couple steps before continuing with this step.
 
@@ -179,9 +233,29 @@ extension CardSuit {
 
 
 
-
 //: ## Step 17
 //: Make the `Rank` type conform to the `Comparable` protocol. Implement the `<` and `==` functions such that they compare the `rawValue` of the `lhs` and `rhs` arguments passed in. This will allow us to compare two rank values with each other and determine whether they are equal, or if not, which one is larger.
+extension CardValue: Comparable {
+   
+   static func == (lhs: CardValue, rhs: CardValue) -> Bool {
+          if lhs.rawValue == rhs.rawValue { return true }
+                else  { return false}
+            }
+    static func < (lhs: CardValue, rhs: CardValue) -> Bool {
+        if lhs.rawValue < rhs.rawValue { return true }
+        else  { return false}
+    }
+  
+}
+    
+     
+        
+        
+        
+        
+  
+    
+
 
 
 
@@ -189,7 +263,18 @@ extension CardSuit {
 
 //: Step 18
 //: Make the `Card` type conform to the `Comparable` protocol. Implement the `<` and `==` methods such that they compare the ranks of the `lhs` and `rhs` arguments passed in. For the `==` method, compare **both** the rank and the suit.
-
+extension Card: Comparable {
+   
+   static func == (lhs: Card, rhs: Card) -> Bool {
+    if lhs.value == rhs.value && lhs.suit == rhs.suit { return true }
+                else  { return false}
+            }
+    static func < (lhs: Card, rhs: Card) -> Bool {
+        if lhs.value < rhs.value{ return true }
+        else  { return false}
+    }
+  
+}
 
 
 
