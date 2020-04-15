@@ -79,7 +79,7 @@ struct Card: CustomStringConvertible, Comparable {
     let rank: Rank
     let suit: Suit
     var description: String {
-        return ("\(rank) of \(suit)")
+        return ("\(rank) of \(suit.rawValue)")
     }
 }
 
@@ -131,7 +131,7 @@ class HighLow: CardGame {
         
         cardGameDelegate?.game(player1DidDraw: player1Card, player2DidDraw: player2Card)
         if player1Card.rank == player2Card.rank {
-            print("Round ends in a tie with a \(player2Card.description)!")
+            print("Round ends in a tie with a \(player2Card.rank)!")
         } else if player1Card.rank > player2Card.rank {
             print("Player 1 wins with a \(player1Card.description)")
         } else if player1Card.rank < player2Card.rank {
