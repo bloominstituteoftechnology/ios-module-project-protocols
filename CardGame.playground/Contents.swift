@@ -180,24 +180,34 @@ protocol CardGameDelegate {
 
 //: ## Step 14
 //: Create a class called `HighLow` that conforms to the `CardGame` protocol. It should have an initialized `Deck` as a property, as well as an optional delegate property of type `CardGameDelegate`.
+//Step 14, 15, 19, 21
+
 class HighLow: CardGame {
     var deck: Deck
     var delegate: CardGameDelegate?
     //MARK: STEP 15
     func play() {
+       
         let playerOne = deck.drawCard()
         let playerTwo = deck.drawCard()
+        delegate?.gameDidStart(game: self)
+        
+        if playerOne == playerTwo {
+            print("Round ends with a tie with \(playerOne)")
+        } else if playerTwo < playerOne {
+            print("Player one wins with \(playerOne)")
+            { else if playerOne < playerTwo {
+        print("Player two wins with \(playerTwo)") }
+        }
     }
-    
+}
+    init(deck: Deck, delegate: CardGameDelegate?) {
+            self.deck = deck
+            self.delegate = delegate
+        }
+    }
     
 
-    
-    init(deck: Deck, delegate: CardGameDelegate?) {
-        self.deck = deck
-        self.delegate = delegate
-    }
-    
-}
 
 
 
@@ -210,7 +220,7 @@ class HighLow: CardGame {
 //: ## Step 16
 //: Take a look at the Swift docs for the [Comparable](https://developer.apple.com/documentation/swift/comparable) protocol. In particular, look at the two functions called `<` and `==`.
 
-
+//
 
 
 //: ## Step 17
@@ -235,7 +245,7 @@ extension PlayingCards: Comparable {
 //: Make the `Card` type conform to the `Comparable` protocol. Implement the `<` and `==` methods such that they compare the ranks of the `lhs` and `rhs` arguments passed in. For the `==` method, compare **both** the rank and the suit.
 extension Card: Comparable {
     static func < (lhs: Card, rhs: Card) -> Bool {
-        return lhs.rank < rhs.rank
+        if lhs.rank.rawValue < rhs.rank.rawValue { return true } else { return  false }
 }
     static func > (lhs: Card, rhs: Card) -> Bool {
         return lhs.rank > rhs.rank
@@ -253,7 +263,7 @@ extension Card: Comparable {
 //: * Ends in a tie, something like, "Round ends in a tie with 3 of clubs."
 //: * Player 1 wins with a higher card, e.g. "Player 1 wins with 8 of hearts."
 //: * Player 2 wins with a higher card, e.g. "Player 2 wins with king of diamonds."
-
+// Refer to step 14
 
 
 //: ## Step 20
@@ -261,7 +271,7 @@ extension Card: Comparable {
 //: * "Player 1 drew a 6 of hearts, player 2 drew a jack of spades."
     class CardGameTracker: CardGameDelegate {
         func gameDidStart(game: CardGame) {
-            <#code#>
+            print() //rework this
         }
         
         func game(player1DidDraw card1: Card, player2DidDraw card2: Card) {
@@ -279,4 +289,6 @@ extension Card: Comparable {
 //: Player 1 drew a 2 of diamonds, player 2 drew a ace of diamonds.
 //: Player 1 wins with 2 of diamonds.
 //: ```
+//Refer to step 14
 }
+
