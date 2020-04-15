@@ -210,17 +210,17 @@ class HighLow: CardGame {
 
     
 
-      
+        print("Round \(counter) result:")
         counter += 1
     
-    
+        
         if player1Draw < player2Draw {
-            print ("Player 2 wins with the \(player2Draw).")
+            print ("Player 2 wins with the \(player2Draw).\n")
        
         } else if player1Draw > player2Draw {
-            print ("Player 1 wins with the \(player1Draw).")
+            print ("Player 1 wins with the \(player1Draw).\n")
       
-        } else { print ("Round ends in a draw with the \(player1Draw).")
+        } else { print ("Round ends in a draw with the \(player1Draw).\n")
        }
       }
      }
@@ -296,7 +296,7 @@ extension Card: Comparable {
 class CardGameTracker: CardGameDelegate {
     func gameDidStart(game: CardGame) {
         if game is HighLow {
-            print("Commencing a new game of High Low. This will be a best of 7. Shuffle up and deal!")
+            print("Commencing a new game of High Low. This will be a best of 7. Shuffle up and deal! \n")
         }
     }
     
