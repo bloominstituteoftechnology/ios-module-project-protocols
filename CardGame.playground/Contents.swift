@@ -141,7 +141,6 @@ struct Deck {
 //: ## Step 10
 //: These loops will allow you to match up every rank with every suit. Make a `Card` object from all these pairings and append each card to the `cards` property of the deck. At the end of the `init` method, the `cards` array should contain a full deck of standard playing card objects.
 let newDeck: Deck = Deck()
-print(newDeck)
 
 //: ## Step 11
 //: Add a method to the deck called `drawCard()`. It takes no arguments and it returns a `Card` object. Have it draw a random card from the deck of cards and return it.
@@ -170,14 +169,21 @@ protocol CardGameDelegate {
 //: Create a class called `HighLow` that conforms to the `CardGame` protocol. It should have an initialized `Deck` as a property, as well as an optional delegate property of type `CardGameDelegate`.
 class HighLow: CardGame {
     var deck: Deck = Deck()
-    let cardGameDelegate: CardGameDelegate?
+    var cardGameDelegate: CardGameDelegate?
     
     func play() {
-        var p1Card = deck.drawCard()
-        var p2Card = deck.drawCard()
+        let p1Card = deck.drawCard()
+        let p2Card = deck.drawCard()
         
-        // TODO: if p1Card == ......
-        
+        if p1Card.rank == p2Card.rank {
+            print("Round ends in a draw with \(p1Card.rank)!")
+        } else if p1Card.rank > p2Card.rank {
+            print("Player 1 wins with a draw of \(p1Card)")
+        } else if p1Card.rank < p2Card.rank {
+            print("Player 2 wins with a draw of \(p2Card)")
+        } else {
+            print("Error: call maintenance!")
+        }
     }
 }
 
@@ -202,14 +208,23 @@ class HighLow: CardGame {
 //: * Ends in a tie, something like, "Round ends in a tie with 3 of clubs."
 //: * Player 1 wins with a higher card, e.g. "Player 1 wins with 8 of hearts."
 //: * Player 2 wins with a higher card, e.g. "Player 2 wins with king of diamonds."
-
-
+// Done
 
 //: ## Step 20
 //: Create a class called `CardGameTracker` that conforms to the `CardGameDelegate` protocol. Implement the two required functions: `gameDidStart` and `game(player1DidDraw:player2DidDraw)`. Model `gameDidStart` after the same method in the guided project from today. As for the other method, have it print a message like the following:
 //: * "Player 1 drew a 6 of hearts, player 2 drew a jack of spades."
-
-
+class CardGameTracker: CardGameDelegate {
+    var numberOfTurns = 0
+    
+    func gameDidStart() {
+        print(">>> Started a new game of High Low! <<<")
+        print("The game is using a full deck of cards.")
+    }
+    
+    func game(player1DidDraw card1: Card, player2DidDraw card2: Card) {
+        print("Player 1 drew a \(card2) and player 2 drew a \(card2).")
+    }
+}
 
 //: Step 21
 //: Time to test all the types you've created. Create an instance of the `HighLow` class. Set the `delegate` property of that object to an instance of `CardGameTracker`. Lastly, call the `play()` method on the game object. It should print out to the console something that looks similar to the following:
@@ -219,5 +234,5 @@ class HighLow: CardGame {
 //: Player 1 drew a 2 of diamonds, player 2 drew a ace of diamonds.
 //: Player 1 wins with 2 of diamonds.
 //: ```
-
-
+let newGame = HighLow()
+newGame.play()
