@@ -2,7 +2,7 @@ import Foundation
 
 //: ## Step 1
 //: Create an enumeration for the value of a playing card. The values are: `ace`, `two`, `three`, `four`, `five`, `six`, `seven`, `eight`, `nine`, `ten`, `jack`, `queen`, and `king`. Set the raw type of the enum to `Int` and assign the ace a value of `1`.
-enum ValueOfAPlayCard: Int {
+enum Rank: Int {
     case ace = 1
     case two
     case three
@@ -13,56 +13,187 @@ enum ValueOfAPlayCard: Int {
     case eight
     case nine
     case ten
-    case jack 
+    case jack
     case queen
     case king
+    
+    var allRanks: Int {
+        switch self {
+        case .ace:
+            return 1
+        case .two:
+            return 2
+        case .three:
+            return 3
+        case .four:
+            return 4
+        case .five:
+            return 5
+        case .six:
+            return 6
+        case .seven:
+            return 7
+        case .eight:
+            return 8
+        case .nine:
+            return 9
+        case .ten:
+            return 10
+        case .jack:
+            return 11
+        case .queen:
+            return 12
+        case .king:
+            return 13
+        }
+    }
 }
+
 //: ## Step 2
 //: Once you've defined the enum as described above, take a look at this built-in protocol, [CustomStringConvertible](https://developer.apple.com/documentation/swift/customstringconvertible) and make the enum conform to that protocol. Make the face cards return a string of their name, and for the numbered cards, simply have it return that number as a string.
-extension ValueOfAPlayCard: CustomStringConvertible {
+extension Rank: CustomStringConvertible {
     var description: String {
-        return "(\(ValueOfAPlayCard.ace.rawValue))"
+        return "(You have \(Rank.ace) with is \(Rank.ace.rawValue)"
     }
 }
 
 //: ## Step 3
 //: Create an enum for the suit of a playing card. The values are `hearts`, `diamonds`, `spades`, and `clubs`. Use a raw type of `String` for this enum (this will allow us to get a string version of the enum cases for free, no use of `CustomStringConvertible` required).
-enum SuitOFAPlayingCard: String {
+enum Suit: String {
     case hearts = "Hearts"
     case diamonds = "Diamonds"
     case spades = "Spades"
     case clubs = "Clubs"
+    
+    var description: String {
+        switch self {
+        case .hearts:
+            return "Hearts"
+        case .diamonds:
+            return "Diamonds"
+        case .spades:
+            return "Spades"
+        case .clubs:
+            return "Clubs"
+        }
+    }
 }
 
 //: ## Step 4
 //: Using the two enums above, create a `struct` called `Card` to model a single playing card. It should have constant properties for each constituent piece (one for suit and one for rank).
-
-
-
+struct Card {
+    let suit: Suit
+    let rank: Rank
+}
 
 //: ## Step 5
 //: Make the card also conform to `CustomStringConvertible`. When turned into a string, a card's value should look something like this, "ace of spades", or "3 of diamonds".
-
-
+extension Card: CustomStringConvertible {
+    var description: String {
+        return "\(rank.rawValue) of \(suit.rawValue)"
+    }
+}
 
 //: ## Step 6
 //: Create a `struct` to model a deck of cards. It should be called `Deck` and have an array of `Card` objects as a constant property. A custom `init` function should be created that initializes the array with a card of each rank and suit. You'll want to iterate over all ranks, and then over all suits (this is an example of _nested `for` loops_). See the next 2 steps before you continue with the nested loops.
-
-
-
-
+//struct Deck {
+//    let cards: [Card]
+//
+//    init(cards: [Card]) {
+//        self.cards = cards
+//
+//        for cardRank in cards {
+//            for cardSuite in cards {
+//                print("I have a \(cardRank.rank) of \(cardSuite.suit)")
+//            }
+//        }
+//    }
+//
+//    func drawCard() -> Card {
+//
+//    }
+//}
 
 //: ## Step 7
 //: In the rank enum, add a static computed property that returns all the ranks in an array. Name this property `allRanks`. This is needed because you can't iterate over all cases from an enum automatically.
-
+/*
+ 
+ enum RankOfAPlayCard: Int {
+     case ace = 1
+     case two
+     case three
+     case four
+     case five
+     case six
+     case seven
+     case eight
+     case nine
+     case ten
+     case jack
+     case queen
+     case king
+     
+     var allRanks: Int {
+         switch self {
+         case .ace:
+             return 1
+         case .two:
+             return 2
+         case .three:
+             return 3
+         case .four:
+             return 4
+         case .five:
+             return 5
+         case .six:
+             return 6
+         case .seven:
+             return 7
+         case .eight:
+             return 8
+         case .nine:
+             return 9
+         case .ten:
+             return 10
+         case .jack:
+             return 11
+         case .queen:
+             return 12
+         case .king:
+             return 13
+         }
+     }
+ }
+ 
+ */
 
 
 
 //: ## Step 8
 //: In the suit enum, add a static computed property that returns all the suits in an array. Name this property `allSuits`.
-
-
-
+/*
+ 
+ enum Suit: String {
+     case hearts = "Hearts"
+     case diamonds = "Diamonds"
+     case spades = "Spades"
+     case clubs = "Clubs"
+     
+     var description: String {
+         switch self {
+         case .hearts:
+             return "Hearts"
+         case .diamonds:
+             return "Diamonds"
+         case .spades:
+             return "Spades"
+         case .clubs:
+             return "Clubs"
+         }
+     }
+ }
+ 
+ */
 
 //: ## Step 9
 //: Back to the `Deck` and the nested loops. Now that you have a way to get arrays of all rank values and all suit values, create 2 `for` loops in the `init` method, one nested inside the other, where you iterate over each value of rank, and then iterate over each value of suit. See an example below to get an idea of how this will work. Imagine an enum that contains the 4 cardinal directions, and imagine that enum has a property `allDirections` that returns an array of them.
@@ -71,7 +202,24 @@ enum SuitOFAPlayingCard: String {
 //:
 //:}
 //:```
-
+/*
+ 
+ struct Deck {
+     let card: [Card]
+     
+     init(card: [Card]) {
+         self.card = card
+         
+         for cardRank in card {
+             for cardSuite in card {
+                 print("I have a \(cardRank.rank) of \(cardSuite.suit)")
+             }
+         }
+         
+     }
+ }
+ 
+ */
 
 
 //: ## Step 10
@@ -79,13 +227,28 @@ enum SuitOFAPlayingCard: String {
 
 
 
-
-
 //: ## Step 11
 //: Add a method to the deck called `drawCard()`. It takes no arguments and it returns a `Card` object. Have it draw a random card from the deck of cards and return it.
 //: - Callout(Hint): There should be `52` cards in the deck. So what if you created a random number within those bounds and then retrieved that card from the deck? Remember that arrays are indexed from `0` and take that into account with your random number picking.
 
-
+struct Deck {
+    let cards: [Card]
+    
+    init(cards: [Card]) {
+        self.cards = cards
+        
+        for cardRank in cards {
+            for cardSuite in cards {
+                print("I have a \(cardRank.rank) of \(cardSuite.suit)")
+            }
+        }
+    }
+    
+    func drawCard() -> Int {
+        let randomCard = Int.random(in: 0...50)
+        return randomCard
+    }
+}
 
 
 
@@ -93,7 +256,12 @@ enum SuitOFAPlayingCard: String {
 //: Create a protocol for a `CardGame`. It should have two requirements:
 //: * a gettable `deck` property
 //: * a `play()` method
-
+protocol CardGame {
+    func play()
+    
+    var deck: Int { get }
+    
+}
 
 
 
