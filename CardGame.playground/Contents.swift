@@ -1,12 +1,7 @@
 import Foundation
 
-enum Rank: Int, Comparable {
-    static func < (lhs: Rank, rhs: Rank) -> Bool {
-        return lhs.rawValue < rhs.rawValue
-    }
-    static func == (lhs: Rank, rhs: Rank) -> Bool {
-        return lhs.rawValue == rhs.rawValue
-    }
+enum Rank: Int, CustomStringConvertible, Comparable {
+
     case ace = 1
     case two
     case three
@@ -24,11 +19,7 @@ enum Rank: Int, Comparable {
     static var allRanks: [Rank] {
         return [.ace, .two, .three, .four, .five, .six, .seven, .eight, .nine, .ten, . jack, .queen, .king]
     }
-}
-
-
-extension Rank: CustomStringConvertible {
-    var description: String {
+        var description: String {
         switch self {
         case .ace:
             return "Ace"
@@ -56,8 +47,15 @@ extension Rank: CustomStringConvertible {
             return "Queen"
         case .king:
             return "King"
-        }
+            
     }
+}
+        static func < (lhs: Rank, rhs: Rank) -> Bool {
+            return lhs.rawValue < rhs.rawValue
+        }
+        static func == (lhs: Rank, rhs: Rank) -> Bool {
+            return lhs.rawValue == rhs.rawValue
+        }
 }
 
 enum Suit: String {
@@ -78,8 +76,8 @@ struct Card: CustomStringConvertible, Comparable {
     static func == (lhs: Card, rhs: Card) -> Bool {
           return lhs.rank == rhs.rank
     }
-    let rank: Rank.RawValue
-    let suit: Suit.RawValue
+    let rank: Rank
+    let suit: Suit
     var description: String {
         return ("\(rank) of \(suit)")
     }
@@ -92,7 +90,7 @@ struct Deck {
         var deckOfCards: [Card] = []
         for currentRank in Rank.allRanks {
             for currentSuit in Suit.allSuits {
-                let newCard: Card = Card(rank: Rank(rawValue: currentRank.rawValue)!.rawValue, suit: Suit(rawValue: currentSuit.rawValue)!.rawValue)
+                let newCard: Card = Card(rank: Rank(rawValue: currentRank.rawValue)!, suit: Suit(rawValue: currentSuit.rawValue)!)
                 deckOfCards.append(newCard)
             }
         }
