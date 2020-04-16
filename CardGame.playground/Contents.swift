@@ -2,32 +2,86 @@ import Foundation
 
 //: ## Step 1
 //: Create an enumeration for the value of a playing card. The values are: `ace`, `two`, `three`, `four`, `five`, `six`, `seven`, `eight`, `nine`, `ten`, `jack`, `queen`, and `king`. Set the raw type of the enum to `Int` and assign the ace a value of `1`.
-
-
-
-
-
+enum Rank: Int {
+    
+    case ace = 1
+    case two = 2
+    case three = 3
+    case four = 4
+    case five = 5
+    case six = 6
+    case seven = 7
+    case eight = 8
+    case nine = 9
+    case ten = 10
+    case jack = 11
+    case queen = 12
+    case king = 13
+    
+}
 //: ## Step 2
 //: Once you've defined the enum as described above, take a look at this built-in protocol, [CustomStringConvertible](https://developer.apple.com/documentation/swift/customstringconvertible) and make the enum conform to that protocol. Make the face cards return a string of their name, and for the numbered cards, simply have it return that number as a string.
-
-
-
-
+extension Rank: CustomStringConvertible {
+    var description: String {
+        switch self {
+        case .ace:
+            return "One"
+        case .two :
+            return "Two"
+        case .three:
+            return "Three"
+        case .four:
+            return "Four"
+        case .five:
+            return "Five"
+        case .six:
+            return "Six"
+        case .seven:
+            return "Seven"
+        case .eight:
+            return "Eight"
+        case .nine:
+            return "Nine"
+        case .ten:
+            return "Ten"
+        case .jack:
+            return "Jack"
+        case .queen:
+            return "Queen"
+        case .king:
+            return "King"
+        default:
+            print("Uh-Oh it's broken")
+        }
+    }
+}
 //: ## Step 3
 //: Create an enum for the suit of a playing card. The values are `hearts`, `diamonds`, `spades`, and `clubs`. Use a raw type of `String` for this enum (this will allow us to get a string version of the enum cases for free, no use of `CustomStringConvertible` required).
-
+            enum Suit: String {
+                case spades = "Spades"
+                case hearts = "Hearts"
+                case diamonds = "Diamonds"
+                case clubs = "Clubs"
+}
 
 
 
 //: ## Step 4
 //: Using the two enums above, create a `struct` called `Card` to model a single playing card. It should have constant properties for each constituent piece (one for suit and one for rank).
-
+         struct Card {
+                let rank: Rank
+                let suit: Suit
+}
 
 
 
 //: ## Step 5
 //: Make the card also conform to `CustomStringConvertible`. When turned into a string, a card's value should look something like this, "ace of spades", or "3 of diamonds".
-
+ extension Card: CustomStringConvertible {
+                var description: String {
+                    return "\(Rank.self.RawValue) of \(Suit.self.RawValue)"
+                }
+}
 
 
 //: ## Step 6
@@ -144,5 +198,6 @@ import Foundation
 //: Player 1 drew a 2 of diamonds, player 2 drew a ace of diamonds.
 //: Player 1 wins with 2 of diamonds.
 //: ```
+
 
 
