@@ -56,9 +56,9 @@ extension Rank: CustomStringConvertible {
         case .jack:
             return "jack"
         case .queen:
-            return "queen"
+            return "Queen"
         case .king:
-            return "king"
+            return "King"
         default:
             "No cards"
         
@@ -204,6 +204,11 @@ protocol CardGameDelegate {
 
 //: ## Step 14
 //: Create a class called `HighLow` that conforms to the `CardGame` protocol. It should have an initialized `Deck` as a property, as well as an optional delegate property of type `CardGameDelegate`.
+//Started a new game of High Low
+//Player 1 drew a 2 of diamonds, player 2 drew a ace of diamonds.
+//Player 1 wins with 2 of diamonds.
+
+
 class HighLow:CardGame {
     
     var deck: Deck = Deck()
@@ -211,9 +216,11 @@ class HighLow:CardGame {
     var delegate:CardGameDelegate?
     func play() {
         
+        print("I started a new game of High Low.")
         let player1Card = deck.drawCards()
         let player2Card = deck.drawCards()
         
+        print("Player 1 drew a \(player1Card.description), Player 2 drew a \(player2Card.description)")
         if player1Card > player2Card {
             print("Player 1 wins with a \(player1Card.description).")
         } else if player2Card > player1Card {
@@ -284,7 +291,7 @@ class CardGameTracker: CardGameDelegate {
     
     func gameDidStart(cardGame: CardGame) {
         if cardGame is HighLow {
-            print("I started a new game of High Low.")
+            print("Started a new game of High Low.")
         }
     }
     func game(player1DidDraw card1: Card, player2DidDraw card2: Card) {
