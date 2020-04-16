@@ -68,9 +68,13 @@ struct Deck {
     var deck: [Card]
 
     init(deck:[Card]) {
-        self.deck = deck
+        for card in [deck]{
+            if let rankcard = deck.rank{
+                [deck.rank].append(contentsOf: rankcard)
+            }
+        }
     }
-
+    
     
 }
 
