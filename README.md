@@ -1,6 +1,6 @@
 # Module Project - Card Game
 
-Please fork and clone this repo so you can start out with the playground included.
+ Please fork and clone this repo so you can start out with the playground included.
 
 The steps listed below match numbered steps in the playground. They will be listed here in chronological order, but you may find them in various places within the playground. This is due to the iterative nature of building up this project from an empty window to the final algorithm when we're done.
 
