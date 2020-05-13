@@ -19,7 +19,9 @@ enum PlayingCard: Int {
     case king = 13
     
 }
-
+var playingCards: [PlayingCard] {
+    [.ace, .two, .three, .four, .five, .six, .seven, .eight, .nine, .ten, .jack, .queen, .king]
+}
 
 
 
@@ -68,7 +70,10 @@ enum PlayingCardSuit: String {
     case clubs = "Clubs"
     case diamonds = "Diamonds"
 }
-
+var playingCardSuits: [PlayingCardSuit] {
+     
+    [.hearts, .spades, .clubs, .diamonds]
+}
 //: ## Step 4
 //: Using the two enums above, create a `struct` called `Card` to model a single playing card. It should have constant properties for each constituent piece (one for suit and one for rank).
 struct Card {
@@ -92,10 +97,20 @@ extension Card: CustomStringConvertible {
 //: ## Step 6
 //: Create a `struct` to model a deck of cards. It should be called `Deck` and have an array of `Card` objects as a constant property. A custom `init` function should be created that initializes the array with a card of each rank and suit. You'll want to iterate over all ranks, and then over all suits (this is an example of _nested `for` loops_). See the next 2 steps before you continue with the nested loops.
 
-
-
-
-
+struct Deck {
+    
+    var deckOfCards: [Card]
+    
+    mutating func createDeck() -> [Card] {
+        for playingCard in playingCards  {
+            for playingCardSuit in playingCardSuits{
+                let card: Card = Card(suit: playingCardSuit, playingCard: playingCard)
+                deckOfCards.append(card)
+            }
+        }
+        return deckOfCards
+    }
+}
 //: ## Step 7
 //: In the rank enum, add a static computed property that returns all the ranks in an array. Name this property `allRanks`. This is needed because you can't iterate over all cases from an enum automatically.
 
