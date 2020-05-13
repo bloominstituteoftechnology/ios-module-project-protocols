@@ -29,7 +29,12 @@ enum playingCardValues: Int {
 //: ## Step 3
 //: Create an enum for the suit of a playing card. The values are `hearts`, `diamonds`, `spades`, and `clubs`. Use a raw type of `String` for this enum (this will allow us to get a string version of the enum cases for free, no use of `CustomStringConvertible` required).
 
-
+enum playingCardSuit: String {
+    case hearts = "hearts"
+    case diamonds = "diamonds"
+    case spades = "spades"
+    case clubs = "clubs"
+}
 
 
 //: ## Step 4
