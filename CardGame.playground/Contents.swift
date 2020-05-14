@@ -76,8 +76,10 @@ enum Suit: String {
 //: Using the two enums above, create a `struct` called `Card` to model a single playing card. It should have constant properties for each constituent piece (one for suit and one for rank).
 struct Card: Comparable {
     static func < (lhs: Card, rhs: Card) -> Bool {
-        if lhs.self != rhs.self {
-            
+        if lhs.rank != rhs.rank {
+            return lhs.rank < rhs.rank
+        } else if lhs.suit != rhs.suit {
+            return lhs.suit == rhs.suit
         }
         return lhs.self < rhs.self
     }
@@ -103,7 +105,7 @@ extension Card: CustomStringConvertible {
 }
 }
     let myCard = Card(rank: .three, suit: .clubs)
-print(myCard)
+//print(myCard)
 //: ## Step 6
 //: Create a `struct` to model a deck of cards. It should be called `Deck` and have an array of `Card` objects as a constant property. A custom `init` function should be created that initializes the array with a card of each rank and suit. You'll want to iterate over all ranks, and then over all suits (this is an example of _nested `for` loops_). See the next 2 steps before you continue with the nested loops.
 
@@ -130,7 +132,7 @@ struct Deck {
     
 
 Deck().drawCard()
-print(Deck.init())
+//print(Deck.init().drawCard())
 //: ## Step 7
 //: In the rank enum, add a static computed property that returns all the ranks in an array. Name this property `allRanks`. This is needed because you can't iterate over all cases from an enum automatically.
 
@@ -200,13 +202,14 @@ class HighLow: CardGame {
     var deck: Deck
     var delegate: CardGameDelegate?
     
-    init(deck: Deck, delegate: CardGameDelegate?) {
+    init(deck: Deck) {
     self.deck = deck
-    self.delegate = delegate
     }
     
     func play() -> Card {
+         
         Deck().drawCard()
+       
     }
     
     
@@ -215,9 +218,12 @@ class HighLow: CardGame {
 
 //: ## Step 15
 //: As part of the protocol conformance, implement a method called `play()`. The method should draw 2 cards from the deck, one for player 1 and one for player 2. These cards will then be compared to see which one is higher. The winning player will be printed along with a description of the winning card. Work will need to be done to the `Suit` and `Rank` types above, so see the next couple steps before continuing with this step.
-
-HighLow(deck: Deck, delegate: CardGameDelegate)
-
+let player1 = HighLow(deck: Deck.init()).play()
+let player2 = HighLow(deck: Deck.init()).play()
+//Deck.init().drawCard()
+//let player1 = Deck.init().drawCard()
+//let player2 = Deck.init().drawCard()
+let gamePlayers = [player1, player2]
 //: ## Step 16
 //: Take a look at the Swift docs for the [Comparable](https://developer.apple.com/documentation/swift/comparable) protocol. In particular, look at the two functions called `<` and `==`.
 
@@ -243,8 +249,15 @@ HighLow(deck: Deck, delegate: CardGameDelegate)
 //: * Ends in a tie, something like, "Round ends in a tie with 3 of clubs."
 //: * Player 1 wins with a higher card, e.g. "Player 1 wins with 8 of hearts."
 //: * Player 2 wins with a higher card, e.g. "Player 2 wins with king of diamonds."
-CardGame()
 
+
+    if player1 > player2 {
+        print("Player 1 wins with \(player1)")
+    } else if player1 < player2 {
+        print("Player 2 wins with \(player2)")
+    } else {
+        print("Round ends in a tie with \(cardName)")
+    }
 
 //: ## Step 20
 //: Create a class called `CardGameTracker` that conforms to the `CardGameDelegate` protocol. Implement the two required functions: `gameDidStart` and `game(player1DidDraw:player2DidDraw)`. Model `gameDidStart` after the same method in the guided project from today. As for the other method, have it print a message like the following:
