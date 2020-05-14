@@ -3,7 +3,7 @@ import Foundation
 //: ## Step 1
 //: Create an enumeration for the value of a playing card. The values are: `ace`, `two`, `three`, `four`, `five`, `six`, `seven`, `eight`, `nine`, `ten`, `jack`, `queen`, and `king`. Set the raw type of the enum to `Int` and assign the ace a value of `1`.
 
-enum playingCardValues1: String {
+enum playingCardValues: String {
     case ace
     case two
     case three
@@ -23,23 +23,10 @@ enum playingCardValues1: String {
 //: ## Step 2
 //: Once you've defined the enum as described above, take a look at this built-in protocol, [CustomStringConvertible](https://developer.apple.com/documentation/swift/customstringconvertible) and make the enum conform to that protocol. Make the face cards return a string of their name, and for the numbered cards, simply have it return that number as a string.
 
-enum playingCardValues2: CustomStringConvertible {
-      case ace
-      case two
-      case three
-      case four
-      case five
-      case six
-      case seven
-      case eight
-      case nine
-      case ten
-      case jack
-      case queen
-      case king
-
+extension enum playingCardValues: CustomStringConvertible {
+    
       var description : String {
-        switch self {
+        switch {
         case .ace: return "1"
         case .two: return "2"
         case .three: return "3"
@@ -71,7 +58,7 @@ enum playingCardSuit: String {
 //: ## Step 4
 //: Using the two enums above, create a `struct` called `Card` to model a single playing card. It should have constant properties for each constituent piece (one for suit and one for rank).
 struct Card {
-    let rank: playingCardValues2
+    let rank: playingCardValues
     let suit: playingCardSuit
 }
 
