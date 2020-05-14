@@ -5,7 +5,7 @@ import Foundation
 enum Rank: Int {
     
     case ace = 1
-    case two
+    case two 
     case three
     case four
     case five
@@ -59,10 +59,7 @@ extension Rank: CustomStringConvertible {
             return "Queen"
         case .king:
             return "King"
-        default:
-            "No cards"
         
-            
            
         }
         
