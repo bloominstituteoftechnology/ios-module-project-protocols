@@ -1,15 +1,22 @@
 # Module Project - Card Game
 
- Please fork and clone this repo so you can start out with the playground included.
+Please fork and clone this repo so you can start out with the playground included.
 
 The steps listed below match numbered steps in the playground. They will be listed here in chronological order, but you may find them in various places within the playground. This is due to the iterative nature of building up this project from an empty window to the final algorithm when we're done.
 
 ## Follow the Steps in This Order
 
-2. Once you've defined the enum as described above, take a look at this built-in protocol, [CustomStringConvertible](https://developer.apple.com/documentation/swift/customstringconvertible) and make the enum conform to that protocol. Make the face cards return a string of their name, and for the numbered cards, simply have it return that number as a string.
+1. Create an enumeration for the value of a playing card, and call it `Rank`. The values are: `ace`, `two`, `three`, `four`, `five`, `six`, `seven`, `eight`, `nine`, `ten`, `jack`, `queen`, and `king`. Set the raw type of the enum to `Int` and assign the ace a value of `1`.
+2. Once you've defined the enum as described above, take a look at this built-in protocol, [CustomStringConvertible](https://developer.apple.com/documentation/swift/customstringconvertible) and make the enum above conform to that protocol. Make the face cards return a string of their name, and for the numbered cards, simply have it return that number as a string.  To do this, you can use `self` to access the cases and return the desired string depending on what the case is. For example, 
+```swift
+ switch self {
+ case .one:
+     return "1"
+// And so on for every case
+```
 3. Create an enum for the suit of a playing card. The values are `hearts`, `diamonds`, `spades`, and `clubs`. Use a raw type of `String` for this enum (this will allow us to get a string version of the enum cases for free, no use of `CustomStringConvertible` required).
 4. Using the two enums above, create a `struct` called `Card` to model a single playing card. It should have constant properties for each constituent piece (one for suit and one for rank).
-5. Make the card also conform to `CustomStringConvertible`. When turned into a string, a card's value should look something like this, "ace of spades", or "3 of diamonds".
+5. Make the card also conform to `CustomStringConvertible` in a similar way to the way you did in step 2. When turned into a string, a card's value should look something like this, "ace of spades", or "3 of diamonds".
 6. Create a `struct` to model a deck of cards. It should be called `Deck` and have an array of `Card` objects as a constant property. A custom `init` function should be created that initializes the array with a card of each rank and suit. You'll want to iterate over all ranks, and then over all suits (this is an example of _nested `for` loops_). See the next 2 steps before you continue with the nested loops.
 7. In the rank enum, add a static computed property that returns all the ranks in an array. Name this property `allRanks`. This is needed because you can't iterate over all cases from an enum automatically.
 8. In the suit enum, add a static computed property that returns all the suits in an array. Name this property `allSuits`.
