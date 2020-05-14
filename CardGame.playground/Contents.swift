@@ -244,14 +244,23 @@ extension Card: Comparable {
 //: Create a class called `CardGameTracker` that conforms to the `CardGameDelegate` protocol. Implement the two required functions: `gameDidStart` and `game(player1DidDraw:player2DidDraw)`. Model `gameDidStart` after the same method in the guided project from today. As for the other method, have it print a message like the following:
 //: * "Player 1 drew a 6 of hearts, player 2 drew a jack of spades."
 class CardGameTracker: CardGameDelegate {
+    func gameDidStart(_: CardGame) {
+        
+    }
     
-    func gameDidStart(_ : CardGame) {
+    var deck: Deck
+    
+    func play() {
         
     }
     
     func game(player1DidDraw card1: Card, player2DidDraw card2: Card) {
         print("Player 1 drew the \(card1.rank) of \(card1.suit); Player 2 drew the \(card2.rank) of \(card2.suit).")
         
+    }
+    
+    init() {
+        self.deck = myDeck
     }
 }
 
@@ -264,5 +273,8 @@ class CardGameTracker: CardGameDelegate {
 //: Player 1 drew a 2 of diamonds, player 2 drew a ace of diamonds.
 //: Player 1 wins with 2 of diamonds.
 //: ```
+let game = HighLow(deck: myDeck, delegate: CardGameTracker.init())
+
+game.play()
 
 
