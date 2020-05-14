@@ -21,6 +21,17 @@ enum Rank: Int {
         return [.ace, .two, .three, .four, .five, .six, .seven, .eight,. nine, .ten, .jack, .queen, .king]
     }
 }
+
+extension Rank: Comparable {
+    static func < (lhs: Rank, rhs: Rank) -> Bool {
+        return lhs.rawValue < rhs.rawValue
+    }
+    static func == (lhs: Rank, rhs: Rank) -> Bool {
+        return lhs.rawValue == rhs.rawValue
+    }
+}
+
+//Make the Rank type conform to the Comparable protocol. Implement the < and == functions such that they compare the rawValue of the lhs and rhs arguments passed in. This will allow us to compare two rank values with each other and determine whether they are equal, or if not, which one is larger.
 //: ## Step 2
 //: Once you've defined the enum as described above, take a look at this built-in protocol, [CustomStringConvertible](https://developer.apple.com/documentation/swift/customstringconvertible) and make the enum conform to that protocol. Make the face cards return a string of their name, and for the numbered cards, simply have it return that number as a string.
 extension Rank: CustomStringConvertible {
@@ -73,6 +84,17 @@ struct Card {
     let suit: Suit
     let rank: Rank
 }
+
+extension Card: Comparable {
+    static func < (lhs: Card, rhs: Card) -> Bool {
+        return lhs.rank < rhs.rank
+    }
+    static func == (lhs:Card, rhs: Card) -> Bool {
+        return lhs.rank == rhs.rank && lhs.suit == rhs.suit
+    }
+}
+
+//Step 18 Make the Card type conform to the Comparable protocol. Implement the < and == methods such that they compare the ranks of the lhs and rhs arguments passed in. For the == method, compare both the rank and the suit.
 //: ## Step 5
 //: Make the card also conform to `CustomStringConvertible`. When turned into a string, a card's value should look something like this, "ace of spades", or "3 of diamonds".
 extension Card: CustomStringConvertible {
@@ -138,8 +160,7 @@ struct Deck {
 protocol CardGame {
     var deck: Deck { get }
     
-    func play() {
-    }
+    func play()
 }
 //: ## Step 13
 //: Create a protocol for tracking a card game as a delegate called `CardGameDelegate`. It should have two functional requirements:
@@ -147,48 +168,41 @@ protocol CardGame {
 //: * a function with the following signature: `game(player1DidDraw card1: Card, player2DidDraw card2: Card)`
 protocol CardGameDelegate {
     func gameDidStart(game: CardGame)
-    }
-    func game(playerDidDraw card1: Card, player2DidDraw card2: Card) {
+}
+func game(playerDidDraw card1: Card, player2DidDraw card2: Card) {
 }
 //: ## Step 14
 //: Create a class called `HighLow` that conforms to the `CardGame` protocol. It should have an initialized `Deck` as a property, as well as an optional delegate property of type `CardGameDelegate`.
-
-
-
-
+class HighLow: CardGame {
+    var deck: Deck
+    var delegate: CardGameDelegate?
+    
+    init(deck: Deck, delegate: CardGameDelegate?) {
+        self.deck = deck
+        self.delegate = delegate
+    }
+    
+    func play() {
+    }
+    
+}
 //: ## Step 15
 //: As part of the protocol conformance, implement a method called `play()`. The method should draw 2 cards from the deck, one for player 1 and one for player 2. These cards will then be compared to see which one is higher. The winning player will be printed along with a description of the winning card. Work will need to be done to the `Suit` and `Rank` types above, so see the next couple steps before continuing with this step.
-
-
-
 
 //: ## Step 16
 //: Take a look at the Swift docs for the [Comparable](https://developer.apple.com/documentation/swift/comparable) protocol. In particular, look at the two functions called `<` and `==`.
 
-
-
-
 //: ## Step 17
 //: Make the `Rank` type conform to the `Comparable` protocol. Implement the `<` and `==` functions such that they compare the `rawValue` of the `lhs` and `rhs` arguments passed in. This will allow us to compare two rank values with each other and determine whether they are equal, or if not, which one is larger.
 
-
-
-
-
 //: Step 18
 //: Make the `Card` type conform to the `Comparable` protocol. Implement the `<` and `==` methods such that they compare the ranks of the `lhs` and `rhs` arguments passed in. For the `==` method, compare **both** the rank and the suit.
-
-
-
-
 
 //: ## Step 19
 //: Back to the `play()` method. With the above types now conforming to `Comparable`, you can write logic to compare the drawn cards and print out 1 of 3 possible message types:
 //: * Ends in a tie, something like, "Round ends in a tie with 3 of clubs."
 //: * Player 1 wins with a higher card, e.g. "Player 1 wins with 8 of hearts."
 //: * Player 2 wins with a higher card, e.g. "Player 2 wins with king of diamonds."
-
-
 
 //: ## Step 20
 //: Create a class called `CardGameTracker` that conforms to the `CardGameDelegate` protocol. Implement the two required functions: `gameDidStart` and `game(player1DidDraw:player2DidDraw)`. Model `gameDidStart` after the same method in the guided project from today. As for the other method, have it print a message like the following:
