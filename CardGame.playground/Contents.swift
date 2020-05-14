@@ -3,7 +3,16 @@ import Foundation
 //: ## Step 1
 //: Create an enumeration for the value of a playing card. The values are: `ace`, `two`, `three`, `four`, `five`, `six`, `seven`, `eight`, `nine`, `ten`, `jack`, `queen`, and `king`. Set the raw type of the enum to `Int` and assign the ace a value of `1`.
 
-enum Rank: Int {
+enum Rank: Int, Comparable {
+    static func < (lhs: Rank, rhs: Rank) -> Bool {
+        if lhs.rawValue != rhs.rawValue {
+        }
+        return lhs.rawValue < rhs.rawValue
+    }
+    static func == (lhs: Rank, rhs: Rank) -> Bool {
+        return lhs.rawValue == rhs.rawValue
+    }
+    
     
     case ace = 1
     case two
@@ -65,7 +74,18 @@ enum Suit: String {
 
 //: ## Step 4
 //: Using the two enums above, create a `struct` called `Card` to model a single playing card. It should have constant properties for each constituent piece (one for suit and one for rank).
-struct Card {
+struct Card: Comparable {
+    static func < (lhs: Card, rhs: Card) -> Bool {
+        if lhs.self != rhs.self {
+            
+        }
+        return lhs.self < rhs.self
+    }
+    static func == (lhs: Card, rhs: Card) -> Bool {
+        return lhs.rank == rhs.rank && lhs.suit == rhs.suit
+    }
+    
+    
     var rank: Rank
     var suit: Suit
 }
@@ -164,21 +184,39 @@ protocol CardGame {
 //: Create a protocol for tracking a card game as a delegate called `CardGameDelegate`. It should have two functional requirements:
 //: * a function called `gameDidStart` that takes a `CardGame` as an argument
 //: * a function with the following signature: `game(player1DidDraw card1: Card, player2DidDraw card2: Card)`
-
+protocol CardGameDelegate {
+   
+    func gameDidStart(for: CardGame)
+    
+    func game(player1DidDraw card1: Card, player2DidDraw card2: Card)
+}
 
 
 
 //: ## Step 14
 //: Create a class called `HighLow` that conforms to the `CardGame` protocol. It should have an initialized `Deck` as a property, as well as an optional delegate property of type `CardGameDelegate`.
 
-
+class HighLow: CardGame {
+    var deck: Deck
+    var delegate: CardGameDelegate?
+    
+    init(deck: Deck, delegate: CardGameDelegate?) {
+    self.deck = deck
+    self.delegate = delegate
+    }
+    
+    func play() -> Card {
+        Deck().drawCard()
+    }
+    
+    
+}
 
 
 //: ## Step 15
 //: As part of the protocol conformance, implement a method called `play()`. The method should draw 2 cards from the deck, one for player 1 and one for player 2. These cards will then be compared to see which one is higher. The winning player will be printed along with a description of the winning card. Work will need to be done to the `Suit` and `Rank` types above, so see the next couple steps before continuing with this step.
 
-
-
+HighLow(deck: Deck, delegate: CardGameDelegate)
 
 //: ## Step 16
 //: Take a look at the Swift docs for the [Comparable](https://developer.apple.com/documentation/swift/comparable) protocol. In particular, look at the two functions called `<` and `==`.
@@ -205,7 +243,7 @@ protocol CardGame {
 //: * Ends in a tie, something like, "Round ends in a tie with 3 of clubs."
 //: * Player 1 wins with a higher card, e.g. "Player 1 wins with 8 of hearts."
 //: * Player 2 wins with a higher card, e.g. "Player 2 wins with king of diamonds."
-
+CardGame()
 
 
 //: ## Step 20
