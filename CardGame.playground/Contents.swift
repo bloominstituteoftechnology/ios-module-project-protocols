@@ -17,10 +17,9 @@ enum PlayingCard: Int {
     case jack = 11
     case queen = 12
     case king = 13
-    
-}
-var playingCards: [PlayingCard] {
-    [.ace, .two, .three, .four, .five, .six, .seven, .eight, .nine, .ten, .jack, .queen, .king]
+    static var playingCards: [PlayingCard] {
+       return [.ace, .two, .three, .four, .five, .six, .seven, .eight, .nine, .ten, .jack, .queen, .king]
+    }
 }
 
 
@@ -69,11 +68,11 @@ enum PlayingCardSuit: String {
     case spades = "Spades"
     case clubs = "Clubs"
     case diamonds = "Diamonds"
+    static var playingCardSuits: [PlayingCardSuit] {
+        return [.hearts, .spades, .clubs, .diamonds]
+    }
 }
-var playingCardSuits: [PlayingCardSuit] {
-     
-    [.hearts, .spades, .clubs, .diamonds]
-}
+
 //: ## Step 4
 //: Using the two enums above, create a `struct` called `Card` to model a single playing card. It should have constant properties for each constituent piece (one for suit and one for rank).
 struct Card {
@@ -101,14 +100,15 @@ struct Deck {
     
     var deckOfCards: [Card]
     
-    mutating func createDeck() -> [Card] {
-        for playingCard in playingCards  {
-            for playingCardSuit in playingCardSuits{
-                let card: Card = Card(suit: playingCardSuit, playingCard: playingCard)
+     init() {
+        var deckOfCards: [Card] = []
+        for playingCard in PlayingCard.playingCards {
+            for playingCardSuit in PlayingCardSuit.playingCardSuits {
+                let card = Card(suit: playingCardSuit, playingCard: playingCard)
                 deckOfCards.append(card)
             }
         }
-        return deckOfCards
+        self.deckOfCards = deckOfCards
     }
 }
 //: ## Step 7
@@ -143,7 +143,12 @@ struct Deck {
 //: ## Step 11
 //: Add a method to the deck called `drawCard()`. It takes no arguments and it returns a `Card` object. Have it draw a random card from the deck of cards and return it.
 //: - Callout(Hint): There should be `52` cards in the deck. So what if you created a random number within those bounds and then retrieved that card from the deck? Remember that arrays are indexed from `0` and take that into account with your random number picking.
-
+extension Deck {
+    func drawCard() -> Card {
+        let cardPosition = Int.random(in: 1...51)
+        return deckOfCards[cardPosition]
+    }
+}
 
 
 
@@ -152,7 +157,12 @@ struct Deck {
 //: Create a protocol for a `CardGame`. It should have two requirements:
 //: * a gettable `deck` property
 //: * a `play()` method
-
+protocol CardGame {
+    
+    var deck: Deck { get }
+    
+    func play()
+}
 
 
 
