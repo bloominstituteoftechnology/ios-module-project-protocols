@@ -4,15 +4,15 @@ import Foundation
 //: Create an enumeration for the value of a playing card. The values are: `ace`, `two`, `three`, `four`, `five`, `six`, `seven`, `eight`, `nine`, `ten`, `jack`, `queen`, and `king`. Set the raw type of the enum to `Int` and assign the ace a value of `1`.
 enum Rank: Int {
     case ace = 1
-    case two = 2
-    case three = 3
-    case four = 4
-    case five = 5
-    case six = 6
-    case seven = 7
-    case eight = 8
-    case nine = 9
-    case ten = 10
+    case two
+    case three
+    case four
+    case five
+    case six
+    case seven
+    case eight
+    case nine
+    case ten
     case jack
     case queen
     case king
@@ -27,7 +27,34 @@ enum Rank: Int {
 //: Once you've defined the enum as described above, take a look at this built-in protocol, [CustomStringConvertible](https://developer.apple.com/documentation/swift/customstringconvertible) and make the enum conform to that protocol. Make the face cards return a string of their name, and for the numbered cards, simply have it return that number as a string.
 extension Rank: CustomStringConvertible {
     var description: String {
-        return "\(Rank.self.RawValue)"
+        switch self {
+        case .ace:
+            return "1"
+        case .two:
+            return "2"
+        case .three:
+            return "3"
+        case .four:
+            return "4"
+        case .five:
+            return "5"
+        case .six:
+            return "6"
+        case .seven:
+            return "7"
+        case .eight:
+            return "8"
+        case .nine:
+            return "9"
+        case .ten:
+            return "10"
+        case .jack:
+            return "jack"
+        case .queen:
+            return "queen"
+        case .king:
+            return "king"
+        }
     }
 }
 //: ## Step 3
@@ -60,11 +87,20 @@ extension Card: CustomStringConvertible {
 //: Create a `struct` to model a deck of cards. It should be called `Deck` and have an array of `Card` objects as a constant property. A custom `init` function should be created that initializes the array with a card of each rank and suit. You'll want to iterate over all ranks, and then over all suits (this is an example of _nested `for` loops_). See the next 2 steps before you continue with the nested loops.
 struct Deck {
     let cardDeck: [Card]
-    
+    // We need an array of Cards.
+    // What is a Card?
+    //HOw do we create a Card?
+    //HOw do we initialize a card?
+    //Where should we initialize a card?
     init() {
+        var cardArray: [Card] = []
         for rank in Rank.allRanks {
-            
+            for suit in Suit.allSuits {
+                let card = Card(suit: suit, rank: rank)
+                cardArray.append(card)
+            }
         }
+        self.cardDeck = cardArray
     }
 }
 
