@@ -16,8 +16,12 @@ enum PlayingCard: Int {
     case jack
     case queen
     case king
-//    let allRanks = [Playingcard.ace, two, three, four, five, six, seven, eight, nine, ten, jack, queen, king]
+
+    
+    static var allRanks: [PlayingCard] {
+        return [.ace, .two, .three, .four, .five, .six, .seven, .eight, .nine, .ten, .jack, .queen, .king]
     }
+}
 
 //: ## Step 2
 //: Once you've defined the enum as described above, take a look at this built-in protocol, [CustomStringConvertible](https://developer.apple.com/documentation/swift/customstringconvertible) and make the enum conform to that protocol. Make the face cards return a string of their name, and for the numbered cards, simply have it return that number as a string.
@@ -64,6 +68,10 @@ enum Suit: String {
     case diamonds = "Diamonds"
     case spades = "Spades"
     case clubs = "Clubs"
+    
+    static var allSuits: [Suit] {
+        return [.hearts, .diamonds, .spades, .clubs]
+    }
 }
 //: ## Step 4
 //: Using the two enums above, create a `struct` called `Card` to model a single playing card. It should have constant properties for each constituent piece (one for suit and one for rank).
@@ -89,31 +97,17 @@ extension Card: CustomStringConvertible {
 struct Deck {
     
     
-    init(
+    init(allRank:
 }
 
 //: ## Step 7
 //: In the rank enum, add a static computed property that returns all the ranks in an array. Name this property `allRanks`. This is needed because you can't iterate over all cases from an enum automatically.
-let allRanks = [PlayingCard.ace,
-PlayingCard.two,
-PlayingCard.three,
-PlayingCard.four,
-PlayingCard.five,
-PlayingCard.six,
-PlayingCard.seven,
-PlayingCard.eight,
-PlayingCard.nine,
-PlayingCard.ten,
-PlayingCard.jack,
-PlayingCard.queen,
-PlayingCard.king]
-
 
 
 
 //: ## Step 8
 //: In the suit enum, add a static computed property that returns all the suits in an array. Name this property `allSuits`.
-let allSuits = [Suit.hearts, Suit.diamonds, Suit.spades, Suit.clubs]
+
 
 
 
