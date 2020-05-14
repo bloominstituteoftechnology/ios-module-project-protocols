@@ -3,11 +3,21 @@ import Foundation
 //: ## Step 1
 //: Create an enumeration for the value of a playing card. The values are: `ace`, `two`, `three`, `four`, `five`, `six`, `seven`, `eight`, `nine`, `ten`, `jack`, `queen`, and `king`. Set the raw type of the enum to `Int` and assign the ace a value of `1`.
 
-enum playingCardValues1: CaseIterable {
-    case "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "jack", "queen", "king"
+enum playingCardValues1: String {
+    case ace
+    case two
+    case three
+    case four
+    case five
+    case six
+    case seven
+    case eight
+    case nine
+    case ten
+    case jack
+    case queen
+    case king
 }
-
- 
 
 
 //: ## Step 2
@@ -81,10 +91,7 @@ extension Card: CustomStringConvertible {
 //: Create a `struct` to model a deck of cards. It should be called `Deck` and have an array of `Card` objects as a constant property. A custom `init` function should be created that initializes the array with a card of each rank and suit. You'll want to iterate over all ranks, and then over all suits (this is an example of _nested `for` loops_). See the next 2 steps before you continue with the nested loops.
 
 
-struct Deck {
-    let myDeck: [Card] = [
-        .init(rank: <#T##playingCardValues#>, suit: <#T##playingCardSuit#>)
-}
+
 
 
 
