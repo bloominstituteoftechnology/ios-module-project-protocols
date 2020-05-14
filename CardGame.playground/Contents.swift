@@ -23,10 +23,24 @@ extension Rank: CustomStringConvertible {
         case .ace :
             return "ace"
         case .two, .three, .four, .five, .six, .seven, .eight, .nine, .ten :
-            return "\(Rank.self.RawValue)"
+            return "\(self.rawValue)"
         }
     }
 }
+
+extension Rank: Comparable {
+    static func < (lhs: Rank, rhs: Rank) -> Bool {
+        if lhs.rawValue < rhs.rawValue {
+            return lhs.rawValue < rhs.rawValue
+        }
+    }
+       static func == (lhs: Rank, rhs: Rank) -> Bool {
+            if lhs.rawValue == rhs.rawValue {
+                return lhs.rawValue == rhs.rawValue
+            }
+        }
+    }
+
 
 //test
 let printRank = Rank.three
@@ -42,7 +56,19 @@ enum Suit: String {
     static let allSuits: [Suit] = [.clubs, .spades, .diamonds, .hearts]
 }
 
-
+//followed documentation
+extension Suit: Comparable {
+    static func < (lhs: Suit, rhs: Suit) -> Bool {
+        if lhs.rawValue < rhs.rawValue {
+            return lhs.rawValue < rhs.rawValue
+        }
+    }
+    static func == (lhs: Suit, rhs: Suit) -> Bool {
+            if lhs.rawValue == rhs.rawValue {
+                return lhs.rawValue == rhs.rawValue
+            }
+        }
+    }
 
 //: ## Step 4
 //: Using the two enums above, create a `struct` called `Card` to model a single playing card. It should have constant properties for each constituent piece (one for suit and one for rank).
@@ -61,6 +87,7 @@ extension Card: CustomStringConvertible {
     }
 }
 
+//this worked fine until I started doing comparables
 let testCard = Card(rank: .ace, suit: .clubs)
 print(testCard)
 //: ## Step 6
@@ -68,22 +95,30 @@ print(testCard)
 struct Deck {
     let cards: [Card]
     
-    init(cards: [Card]) {
+    init() {
         //iterate over ranks array
+        var cards = [Card]()
         for rank in Rank.allRanks {
         // iterate over suits array
             for suit in Suit.allSuits {
         // return custom init
-                return self.cards
+                let card = Card(rank: rank, suit: suit)
+                cards.append(card)
             }
         }
         self.cards = cards
     }
+    
+    func drawCard() -> Card {
+        let randomCard = cards.randomElement()!
+        return randomCard
+    }
 }
 
-
-
-
+//testing
+// let myDeck = Deck()
+// let randomCard = myDeck.drawCard()
+// print(randomCard)
 //: ## Step 7
 //: In the rank enum, add a static computed property that returns all the ranks in an array. Name this property `allRanks`. This is needed because you can't iterate over all cases from an enum automatically.
 //static let allRanks: [Rank] = [.ace, .two, .three, .four, .five, .six, .seven, .eight, .nine, .ten, .jack, .queen, .king]
@@ -102,12 +137,11 @@ struct Deck {
 //:
 //:}
 //:```
-
-
+ //See Above
 
 //: ## Step 10
 //: These loops will allow you to match up every rank with every suit. Make a `Card` object from all these pairings and append each card to the `cards` property of the deck. At the end of the `init` method, the `cards` array should contain a full deck of standard playing card objects.
-
+//See Above
 
 
 
@@ -116,7 +150,7 @@ struct Deck {
 //: Add a method to the deck called `drawCard()`. It takes no arguments and it returns a `Card` object. Have it draw a random card from the deck of cards and return it.
 //: - Callout(Hint): There should be `52` cards in the deck. So what if you created a random number within those bounds and then retrieved that card from the deck? Remember that arrays are indexed from `0` and take that into account with your random number picking.
 
-
+//See Above
 
 
 
@@ -124,7 +158,10 @@ struct Deck {
 //: Create a protocol for a `CardGame`. It should have two requirements:
 //: * a gettable `deck` property
 //: * a `play()` method
-
+protocol CardGame {
+    var myDeck: Deck { get }
+    func play()
+}
 
 
 
@@ -132,16 +169,39 @@ struct Deck {
 //: Create a protocol for tracking a card game as a delegate called `CardGameDelegate`. It should have two functional requirements:
 //: * a function called `gameDidStart` that takes a `CardGame` as an argument
 //: * a function with the following signature: `game(player1DidDraw card1: Card, player2DidDraw card2: Card)`
-
+protocol CardGameDelegate {
+    func gameDidStart(_ :CardGame)
+    func game(player1DidDraw card1: Card, player2DidDraw card2: Card)
+}
 
 
 
 //: ## Step 14
 //: Create a class called `HighLow` that conforms to the `CardGame` protocol. It should have an initialized `Deck` as a property, as well as an optional delegate property of type `CardGameDelegate`.
+class HighLow: CardGame {
+    var myDeck: Deck
+    var delegate: CardGameDelegate?
+    
+    init(myDeck: Deck, delegate: CardGameDelegate?) {
+        self.myDeck = myDeck
+        self.delegate = delegate
+        }
+    
+    func play() {
+        let playerOne = myDeck.drawCard.self
+        let playerTwo = myDeck.drawCard.self
+        if playerOne == playerTwo {
+            print("Ends in a tie with \(String(describing: playerOne))")
+        } else if playerOne >= playerTwo {
+            print("Player 1 wins with \(String(describing: playerOne))")
+        } else {
+            print("Player 2 wins with \(String(describing: playerTwo))")
+        }
+        }
+        }
 
 
-
-
+     
 //: ## Step 15
 //: As part of the protocol conformance, implement a method called `play()`. The method should draw 2 cards from the deck, one for player 1 and one for player 2. These cards will then be compared to see which one is higher. The winning player will be printed along with a description of the winning card. Work will need to be done to the `Suit` and `Rank` types above, so see the next couple steps before continuing with this step.
 
@@ -156,14 +216,14 @@ struct Deck {
 
 //: ## Step 17
 //: Make the `Rank` type conform to the `Comparable` protocol. Implement the `<` and `==` functions such that they compare the `rawValue` of the `lhs` and `rhs` arguments passed in. This will allow us to compare two rank values with each other and determine whether they are equal, or if not, which one is larger.
-
+// not sure what is wrong with return.  Followed documentation
 
 
 
 
 //: Step 18
 //: Make the `Card` type conform to the `Comparable` protocol. Implement the `<` and `==` methods such that they compare the ranks of the `lhs` and `rhs` arguments passed in. For the `==` method, compare **both** the rank and the suit.
-
+// not sure what is wrong with return.  Followed documentation
 
 
 
@@ -173,8 +233,7 @@ struct Deck {
 //: * Ends in a tie, something like, "Round ends in a tie with 3 of clubs."
 //: * Player 1 wins with a higher card, e.g. "Player 1 wins with 8 of hearts."
 //: * Player 2 wins with a higher card, e.g. "Player 2 wins with king of diamonds."
-
-
+//Followed directions.  Not sure why I can't compare.
 
 //: ## Step 20
 //: Create a class called `CardGameTracker` that conforms to the `CardGameDelegate` protocol. Implement the two required functions: `gameDidStart` and `game(player1DidDraw:player2DidDraw)`. Model `gameDidStart` after the same method in the guided project from today. As for the other method, have it print a message like the following:
