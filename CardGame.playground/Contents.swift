@@ -109,8 +109,8 @@ struct Deck {
     let cardDeck: [Card]
     // We need an array of Cards.
     // What is a Card?
-    //HOw do we create a Card?
-    //HOw do we initialize a card?
+    //How do we create a Card?
+    //How do we initialize a card?
     //Where should we initialize a card?
     init() {
         var cardArray: [Card] = []
@@ -168,8 +168,7 @@ protocol CardGame {
 //: * a function with the following signature: `game(player1DidDraw card1: Card, player2DidDraw card2: Card)`
 protocol CardGameDelegate {
     func gameDidStart(game: CardGame)
-}
-func game(playerDidDraw card1: Card, player2DidDraw card2: Card) {
+    func game(player1DidDraw card1: Card, player2DidDraw card2: Card)
 }
 //: ## Step 14
 //: Create a class called `HighLow` that conforms to the `CardGame` protocol. It should have an initialized `Deck` as a property, as well as an optional delegate property of type `CardGameDelegate`.
@@ -183,8 +182,18 @@ class HighLow: CardGame {
     }
     
     func play() {
+        let firstPlayer = deck.drawCard()
+        let secondPlayer = deck.drawCard()
+        if firstPlayer == secondPlayer {
+            print("Round ends in a tie with \(firstPlayer).")
+        }
+        else if firstPlayer < secondPlayer {
+            print("Player 2 wins with a \(secondPlayer).")
+        }
+        else {
+            print("Player 1 wins with a \(firstPlayer).")
+        }
     }
-    
 }
 //: ## Step 15
 //: As part of the protocol conformance, implement a method called `play()`. The method should draw 2 cards from the deck, one for player 1 and one for player 2. These cards will then be compared to see which one is higher. The winning player will be printed along with a description of the winning card. Work will need to be done to the `Suit` and `Rank` types above, so see the next couple steps before continuing with this step.
@@ -207,8 +216,16 @@ class HighLow: CardGame {
 //: ## Step 20
 //: Create a class called `CardGameTracker` that conforms to the `CardGameDelegate` protocol. Implement the two required functions: `gameDidStart` and `game(player1DidDraw:player2DidDraw)`. Model `gameDidStart` after the same method in the guided project from today. As for the other method, have it print a message like the following:
 //: * "Player 1 drew a 6 of hearts, player 2 drew a jack of spades."
-
-
+//class CardGameTracker: CardGameDelegate {
+//    func gameDidStart(game: CardGame) {
+//
+//    }
+//
+//    func game(player1DidDraw card1: Card, player2DidDraw card2: Card) {
+//        print("Player 1 drew a \(card1), player 2 drew a \(card2).")
+//    }
+//
+//}
 
 //: Step 21
 //: Time to test all the types you've created. Create an instance of the `HighLow` class. Set the `delegate` property of that object to an instance of `CardGameTracker`. Lastly, call the `play()` method on the game object. It should print out to the console something that looks similar to the following:
@@ -218,5 +235,6 @@ class HighLow: CardGame {
 //: Player 1 drew a 2 of diamonds, player 2 drew a ace of diamonds.
 //: Player 1 wins with 2 of diamonds.
 //: ```
+let myGame = HighLow(deck: <#T##Deck#>, delegate: <#T##CardGameDelegate?#>)
 
-
+myGame.play()
