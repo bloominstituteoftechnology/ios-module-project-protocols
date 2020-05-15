@@ -30,14 +30,12 @@ extension Rank: CustomStringConvertible {
 
 extension Rank: Comparable {
     static func < (lhs: Rank, rhs: Rank) -> Bool {
-        if lhs.rawValue < rhs.rawValue {
             return lhs.rawValue < rhs.rawValue
-        }
+
     }
        static func == (lhs: Rank, rhs: Rank) -> Bool {
-            if lhs.rawValue == rhs.rawValue {
                 return lhs.rawValue == rhs.rawValue
-            }
+
         }
     }
 
@@ -57,18 +55,6 @@ enum Suit: String {
 }
 
 //followed documentation
-extension Suit: Comparable {
-    static func < (lhs: Suit, rhs: Suit) -> Bool {
-        if lhs.rawValue < rhs.rawValue {
-            return lhs.rawValue < rhs.rawValue
-        }
-    }
-    static func == (lhs: Suit, rhs: Suit) -> Bool {
-            if lhs.rawValue == rhs.rawValue {
-                return lhs.rawValue == rhs.rawValue
-            }
-        }
-    }
 
 //: ## Step 4
 //: Using the two enums above, create a `struct` called `Card` to model a single playing card. It should have constant properties for each constituent piece (one for suit and one for rank).
@@ -86,6 +72,16 @@ extension Card: CustomStringConvertible {
         return "\(rank) of \(suit.rawValue)"
     }
 }
+
+extension Card: Comparable {
+    static func < (lhs: Card, rhs: Card) -> Bool {
+            return lhs.rank < rhs.rank
+        }
+    static func == (lhs: Card, rhs: Card) -> Bool {
+            return lhs.rank == rhs.rank
+        }
+    }
+
 
 //this worked fine until I started doing comparables
 let testCard = Card(rank: .ace, suit: .clubs)
@@ -188,8 +184,8 @@ class HighLow: CardGame {
         }
     
     func play() {
-        let playerOne = myDeck.drawCard.self
-        let playerTwo = myDeck.drawCard.self
+        let playerOne = myDeck.drawCard()
+        let playerTwo = myDeck.drawCard()
         if playerOne == playerTwo {
             print("Ends in a tie with \(String(describing: playerOne))")
         } else if playerOne >= playerTwo {
@@ -198,12 +194,9 @@ class HighLow: CardGame {
             print("Player 2 wins with \(String(describing: playerTwo))")
         }
         }
-        }
+    
+}
 
-
-     
-//: ## Step 15
-//: As part of the protocol conformance, implement a method called `play()`. The method should draw 2 cards from the deck, one for player 1 and one for player 2. These cards will then be compared to see which one is higher. The winning player will be printed along with a description of the winning card. Work will need to be done to the `Suit` and `Rank` types above, so see the next couple steps before continuing with this step.
 
 
 
@@ -238,7 +231,10 @@ class HighLow: CardGame {
 //: ## Step 20
 //: Create a class called `CardGameTracker` that conforms to the `CardGameDelegate` protocol. Implement the two required functions: `gameDidStart` and `game(player1DidDraw:player2DidDraw)`. Model `gameDidStart` after the same method in the guided project from today. As for the other method, have it print a message like the following:
 //: * "Player 1 drew a 6 of hearts, player 2 drew a jack of spades."
-
+protocol CardGameTracker {
+    func gameDidStart(_ :CardGame)
+    func game(player1DidDraw card1: Card, player2DidDraw card2: Card)
+}
 
 
 //: Step 21
@@ -249,5 +245,8 @@ class HighLow: CardGame {
 //: Player 1 drew a 2 of diamonds, player 2 drew a ace of diamonds.
 //: Player 1 wins with 2 of diamonds.
 //: ```
+let myDeck = Deck.init()
+let delegate = CardGameTracker.self
+let variable = HighLow(myDeck: myDeck, delegate: delegate as? CardGameDelegate)
 
-
+HighLow.play(variable)
