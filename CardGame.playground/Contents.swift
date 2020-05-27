@@ -55,17 +55,85 @@ struct Card {
     let rank: Rank
     let suit: Suit
 }
-
-
 //: ## Step 5
 //: Make the card also conform to `CustomStringConvertible`. When turned into a string, a card's value should look something like this, "ace of spades", or "3 of diamonds".
-
-
+extension Card: CustomStringConvertible {
+    var description: String {
+        let playingCard = Card(rank: .ace, suit: .spades)
+        
+        switch playingCard.rank {
+        case .ace, .two, .three, .four, .five, .six, .seven, .eight, .nine, .ten, .jack, .queen, .king:
+            return "\(playingCard.rank)"
+        
+        switch playingCard.suit {
+        case .clubs, .diamonds, .hearts, .spades:
+            return "\(playingCard.suit)"
+            }
+        }
+    }
+}
 
 //: ## Step 6
 //: Create a `struct` to model a deck of cards. It should be called `Deck` and have an array of `Card` objects as a constant property. A custom `init` function should be created that initializes the array with a card of each rank and suit. You'll want to iterate over all ranks, and then over all suits (this is an example of _nested `for` loops_). See the next 2 steps before you continue with the nested loops.
 
-
+struct Deck {
+    let cards: [Card] = [Card(rank: .ace, suit: .clubs),
+                        Card(rank: .ace, suit: .diamonds),
+                        Card(rank: .ace, suit: .hearts),
+                        Card(rank: .ace, suit: .spades),
+                        Card(rank: .two, suit: .clubs),
+                        Card(rank: .two, suit: .diamonds),
+                        Card(rank: .two, suit: .hearts),
+                        Card(rank: .two, suit: .spades),
+                        Card(rank: .three, suit: .clubs),
+                        Card(rank: .three, suit: .diamonds),
+                        Card(rank: .three, suit: .hearts),
+                        Card(rank: .three, suit: .spades),
+                        Card(rank: .four, suit: .clubs),
+                        Card(rank: .four, suit: .diamonds),
+                        Card(rank: .four, suit: .hearts),
+                        Card(rank: .four, suit: .spades),
+                        Card(rank: .five, suit: .clubs),
+                        Card(rank: .five, suit: .diamonds),
+                        Card(rank: .five, suit: .hearts),
+                        Card(rank: .five, suit: .spades),
+                        Card(rank: .six, suit: .clubs),
+                        Card(rank: .six, suit: .diamonds),
+                        Card(rank: .six, suit: .hearts),
+                        Card(rank: .six, suit: .spades),
+                        Card(rank: .seven, suit: .clubs),
+                        Card(rank: .seven, suit: .diamonds),
+                        Card(rank: .seven, suit: .hearts),
+                        Card(rank: .seven, suit: .spades),
+                        Card(rank: .eight, suit: .clubs),
+                        Card(rank: .eight, suit: .diamonds),
+                        Card(rank: .eight, suit: .hearts),
+                        Card(rank: .eight, suit: .spades),
+                        Card(rank: .nine, suit: .clubs),
+                        Card(rank: .nine, suit: .diamonds),
+                        Card(rank: .nine, suit: .hearts),
+                        Card(rank: .nine, suit: .spades),
+                        Card(rank: .ten, suit: .clubs),
+                        Card(rank: .ten, suit: .diamonds),
+                        Card(rank: .ten, suit: .hearts),
+                        Card(rank: .ten, suit: .spades),
+                        Card(rank: .jack, suit: .clubs),
+                        Card(rank: .jack, suit: .diamonds),
+                        Card(rank: .jack, suit: .hearts),
+                        Card(rank: .jack, suit: .spades),
+                        Card(rank: .queen, suit: .clubs),
+                        Card(rank: .queen, suit: .diamonds),
+                        Card(rank: .queen, suit: .hearts),
+                        Card(rank: .queen, suit: .spades),
+                        Card(rank: .king, suit: .clubs),
+                        Card(rank: .king, suit: .diamonds),
+                        Card(rank: .king, suit: .hearts),
+                        Card(rank: .king, suit: .spades),
+]
+    
+    init(cards: [Card]) {
+    }
+}
 
 
 
