@@ -6,6 +6,8 @@ enum CardValue: Int {
     case ace = 1
     case two, three, four, five, six, seven, eight, nine, ten
     case jack, queen, king
+    
+      static var allRanks: [CardValue] = [.ace, .two, .three, .four, .five, .six, .seven, .eight, .nine, .ten, .jack, .queen, .king ]
 }
 
 //: ## Step 2
@@ -43,6 +45,9 @@ extension CardValue: CustomStringConvertible {
 //: Create an enum for the suit of a playing card. The values are `hearts`, `diamonds`, `spades`, and `clubs`. Use a raw type of `String` for this enum (this will allow us to get a string version of the enum cases for free, no use of `CustomStringConvertible` required).
 enum CardSuit: String {
     case hearts, diamonds, spades, clubs
+    
+    static var allSuits: [CardSuit] = [.clubs, .diamonds, .spades, .hearts ]
+
 }
 
 //: ## Step 4
@@ -58,16 +63,20 @@ struct Card {
 //: Make the card also conform to `CustomStringConvertible`. When turned into a string, a card's value should look something like this, "ace of spades", or "3 of diamonds".
 extension Card: CustomStringConvertible {
     var description: String {
-        <#code#>
+        return "\(rank) of \(suit)"
     }
-    
-    
 }
 
 
 //: ## Step 6
 //: Create a `struct` to model a deck of cards. It should be called `Deck` and have an array of `Card` objects as a constant property. A custom `init` function should be created that initializes the array with a card of each rank and suit. You'll want to iterate over all ranks, and then over all suits (this is an example of _nested `for` loops_). See the next 2 steps before you continue with the nested loops.
-
+struct Deck {
+    var cards: [Card] = []
+    
+    init (cards: [Card]) {
+        self.cards = cards
+    }
+}
 
 
 
@@ -75,13 +84,17 @@ extension Card: CustomStringConvertible {
 //: ## Step 7
 //: In the rank enum, add a static computed property that returns all the ranks in an array. Name this property `allRanks`. This is needed because you can't iterate over all cases from an enum automatically.
 
-
+//extension CardValue {
+//    static var allRanks: [CardValue] = [.ace, .two, .three, .four, .five, .six, .seven, .eight, .nine, .ten, .jack, .queen, .king ]
+//}
 
 
 //: ## Step 8
 //: In the suit enum, add a static computed property that returns all the suits in an array. Name this property `allSuits`.
 
-
+//extension CardSuit {
+//    static var allSuits: [CardSuit] = [.clubs, .diamonds, .spades, .hearts ]
+//}
 
 
 //: ## Step 9
