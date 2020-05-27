@@ -7,7 +7,7 @@ enum Ranks: Int {
     case two, three, four, five, six, seven, eight, nine, ten
     case jack, queen, king
     
-      static var allRanks: [Ranks] = [.ace, .two, .three, .four, .five, .six, .seven, .eight, .nine, .ten, .jack, .queen, .king ]
+    static var allRanks: [Ranks] = [.ace, .two, .three, .four, .five, .six, .seven, .eight, .nine, .ten, .jack, .queen, .king ]
 }
 
 //: ## Step 2
@@ -33,6 +33,12 @@ extension Ranks: CustomStringConvertible {
                 return "9"
             case .ten:
                 return "10"
+            case .jack:
+                return "Jack"
+            case .king:
+                return "King"
+            case .queen:
+                return "Queen"
             default:
                 return String(self.rawValue)
         }
@@ -223,6 +229,7 @@ extension Card: Comparable {
 //: ## Step 20
 //: Create a class called `CardGameTracker` that conforms to the `CardGameDelegate` protocol. Implement the two required functions: `gameDidStart` and `game(player1DidDraw:player2DidDraw)`. Model `gameDidStart` after the same method in the guided project from today. As for the other method, have it print a message like the following:
 //: * "Player 1 drew a 6 of hearts, player 2 drew a jack of spades."
+
 class CardGameTracker: CardGameDelegate {
     
     func gameDidStart(_ game: CardGame) {
@@ -245,6 +252,7 @@ class CardGameTracker: CardGameDelegate {
 //: Player 1 drew a 2 of diamonds, player 2 drew a ace of diamonds.
 //: Player 1 wins with 2 of diamonds.
 //: ```
+
 let tracker = CardGameTracker()
 let game = HighLow()
 game.delegate = tracker
