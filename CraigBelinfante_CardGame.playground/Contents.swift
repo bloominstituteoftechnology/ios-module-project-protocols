@@ -75,14 +75,14 @@ struct Card {
 //5
 extension Card: CustomStringConvertible {
     var description: String {
-        "\(self.suit.rawValue) \(self.rank.description)"
+        "\(self.rank.description) of \(self.suit.rawValue)"
     }
 }
 //6-11
 struct Deck {
     var deckArray: [Card]
     
-    init? () {
+    init () {
         var cardDeck: [Card] = []
         
         let suits = Suits.allSuits
@@ -93,18 +93,66 @@ struct Deck {
                 cardDeck.append(Card(rank: rank, suit: suit))
             }
         }
-        
-        func drawCards() -> Card {
-            let randomCard = Int.random(in: 0...51)
-            return cardDeck[randomCard]
-        }
-        return nil
+        deckArray = cardDeck
+    }
+    
+    
+    func drawCards() -> Card {
+        let randomCard = Int.random(in: 0...51)
+        return deckArray[randomCard]
     }
 }
 
-//12
+//12-16
 protocol CardGame {
     var deck: Deck { get }
-
+    
     func playGame()
 }
+
+extension Rank: Comparable {
+    static func < (lhs: Rank, rhs: Rank) -> Bool {
+        return lhs.rawValue < rhs.rawValue
+    }
+    static func == (lhs: Rank, rhs: Rank) -> Bool {
+        return lhs.rawValue == rhs.rawValue
+    }
+}
+
+
+class HighLow: CardGame{
+    var deck = Deck ()
+    //18
+   // var delegate: CardGame?
+    
+    func playGame() {
+        let player1 = deck.drawCards()
+        let player2 = deck.drawCards()
+        
+        if player1 > player2 {
+                   print("Player 1 wins with the \(player1.description)")
+               } else if player1 < player2 {
+                   print("Player 2 wins with the \(player2.description)")
+               } else if player1 == player2 {
+                   print("Round ends in a tie with \(player1.description) and \(player2.description)")
+        }
+    }
+    
+}
+
+//17
+
+extension Card: Comparable {
+    static func < (lhs: Card, rhs: Card) -> Bool {
+        return lhs.rank < rhs.rank
+    }
+    static func == (lhs: Card, rhs: Card) -> Bool {
+        return lhs.suit == rhs.suit && lhs.rank == rhs.rank
+    } // I want to compare the suit and rank when they are equal to each other and retrun the value. This is why we use the and (&&). For example 10 beats 9 but if clubs is equal to clubs then to define the rank we need to know what its value is and if its equal to the clubs and clubs.
+}
+
+//19
+
+let cardGame = HighLow()
+
+cardGame.playGame()
