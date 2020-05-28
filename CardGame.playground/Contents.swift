@@ -56,6 +56,7 @@ extension CardRanks: CustomStringConvertible {
     static var allRanks: [CardRanks] {
         return [.ace, .two, .three, .four, .five, .six, .seven, .eight, .nine, .ten, .jack, .queen, .king]
     }
+    
 }
 
 
@@ -190,17 +191,30 @@ class HighLow : CardGame {
     
     func play() {
         delegate?.gameDidStart(cardGame: self)
-        let player1Card = deck.drawCard()
-        let player2Card = deck.drawCard()
+        print("Started a Best of 7 series of High Low")
+        var playerOneScore = 0
+        var playerTwoScore = 0
         
         
+        
+        while playerOneScore != 4 && playerTwoScore != 4 {
+            let player1Card = deck.drawCard()
+            let player2Card = deck.drawCard()
+            print("Player 1 drew a \(player1Card.rank) of \(player1Card.suit). Player 2 drew a \(player2Card.rank) of \(player2Card.suit)")
         if player1Card == player2Card {
             print("Round ends in tie with \(player1Card.rank) of \(player2Card.suit)")
+            print("Player One Score: \(playerOneScore) Player Two Score: \(playerTwoScore)")
         } else if player1Card < player2Card {
             print("Player 2 wins with \(player2Card.rank) of \(player2Card.suit)")
+            
+            playerTwoScore += 1
+            print("Player One Score: \(playerOneScore) Player Two Score: \(playerTwoScore)")
+            
         } else if player2Card < player1Card {
                 print("Player 1 wins with \(player1Card.rank) of \(player1Card.suit)")
-        
+            playerOneScore += 1
+            print("Player One Score: \(playerOneScore) Player Two Score: \(playerTwoScore)")
+            }
     }
     }
     
@@ -275,6 +289,7 @@ extension Card : Comparable {
 //: * "Player 1 drew a 6 of hearts, player 2 drew a jack of spades."
 class CardGameTracker : CardGameDelegate {
     func gameDidStart(cardGame: CardGame) {
+
     }
     
     func game(player1DidDraw card1: Card, player2DidDraw card2: Card) {
