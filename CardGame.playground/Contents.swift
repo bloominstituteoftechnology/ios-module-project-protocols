@@ -100,10 +100,8 @@ struct DeckOfCards {
         }
     }
     func drawCard() -> Card{
-        if let randomCard = cardArray.randomElement(){
-            return randomCard
-        }
-        return Card.init(cardSuit: .clubs, cardRank: .ace)
+        
+        return cardArray[Int.random(in: 0...51)]
     }
         
 }
@@ -157,7 +155,6 @@ print(newDeck.cardArray)
 protocol CardGame {
     var getDeck: DeckOfCards {get}
     func play()
-    
 }
 
 
@@ -172,7 +169,7 @@ protocol CardGame {
 //: Create a protocol for tracking a card game as a delegate called `CardGameDelegate`. It should have two functional requirements:
 //: * a function called `gameDidStart` that takes a `CardGame` as an argument
 //: * a function with the following signature: `game(player1DidDraw card1: Card, player2DidDraw card2: Card)`
-protocol CardGameDelegate {
+    protocol CardGameDelegate {
     func gameDidStart(cardGame: CardGame)
     func cardSignature(playerOneDidDraw card1: Card, playerTwoDidDraw card2: Card)
 }
@@ -183,26 +180,31 @@ protocol CardGameDelegate {
 //: Create a class called `HighLow` that conforms to the `CardGame` protocol. It should have an initialized `Deck` as a property, as well as an optional delegate property of type `CardGameDelegate`.
 class HighLow: CardGame{
     var getDeck: DeckOfCards
-    var player1 = [Card]()
-    var player2 = [Card]()
-    var delegate: CardGameDelegate?
-    let drawCard = newDeck.cardArray.randomElement()
+    var delegate: CardGameDelegate
     func play() {
-        let card1 = DeckOfCards.drawCard(getDeck)
-      player1.append(card1())
-        player2.append(card1())
         
+        let card1 = getDeck.drawCard()
+        let card2 = getDeck.drawCard()
         
-        
-    }
+        if card1 == card2 {
+            print("Round ends in a tie with \(card1.cardRank) of \(card2.cardSuit) ")
+        }
+        else if card1 < card2 {
+            print("Player 2 wins with \(card2.cardRank) of \(card2.cardSuit)")
+        }
+        else if card2 < card1 {
+            print("Player 1 wins with \(card1.cardRank) of \(card1.cardSuit)")
+        }
 
-    init(getDeck: DeckOfCards, player1: [Card], player2: [Card], delegate: CardGameDelegate?){
+        }
+
+
+    init(getDeck: DeckOfCards, delegate: CardGameDelegate){
         self.getDeck = getDeck
-        self.player1 = player1
-        self.player2 = player2
         self.delegate = delegate
     }
-    }
+}
+
     
     
 
@@ -259,25 +261,25 @@ extension Card: Comparable {
 //: * Player 1 wins with a higher card, e.g. "Player 1 wins with 8 of hearts."
 //: * Player 2 wins with a higher card, e.g. "Player 2 wins with king of diamonds."
 
-    
+let newTracker = CardGameTracker()
+
+let newDecks = DeckOfCards()
+let game1 = HighLow(getDeck: newDecks, delegate: newTracker)
 
 
 
 //: ## Step 20
 //: Create a class called `CardGameTracker` that conforms to the `CardGameDelegate` protocol. Implement the two required functions: `gameDidStart` and `game(player1DidDraw:player2DidDraw)`. Model `gameDidStart` after the same method in the guided project from today. As for the other method, have it print a message like the following:
 //: * "Player 1 drew a 6 of hearts, player 2 drew a jack of spades."
-class CardGameTracker: CardGame{
-    var getDeck: DeckOfCards
+class CardGameTracker: CardGameDelegate {
+    func gameDidStart(cardGame: CardGame) {
+        }
     
-    func play() {
-        print(
+    func cardSignature(playerOneDidDraw card1: Card, playerTwoDidDraw card2: Card) {
     }
-    func gameDidStart() {
     
-    }
     
 }
-
 
 //: Step 21
 //: Time to test all the types you've created. Create an instance of the `HighLow` class. Set the `delegate` property of that object to an instance of `CardGameTracker`. Lastly, call the `play()` method on the game object. It should print out to the console something that looks similar to the following:
@@ -287,5 +289,4 @@ class CardGameTracker: CardGame{
 //: Player 1 drew a 2 of diamonds, player 2 drew a ace of diamonds.
 //: Player 1 wins with 2 of diamonds.
 //: ```
-
-
+game1.play()
