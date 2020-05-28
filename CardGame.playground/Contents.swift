@@ -177,9 +177,12 @@ class HighLow: CardGame {
     
     
     func play() {
+        self.delegate?.gameDidStart(cardGame: self)
         
         let playerOne = deck.drawCards()
         let playerTwo = deck.drawCards()
+        
+        self.delegate?.game(player1DidDraw: playerOne, player2DidDraw: playerTwo)
         
         if playerOne > playerTwo {
             print("Player 1 wins with \(playerOne.description)")
@@ -257,9 +260,7 @@ extension Card: Comparable {
 class CardGameTracker: CarGameDelegate {
     
     func gameDidStart(cardGame: CardGame) {
-        if cardGame is HighLow {
-            print("Start a new game")
-        }
+        print("Start a new game")
     }
     
     func game(player1DidDraw card1: Card, player2DidDraw card2: Card) {
@@ -278,6 +279,6 @@ class CardGameTracker: CarGameDelegate {
 //: Player 1 wins with 2 of diamonds.
 //: ```
 let newGame = HighLow()
-
+newGame.delegate = CardGameTracker()
 newGame.play()
 
