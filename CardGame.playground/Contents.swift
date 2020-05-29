@@ -5,18 +5,18 @@ import Foundation
 
 enum Rank: Int {
     case ace = 1
-    case two = 2
-    case three = 3
-    case four = 4
-    case five = 5
-    case six = 6
-    case seven = 7
-    case eight = 8
-    case nine = 9
-    case ten = 10
-    case jack = 11
-    case queen = 12
-    case king = 13
+    case two
+    case three
+    case four
+    case five
+    case six
+    case seven
+    case eight
+    case nine
+    case ten
+    case jack
+    case queen
+    case king
 }
 
 
@@ -27,15 +27,28 @@ enum Rank: Int {
 extension Rank: CustomStringConvertible {
     var description: String {
         switch self {
-        case .ace, .jack, .queen, .king:
-            return "\(Rank.self)"
-        case .two, .three, .four, .five, .six, .seven, .eight, .nine, .ten:
-            return "\(Rank.self.RawValue)"
+        case .ace, .two, .three, .four, .five, .six, .seven, .eight, .nine, .ten:
+            return String(self.rawValue)
+        case .jack:
+            return "Jack"
+        case .queen:
+            return "Queen"
+        case .king:
+            return "King"
         }
     }
 }
 
-
+//extension Rank: CustomStringConvertible {
+//    var description: String {
+//        switch self {
+//        case .ace, .jack, .queen, .king:
+//            return "\(String(describing: Rank.self))"
+//        case .two, .three, .four, .five, .six, .seven, .eight, .nine, .ten:
+//            return "\(String(describing: Rank.self))"
+//        }
+//    }
+//}
 
 //: ## Step 3
 //: Create an enum for the suit of a playing card. The values are `hearts`, `diamonds`, `spades`, and `clubs`. Use a raw type of `String` for this enum (this will allow us to get a string version of the enum cases for free, no use of `CustomStringConvertible` required).
@@ -57,97 +70,63 @@ struct Card {
 }
 //: ## Step 5
 //: Make the card also conform to `CustomStringConvertible`. When turned into a string, a card's value should look something like this, "ace of spades", or "3 of diamonds".
+
 extension Card: CustomStringConvertible {
     var description: String {
-        let playingCard = Card(rank: .ace, suit: .spades)
-        
-        switch playingCard.rank {
-        case .ace, .two, .three, .four, .five, .six, .seven, .eight, .nine, .ten, .jack, .queen, .king:
-            return "\(playingCard.rank)"
-        
-        switch playingCard.suit {
-        case .clubs, .diamonds, .hearts, .spades:
-            return "\(playingCard.suit)"
-            }
-        }
+        return "\(self.rank.description) of \(self.suit.rawValue)"
     }
 }
 
+
+//extension Card: CustomStringConvertible {
+//    var description: String {
+//        let playingCard = Card(rank: .ace, suit: .spades)
+//
+//        if playingCard.rank == .ace  && playingCard.suit == .spades {
+//        }
+//
+//        return ("\(playingCard.rank) of \(playingCard.suit)")
+//
+//    }
+//}
+
+
+
+//        switch playingCard.rank {
+//        case .ace, .two, .three, .four, .five, .six, .seven, .eight, .nine, .ten, .jack, .queen, .king:
+//            return "\(playingCard.rank)"
+//
+//        switch playingCard.suit {
+//        case .clubs, .diamonds, .hearts, .spades:
+//            return "\(playingCard.suit)"
 //: ## Step 6
 //: Create a `struct` to model a deck of cards. It should be called `Deck` and have an array of `Card` objects as a constant property. A custom `init` function should be created that initializes the array with a card of each rank and suit. You'll want to iterate over all ranks, and then over all suits (this is an example of _nested `for` loops_). See the next 2 steps before you continue with the nested loops.
 
 struct Deck {
-    let cards: [Card] = [Card(rank: .ace, suit: .clubs),
-                        Card(rank: .ace, suit: .diamonds),
-                        Card(rank: .ace, suit: .hearts),
-                        Card(rank: .ace, suit: .spades),
-                        Card(rank: .two, suit: .clubs),
-                        Card(rank: .two, suit: .diamonds),
-                        Card(rank: .two, suit: .hearts),
-                        Card(rank: .two, suit: .spades),
-                        Card(rank: .three, suit: .clubs),
-                        Card(rank: .three, suit: .diamonds),
-                        Card(rank: .three, suit: .hearts),
-                        Card(rank: .three, suit: .spades),
-                        Card(rank: .four, suit: .clubs),
-                        Card(rank: .four, suit: .diamonds),
-                        Card(rank: .four, suit: .hearts),
-                        Card(rank: .four, suit: .spades),
-                        Card(rank: .five, suit: .clubs),
-                        Card(rank: .five, suit: .diamonds),
-                        Card(rank: .five, suit: .hearts),
-                        Card(rank: .five, suit: .spades),
-                        Card(rank: .six, suit: .clubs),
-                        Card(rank: .six, suit: .diamonds),
-                        Card(rank: .six, suit: .hearts),
-                        Card(rank: .six, suit: .spades),
-                        Card(rank: .seven, suit: .clubs),
-                        Card(rank: .seven, suit: .diamonds),
-                        Card(rank: .seven, suit: .hearts),
-                        Card(rank: .seven, suit: .spades),
-                        Card(rank: .eight, suit: .clubs),
-                        Card(rank: .eight, suit: .diamonds),
-                        Card(rank: .eight, suit: .hearts),
-                        Card(rank: .eight, suit: .spades),
-                        Card(rank: .nine, suit: .clubs),
-                        Card(rank: .nine, suit: .diamonds),
-                        Card(rank: .nine, suit: .hearts),
-                        Card(rank: .nine, suit: .spades),
-                        Card(rank: .ten, suit: .clubs),
-                        Card(rank: .ten, suit: .diamonds),
-                        Card(rank: .ten, suit: .hearts),
-                        Card(rank: .ten, suit: .spades),
-                        Card(rank: .jack, suit: .clubs),
-                        Card(rank: .jack, suit: .diamonds),
-                        Card(rank: .jack, suit: .hearts),
-                        Card(rank: .jack, suit: .spades),
-                        Card(rank: .queen, suit: .clubs),
-                        Card(rank: .queen, suit: .diamonds),
-                        Card(rank: .queen, suit: .hearts),
-                        Card(rank: .queen, suit: .spades),
-                        Card(rank: .king, suit: .clubs),
-                        Card(rank: .king, suit: .diamonds),
-                        Card(rank: .king, suit: .hearts),
-                        Card(rank: .king, suit: .spades),
-]
+    let cardDeck: [Card] = []
     
-    init(cards: [Card]) {
+    init(cardDeck: [Card]) {
+    
     }
 }
-
-
 
 //: ## Step 7
 //: In the rank enum, add a static computed property that returns all the ranks in an array. Name this property `allRanks`. This is needed because you can't iterate over all cases from an enum automatically.
 
-
-
+extension Rank {
+    static var allRanks: [Rank] {
+        return [.ace, .two, .three, .four, .five, .six, .seven, .eight, .nine, .ten, .jack, .queen, .king]
+    }
+}
 
 //: ## Step 8
 //: In the suit enum, add a static computed property that returns all the suits in an array. Name this property `allSuits`.
 
-
-
+extension Suit {
+    static var allSuits: [Suit] {
+        return [.clubs, .diamonds, .hearts, .spades]
+    }
+}
 
 //: ## Step 9
 //: Back to the `Deck` and the nested loops. Now that you have a way to get arrays of all rank values and all suit values, create 2 `for` loops in the `init` method, one nested inside the other, where you iterate over each value of rank, and then iterate over each value of suit. See an example below to get an idea of how this will work. Imagine an enum that contains the 4 cardinal directions, and imagine that enum has a property `allDirections` that returns an array of them.
@@ -157,7 +136,9 @@ struct Deck {
 //:}
 //:```
 
-
+extension Deck {
+    
+}
 
 //: ## Step 10
 //: These loops will allow you to match up every rank with every suit. Make a `Card` object from all these pairings and append each card to the `cards` property of the deck. At the end of the `init` method, the `cards` array should contain a full deck of standard playing card objects.
