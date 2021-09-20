@@ -6,11 +6,60 @@ import Foundation
 
 
 
+enum value: Int {
+    
+    case ace = 1
+    case two
+    case three
+    case four
+    case five
+    case six
+    case seven
+    case eight
+    case nine
+    case ten
+    case jack
+    case queen
+    case king
+}
+
 
 //: ## Step 2
 //: Once you've defined the enum as described above, take a look at this built-in protocol, [CustomStringConvertible](https://developer.apple.com/documentation/swift/customstringconvertible) and make the enum conform to that protocol. Make the face cards return a string of their name, and for the numbered cards, simply have it return that number as a string.
 
-
+extension value: CustomStringConvertible {
+    var description: String {
+        switch self {
+        case .ace:
+            return "one"
+        case .two:
+            return "two"
+        case .three:
+            return "three"
+        case .four:
+            return "four"
+        case .five:
+            return "five"
+        case .six:
+            return "six"
+        case .seven:
+            return "seven"
+        case .eight:
+            return "eight"
+        case .nine:
+            return "nine"
+        case .ten:
+            return "ten"
+        case .jack:
+            return "jack"
+        case .queen:
+            return "queen"
+        case .king:
+            return "king"
+            
+        }
+    }
+}
 
 
 //: ## Step 3
