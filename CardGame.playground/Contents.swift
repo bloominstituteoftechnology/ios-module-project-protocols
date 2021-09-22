@@ -69,6 +69,7 @@ extension CardRank: CustomStringConvertible {
 }
 
 
+
 //: ## Step 3
 //: Create an enum for the suit of a playing card. The values are `hearts`, `diamonds`, `spades`, and `clubs`. Use a raw type of `String` for this enum (this will allow us to get a string version of the enum cases for free, no use of `CustomStringConvertible` required).
 
@@ -173,7 +174,7 @@ struct Deck {
 
 protocol CardGame {
     
-    static var deck: Deck { get }
+    var deck: Deck { get }
     
     static func play()
     
@@ -194,7 +195,22 @@ protocol CardGameDelegate {
 //: ## Step 14
 //: Create a class called `HighLow` that conforms to the `CardGame` protocol. It should have an initialized `Deck` as a property, as well as an optional delegate property of type `CardGameDelegate`.
 
-
+class HighLow: CardGame {
+    var deck: Deck
+    var delegate: CardGameDelegate?
+    
+    static func play() {
+        //deck.drawCard()
+        //deck.drawCard()
+    }
+    
+    
+    init(deck: Deck) {
+        self.deck = deck
+    }
+    
+    
+}
 
 
 //: ## Step 15
@@ -208,10 +224,27 @@ protocol CardGameDelegate {
 
 
 
-
 //: ## Step 17
 //: Make the `Rank` type conform to the `Comparable` protocol. Implement the `<` and `==` functions such that they compare the `rawValue` of the `lhs` and `rhs` arguments passed in. This will allow us to compare two rank values with each other and determine whether they are equal, or if not, which one is larger.
 
+
+extension CardRank: Comparable {
+    static func < (lhs: CardRank, rhs: CardRank) -> Bool {
+        /*if lhs.rawValue < rhs.rawValue {
+            return true
+        }
+        return false*/
+        return lhs.rawValue < rhs.rawValue
+    }
+    
+    static func == (lhs: CardRank, rhs: CardRank) -> Bool {
+        
+        return lhs.rawValue == rhs.rawValue
+        
+    }
+    
+    
+}
 
 
 
@@ -219,7 +252,21 @@ protocol CardGameDelegate {
 //: Step 18
 //: Make the `Card` type conform to the `Comparable` protocol. Implement the `<` and `==` methods such that they compare the ranks of the `lhs` and `rhs` arguments passed in. For the `==` method, compare **both** the rank and the suit.
 
-
+extension Card: Comparable {
+    static func < (lhs: Card, rhs: Card) -> Bool {
+        return lhs.rank.rawValue < rhs.rank.rawValue
+    }
+    
+    static func == (lhs: Card, rhs: Card) -> Bool {
+        if (lhs.rank.rawValue < rhs.rank.rawValue) {
+            return false
+        } else if (lhs.suit.rawValue == rhs.suit.rawValue) {
+            return true
+        }
+        return false
+    }
+    
+}
 
 
 
