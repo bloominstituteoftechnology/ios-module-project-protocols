@@ -185,7 +185,10 @@ protocol CardGame {
 //: * a function called `gameDidStart` that takes a `CardGame` as an argument
 //: * a function with the following signature: `game(player1DidDraw card1: Card, player2DidDraw card2: Card)`
 
-
+protocol CardGameDelegate {
+    static func gameDidStart(game: CardGame)
+    static func game(player1DidDraw card1: Card, player2DidDraw card2: Card)
+}
 
 
 //: ## Step 14
