@@ -171,7 +171,13 @@ struct Deck {
 //: * a gettable `deck` property
 //: * a `play()` method
 
-
+protocol CardGame {
+    
+    static var deck: Deck { get }
+    
+    static func play()
+    
+}
 
 
 //: ## Step 13
