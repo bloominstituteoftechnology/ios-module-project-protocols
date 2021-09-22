@@ -6,7 +6,7 @@ import Foundation
 
 
 
-enum value: Int {
+enum CardRank: Int {
     
     case ace = 1
     case two
@@ -21,35 +21,42 @@ enum value: Int {
     case jack
     case queen
     case king
+    
+    
+    
+    static var allRanks: [CardRank] {
+        return [self.ace, self.two, self.three, self.four, self.five, self.six, self.seven, self.eight, self.nine, self.ten, self.jack, self.queen, self.king]
+    }
 }
 
 
 //: ## Step 2
 //: Once you've defined the enum as described above, take a look at this built-in protocol, [CustomStringConvertible](https://developer.apple.com/documentation/swift/customstringconvertible) and make the enum conform to that protocol. Make the face cards return a string of their name, and for the numbered cards, simply have it return that number as a string.
 
-extension value: CustomStringConvertible {
+extension CardRank: CustomStringConvertible {
+    
     var description: String {
         switch self {
         case .ace:
-            return "one"
+            return "1"
         case .two:
-            return "two"
+            return "2"
         case .three:
-            return "three"
+            return "3"
         case .four:
-            return "four"
+            return "4"
         case .five:
-            return "five"
+            return "5"
         case .six:
-            return "six"
+            return "6"
         case .seven:
-            return "seven"
+            return "7"
         case .eight:
-            return "eight"
+            return "8"
         case .nine:
-            return "nine"
+            return "9"
         case .ten:
-            return "ten"
+            return "10"
         case .jack:
             return "jack"
         case .queen:
@@ -65,42 +72,69 @@ extension value: CustomStringConvertible {
 //: ## Step 3
 //: Create an enum for the suit of a playing card. The values are `hearts`, `diamonds`, `spades`, and `clubs`. Use a raw type of `String` for this enum (this will allow us to get a string version of the enum cases for free, no use of `CustomStringConvertible` required).
 
-enum Suit: String {
+enum CardSuit: String {
     case hearts
     case diamonds
     case spades
     case clubs
+    
+    static var allSuits: [CardSuit] {
+        return [self.hearts, self.diamonds, self.spades, self.clubs]
+    }
 }
 
 
 //: ## Step 4
 //: Using the two enums above, create a `struct` called `Card` to model a single playing card. It should have constant properties for each constituent piece (one for suit and one for rank).
 
-
+struct Card {
+    let suit: CardSuit
+    let rank: CardRank
+}
 
 
 //: ## Step 5
 //: Make the card also conform to `CustomStringConvertible`. When turned into a string, a card's value should look something like this, "ace of spades", or "3 of diamonds".
 
-
+extension Card: CustomStringConvertible {
+    var description: String {
+        let strinng = "\(rank.rawValue) of \(suit)"
+        return strinng
+    }
+    
+}
 
 //: ## Step 6
 //: Create a `struct` to model a deck of cards. It should be called `Deck` and have an array of `Card` objects as a constant property. A custom `init` function should be created that initializes the array with a card of each rank and suit. You'll want to iterate over all ranks, and then over all suits (this is an example of _nested `for` loops_). See the next 2 steps before you continue with the nested loops.
 
-
+struct Deck {
+    var deckOfCards: [Card] = []
+//    var tempCard = Card(suit: .hearts, rank: .ace)
+    
+    init() {
+        for rank in CardRank.allRanks {
+            for suit in CardSuit.allSuits {
+                let tempCard = Card(suit: suit, rank: rank)
+                deckOfCards.append(tempCard)
+            }
+        }
+    }
+    
+    
+}
 
 
 
 //: ## Step 7
 //: In the rank enum, add a static computed property that returns all the ranks in an array. Name this property `allRanks`. This is needed because you can't iterate over all cases from an enum automatically.
 
-
+//done
 
 
 //: ## Step 8
 //: In the suit enum, add a static computed property that returns all the suits in an array. Name this property `allSuits`.
 
-
+//done
 
 
 //: ## Step 9
@@ -111,7 +145,7 @@ enum Suit: String {
 //:}
 //:```
 
-
+//done
 
 //: ## Step 10
 //: These loops will allow you to match up every rank with every suit. Make a `Card` object from all these pairings and append each card to the `cards` property of the deck. At the end of the `init` method, the `cards` array should contain a full deck of standard playing card objects.
