@@ -176,7 +176,7 @@ protocol CardGame {
     
     var deck: Deck { get }
     
-    static func play()
+    func play()
     
 }
 
@@ -187,8 +187,8 @@ protocol CardGame {
 //: * a function with the following signature: `game(player1DidDraw card1: Card, player2DidDraw card2: Card)`
 
 protocol CardGameDelegate {
-    static func gameDidStart(game: CardGame)
-    static func game(player1DidDraw card1: Card, player2DidDraw card2: Card)
+    func gameDidStart(game: CardGame)
+    func game(player1DidDraw card1: Card, player2DidDraw card2: Card)
 }
 
 
@@ -196,12 +196,21 @@ protocol CardGameDelegate {
 //: Create a class called `HighLow` that conforms to the `CardGame` protocol. It should have an initialized `Deck` as a property, as well as an optional delegate property of type `CardGameDelegate`.
 
 class HighLow: CardGame {
+
+    
     var deck: Deck
     var delegate: CardGameDelegate?
     
-    static func play() {
-        //deck.drawCard()
-        //deck.drawCard()
+    func play() {
+        let play1Card = deck.drawCard()
+        let play2Card = deck.drawCard()
+        if (play1Card < play2Card) {
+            print("Player 2 wins with a \(play2Card.rank) of \(play2Card.suit)")
+        } else if (play2Card < play2Card) {
+            print("Player 2 wins with a \(play1Card.rank) of \(play1Card.suit)")
+        } else {
+            print("Round ends in a tie with \(play1Card.rank) of \(play1Card.suit)")
+        }
     }
     
     
@@ -276,7 +285,7 @@ extension Card: Comparable {
 //: * Player 1 wins with a higher card, e.g. "Player 1 wins with 8 of hearts."
 //: * Player 2 wins with a higher card, e.g. "Player 2 wins with king of diamonds."
 
-
+//done
 
 //: ## Step 20
 //: Create a class called `CardGameTracker` that conforms to the `CardGameDelegate` protocol. Implement the two required functions: `gameDidStart` and `game(player1DidDraw:player2DidDraw)`. Model `gameDidStart` after the same method in the guided project from today. As for the other method, have it print a message like the following:
