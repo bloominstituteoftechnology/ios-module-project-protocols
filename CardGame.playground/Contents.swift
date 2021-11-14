@@ -6,7 +6,7 @@ import Foundation
 
 
 
-enum CardRank: Int {
+enum CardRank: Int, CustomStringConvertible {
     
     case ace = 1
     case two
@@ -27,18 +27,12 @@ enum CardRank: Int {
     static var allRanks: [CardRank] {
         return [self.ace, self.two, self.three, self.four, self.five, self.six, self.seven, self.eight, self.nine, self.ten, self.jack, self.queen, self.king]
     }
-}
-
-
-//: ## Step 2
-//: Once you've defined the enum as described above, take a look at this built-in protocol, [CustomStringConvertible](https://developer.apple.com/documentation/swift/customstringconvertible) and make the enum conform to that protocol. Make the face cards return a string of their name, and for the numbered cards, simply have it return that number as a string.
-
-extension CardRank: CustomStringConvertible {
+    
     
     var description: String {
         switch self {
         case .ace:
-            return "1"
+            return "Ace"
         case .two:
             return "2"
         case .three:
@@ -58,15 +52,54 @@ extension CardRank: CustomStringConvertible {
         case .ten:
             return "10"
         case .jack:
-            return "jack"
+            return "Jack"
         case .queen:
-            return "queen"
+            return "Queen"
         case .king:
-            return "king"
+            return "King"
             
         }
     }
 }
+
+
+//: ## Step 2
+//: Once you've defined the enum as described above, take a look at this built-in protocol, [CustomStringConvertible](https://developer.apple.com/documentation/swift/customstringconvertible) and make the enum conform to that protocol. Make the face cards return a string of their name, and for the numbered cards, simply have it return that number as a string.
+/*
+extension CardRank: CustomStringConvertible {
+    
+    var description: String {
+        switch self {
+        case .ace:
+            return "Ace"
+        case .two:
+            return "2"
+        case .three:
+            return "3"
+        case .four:
+            return "4"
+        case .five:
+            return "5"
+        case .six:
+            return "6"
+        case .seven:
+            return "7"
+        case .eight:
+            return "8"
+        case .nine:
+            return "9"
+        case .ten:
+            return "10"
+        case .jack:
+            return "Jack"
+        case .queen:
+            return "Queen"
+        case .king:
+            return "King"
+            
+        }
+    }
+}*/
 
 
 
@@ -113,9 +146,9 @@ struct Deck {
 //    var tempCard = Card(suit: .hearts, rank: .ace)
     
     init() {
-        for rank in CardRank.allRanks {
-            for suit in CardSuit.allSuits {
-                let tempCard = Card(suit: suit, rank: rank)
+        for thisRank in CardRank.allRanks {
+            for thisSuit in CardSuit.allSuits {
+                let tempCard = Card(suit: thisSuit, rank: thisRank)
                 cards.append(tempCard)
             }
         }
@@ -202,6 +235,8 @@ class HighLow: CardGame {
     var delegate: CardGameDelegate?
     
     func play() {
+        
+        
         let play1Card = deck.drawCard()
         let play2Card = deck.drawCard()
         if (play1Card < play2Card) {
@@ -291,7 +326,21 @@ extension Card: Comparable {
 //: Create a class called `CardGameTracker` that conforms to the `CardGameDelegate` protocol. Implement the two required functions: `gameDidStart` and `game(player1DidDraw:player2DidDraw)`. Model `gameDidStart` after the same method in the guided project from today. As for the other method, have it print a message like the following:
 //: * "Player 1 drew a 6 of hearts, player 2 drew a jack of spades."
 
-
+class CardGameTracker: CardGameDelegate {
+    var numTurns = 0
+    func gameDidStart(game: CardGame) {
+        numTurns = 0
+        if (thisGame = HighLow) {
+            print("Starting a game of High Low :^)")
+        }
+    }
+    
+    func game(player1DidDraw card1: Card, player2DidDraw card2: Card) {
+        <#code#>
+    }
+    
+    
+}
 
 //: Step 21
 //: Time to test all the types you've created. Create an instance of the `HighLow` class. Set the `delegate` property of that object to an instance of `CardGameTracker`. Lastly, call the `play()` method on the game object. It should print out to the console something that looks similar to the following:
@@ -301,5 +350,7 @@ extension Card: Comparable {
 //: Player 1 drew a 2 of diamonds, player 2 drew a ace of diamonds.
 //: Player 1 wins with 2 of diamonds.
 //: ```
+let thisDeck = Deck()
 
+var thisGame = HighLow(deck: thisDeck)
 
