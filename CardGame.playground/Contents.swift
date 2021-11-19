@@ -326,11 +326,22 @@ extension Card: Comparable {
 //: Create a class called `CardGameTracker` that conforms to the `CardGameDelegate` protocol. Implement the two required functions: `gameDidStart` and `game(player1DidDraw:player2DidDraw)`. Model `gameDidStart` after the same method in the guided project from today. As for the other method, have it print a message like the following:
 //: * "Player 1 drew a 6 of hearts, player 2 drew a jack of spades."
 
+    var numberOfTurns = 0
+
+    func gameDidStart(_ game: DiceGame) {
+        numberOfTurns = 0
+        if game is KnockOut {
+            print("Started a new game of Knock Out")
+        }
+        print("The game is using a \(game.dice.sides)-sided die")
+    }
+
 class CardGameTracker: CardGameDelegate {
     var numTurns = 0
+    
     func gameDidStart(game: CardGame) {
         numTurns = 0
-        if (thisGame = HighLow) {
+        if thisGame is HighLow {
             print("Starting a game of High Low :^)")
         }
     }
