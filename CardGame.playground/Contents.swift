@@ -27,7 +27,7 @@ extension Rank: CustomStringConvertible {
     var description: String {
         switch self {
         case .ace:
-            return "1"
+            return "Ace"
         case .two:
             return "2"
         case .three:
@@ -45,11 +45,11 @@ extension Rank: CustomStringConvertible {
         case .nine:
             return "9"
         case .jack:
-            return "jack"
+            return "Jack"
         case .queen:
-            return "queen"
+            return "Queen"
         case .king:
-            return "king"
+            return "King"
         }
     }
 }
@@ -75,26 +75,43 @@ struct Card {
 //: ## Step 5
 //: Make the card also conform to `CustomStringConvertible`. When turned into a string, a card's value should look something like this, "ace of spades", or "3 of diamonds".
 
-
+extension Card: CustomStringConvertible {
+    
+    var description: String {
+        return "\(self.rank) of \(self.suit)"
+    }
+    
+}
 
 //: ## Step 6
 //: Create a `struct` to model a deck of cards. It should be called `Deck` and have an array of `Card` objects as a constant property. A custom `init` function should be created that initializes the array with a card of each rank and suit. You'll want to iterate over all ranks, and then over all suits (this is an example of _nested `for` loops_). See the next 2 steps before you continue with the nested loops.
 
-
-
-
+struct Deck {
+    var cards: [Card] = []
+    
+    init() {
+        for suit in Suit.allSuits {
+            for rank in Rank.allRanks {
+                cards.append(Card(rank: rank, suit: suit))
+            }
+        }
+    }
+    
+}
 
 //: ## Step 7
 //: In the rank enum, add a static computed property that returns all the ranks in an array. Name this property `allRanks`. This is needed because you can't iterate over all cases from an enum automatically.
 
-
-
+extension Rank {
+    static let allRanks: [Rank] = [.ace, .two, .three, .four, .five, .six, .seven, .eight, .nine, .jack, .queen, .king]
+}
 
 //: ## Step 8
 //: In the suit enum, add a static computed property that returns all the suits in an array. Name this property `allSuits`.
 
-
-
+extension Suit {
+    static let allSuits: [Suit] = [.diamonds, .clubs, .hearts, .spades]
+}
 
 //: ## Step 9
 //: Back to the `Deck` and the nested loops. Now that you have a way to get arrays of all rank values and all suit values, create 2 `for` loops in the `init` method, one nested inside the other, where you iterate over each value of rank, and then iterate over each value of suit. See an example below to get an idea of how this will work. Imagine an enum that contains the 4 cardinal directions, and imagine that enum has a property `allDirections` that returns an array of them.
